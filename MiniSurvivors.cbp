@@ -50,13 +50,17 @@
 		<Unit filename="include/Enemy.h" />
 		<Unit filename="include/FileManager.h" />
 		<Unit filename="include/Game.h" />
+		<Unit filename="include/Globals.h" />
 		<Unit filename="include/Player.h" />
+		<Unit filename="include/Spawner.h" />
 		<Unit filename="include/entity.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="src/Enemy.cpp" />
 		<Unit filename="src/FileManager.cpp" />
 		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/Globals.cpp" />
 		<Unit filename="src/Player.cpp" />
+		<Unit filename="src/Spawner.cpp" />
 		<Unit filename="src/entity.cpp" />
 		<Extensions>
 			<lib_finder disable_auto="1" />

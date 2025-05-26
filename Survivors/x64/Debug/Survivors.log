@@ -1,0 +1,6 @@
+﻿  Spawner.cpp
+F:\dev\Projects\programacion2\Survivors\Spawner.cpp(24,29): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+F:\dev\Projects\programacion2\Survivors\Spawner.cpp(28,29): warning C4244: '=': conversión de 'int' a 'float'; posible pérdida de datos
+  Survivors.cpp
+  Generando código...
+  Survivors.vcxproj -> F:\dev\Projects\programacion2\Survivors\x64\Debug\Survivors.exe

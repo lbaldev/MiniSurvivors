@@ -10,26 +10,20 @@ Spawner::~Spawner()
     //dtor
 }
 
-void Spawner::spawnEnemies(std::vector<Enemy>& enemigos) {
-
+void Spawner::spawnEnemies(std::vector<Enemy>& enemigos, sf::Vector2f playerPosition) {
     if (enemigos.size() < MAX_ENEMIES &&
         relojGeneracionEnemigos.getElapsedTime().asSeconds() >= ENEMY_INTERVAL)
     {
+        float radius = 900.f;  // Distancia a la que aparecerán los enemigos desde el jugador
 
-        // Posicin aleatoria en los bordes de la pantalla
-        float x, y;
-        if (std::rand() % 2 == 0)    // Aparecer en los laterales (izq/der)
-        {
-            x = (std::rand() % 2 == 0) ? 0.f : WINDOW_WIDTH;
-            y = std::rand() % WINDOW_HEIGHT;
-        }
-        else                         // Aparecer en la parte superior/inferior
-        {
-            x = std::rand() % WINDOW_WIDTH;
-            y = (std::rand() % 2 == 0) ? 0.f : WINDOW_HEIGHT;
-        }
-        enemigos.emplace_back(50.0f, 20.0f, 1.0f, "assets/mago.png", sf::Vector2f(x, y));
-        //enemigos.emplace_back(sf::Vector2f(x, y));  // Anade el nuevo enemigo
-        relojGeneracionEnemigos.restart();          // Reinicia el reloj
+        // Ángulo aleatorio en radianes
+        float angle = (float)(std::rand()) / RAND_MAX * 2 * 3.14159265f;
+
+        float x = playerPosition.x + std::cos(angle) * radius;
+        float y = playerPosition.y + std::sin(angle) * radius;
+
+        enemigos.emplace_back(50.0f, 20.0f, 1.0f, "assets/fantasma.png", sf::Vector2f(x, y));
+        relojGeneracionEnemigos.restart();
     }
 }
+

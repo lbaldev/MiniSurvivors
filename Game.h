@@ -15,6 +15,7 @@ private:
     Player _player;
     std::vector<Enemy> _enemies;
     Spawner _spawner;
+    sf::View _camera;
 
     void processEvents();
     void update(float deltaTime);

@@ -5,7 +5,9 @@ Game::Game()
     : _window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mini Survivors"),
     _player(100.0f, 200.0f, "assets/mago.png")
 {
-    //_enemies.emplace_back(50.0f, 20.0f, 1.0f, "assets/mago.png");
+    _camera.setSize(WINDOW_WIDTH, WINDOW_HEIGHT); // tamaño de la ventana
+    _camera.setCenter(_player.getPosition());     // empieza centrado en el jugador
+
 }
 
 void Game::run()
@@ -15,7 +17,6 @@ void Game::run()
     while (_window.isOpen())
     {
         float dt = clock.restart().asSeconds();
-        _spawner.spawnEnemies(_enemies);
         processEvents();
         update(dt);
         render();
@@ -36,9 +37,13 @@ void Game::processEvents()
 void Game::update(float dt)
 {
     _player.update(dt);
+    _spawner.spawnEnemies(_enemies, _player.getPosition());
 
     for (auto& enemy : _enemies)
         enemy.chase(_player.getPosition(), dt);
+
+    _camera.setCenter(_player.getPosition());
+    _window.setView(_camera);
 }
 
 void Game::render()

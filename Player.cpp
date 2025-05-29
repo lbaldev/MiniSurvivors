@@ -24,12 +24,3 @@ void Player::handleInput(float dt) {
 void Player::update(float dt) {
     handleInput(dt);
 }
-
-void Player::move(sf::Vector2f direction) {
-    _position += direction * _speed;
-    _sprite.setPosition(_position);
-}
-
-void Player::addSkill(const Skill& skill) {
-    _skills.push_back(skill);
-}

@@ -11,15 +11,17 @@
 
 class Game {
 private:
-    sf::RenderWindow _window;
+	sf::RenderWindow _window; // La ventana principal para renderizar
     Player _player;
-    std::vector<Enemy> _enemies;
+	std::vector<Enemy> _enemies; // Vector para almacenar enemigos
     Spawner _spawner;
     sf::View _camera;
 
     void processEvents();
     void update(float deltaTime);
     void render();
+	void checkCollisions();
+
 
 public:
     Game();

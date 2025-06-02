@@ -11,6 +11,11 @@ public:
     Enemy(float health, float speed, float damage, const std::string& texturePath, sf::Vector2f startPosition);
     void update(float dt) override;
     void chase(sf::Vector2f target, float dt);
+
+
+    void quieto(float x, float y);
+
+
 };
 
 #endif

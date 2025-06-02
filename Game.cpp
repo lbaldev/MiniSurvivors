@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <iostream>
 
 
 Game::Game()
@@ -36,11 +37,13 @@ void Game::processEvents()
 
 void Game::update(float dt)
 {
-    _player.update(dt);
-    _spawner.spawnEnemies(_enemies, _player.getPosition());
+	_player.update(dt); // Actualizar el jugador
+	_spawner.spawnEnemies(_enemies, _player.getPosition()); // Generar enemigos cerca del jugador
 
-    for (auto& enemy : _enemies)
-        enemy.chase(_player.getPosition(), dt);
+	for (auto& enemy : _enemies) // Actualizar cada enemigo
+		enemy.chase(_player.getPosition(), dt); // Enemigos persiguen al jugador
+
+	checkCollisions(); // Verificar colisiones entre el jugador y los enemigos
 
     _camera.setCenter(_player.getPosition());
     _window.setView(_camera);
@@ -48,11 +51,39 @@ void Game::update(float dt)
 
 void Game::render()
 {
-    _window.clear();
-    _window.draw(_player);
+    _window.clear(); 
+	_window.draw(_player); // Dibujar el jugador
 
     for (const auto& enemy : _enemies)
         _window.draw(enemy);
 
     _window.display();
+}
+
+void Game::checkCollisions()
+{
+    for (auto& enemy : _enemies){ 
+		if (_player.getGlobalBounds().intersects(enemy.getGlobalBounds())) { // Verificar colisiones entre el jugador y los enemigos
+            //std::cout << "Colision" << std::endl;
+			sf::Vector2f pushBack = enemy.getPrevPosition() - (enemy.getPosition() - enemy.getPrevPosition()) * 2.0f; // Calcular la posición de retroceso
+            enemy.setPosition(pushBack); 
+        }
+        /*
+        if (enemy.getGlobalBounds().intersects(enemy.getGlobalBounds())) { 
+
+
+            std::cout << "Colision" << std::endl;
+
+			//enemy.setPosition(enemy.getPrevPosition()); // Si colisiona consigo mismo, vuelve a la posición anterior
+        }
+        */
+    }
+	for (size_t i = 0; i < _enemies.size(); i++) // Verificar colisiones entre enemigos
+    {
+        for (size_t j = i + 1; j < _enemies.size(); j++) { // 
+            if (_enemies[i].getGlobalBounds().intersects(_enemies[j].getGlobalBounds())) {
+                std::cout << "Colision" << std::endl;
+            }
+        }
+    }
 }

@@ -1,13 +1,18 @@
-#include "Game.h"
+#include <cmath>
 #include <iostream>
+#include <SFML/Graphics.hpp>
+
+
+#include "Game.h"
+
 
 
 Game::Game()
     : _window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mini Survivors"),
     _player(100.0f, 200.0f, "assets/mago.png")
 {
-    _camera.setSize(WINDOW_WIDTH, WINDOW_HEIGHT); // tama駉 de la ventana
-    _camera.setCenter(_player.getPosition());     // empieza centrado en el jugador
+    _camera.setSize(WINDOW_WIDTH, WINDOW_HEIGHT); 
+    _camera.setCenter(_player.getPosition());     
 
 }
 
@@ -37,13 +42,13 @@ void Game::processEvents()
 
 void Game::update(float dt)
 {
-	_player.update(dt); // Actualizar el jugador
-	_spawner.spawnEnemies(_enemies, _player.getPosition()); // Generar enemigos cerca del jugador
+	_player.update(dt);
+	_spawner.spawnEnemies(_enemies, _player.getPosition()); 
 
-	for (auto& enemy : _enemies) // Actualizar cada enemigo
-		enemy.chase(_player.getPosition(), dt); // Enemigos persiguen al jugador
+	for (auto& enemy : _enemies) 
+		enemy.chase(_player.getPosition(), dt); 
 
-	checkCollisions(); // Verificar colisiones entre el jugador y los enemigos
+	checkCollisions(); 
 
     _camera.setCenter(_player.getPosition());
     _window.setView(_camera);
@@ -60,30 +65,68 @@ void Game::render()
     _window.display();
 }
 
+
 void Game::checkCollisions()
 {
-    for (auto& enemy : _enemies){ 
-		if (_player.getGlobalBounds().intersects(enemy.getGlobalBounds())) { // Verificar colisiones entre el jugador y los enemigos
-            //std::cout << "Colision" << std::endl;
-			sf::Vector2f pushBack = enemy.getPrevPosition() - (enemy.getPosition() - enemy.getPrevPosition()) * 2.0f; // Calcular la posici髇 de retroceso
-            enemy.setPosition(pushBack); 
-        }
-        /*
-        if (enemy.getGlobalBounds().intersects(enemy.getGlobalBounds())) { 
+    // Constantes para ajustar el comportamiento
+    const float EMPUJE_JUGADOR = 2.5f;      // Fuerza con la que el jugador empuja
+    const float EMPUJE_ENEMIGO = 1.0f;      // Fuerza con la que se separan los enemigos
+    const float DIST_MINIMA = 40.0f;        // Distancia m铆nima entre enemigos
 
-
-            std::cout << "Colision" << std::endl;
-
-			//enemy.setPosition(enemy.getPrevPosition()); // Si colisiona consigo mismo, vuelve a la posici髇 anterior
-        }
-        */
-    }
-	for (size_t i = 0; i < _enemies.size(); i++) // Verificar colisiones entre enemigos
+    // 1. Colisiones Jugador-Enemigo
+    for (auto& enemigo : _enemies)
     {
-        for (size_t j = i + 1; j < _enemies.size(); j++) { // 
-            if (_enemies[i].getGlobalBounds().intersects(_enemies[j].getGlobalBounds())) {
-                std::cout << "Colision" << std::endl;
+        if (_player.getGlobalBounds().intersects(enemigo.getGlobalBounds()))
+        {
+            // Calcular direcci贸n del empuje (desde jugador hacia enemigo)
+            sf::Vector2f direccion = enemigo.getPosition() - _player.getPosition();
+            
+            // Normalizar el vector (convertirlo en direcci贸n unitaria)
+            float distancia = std::sqrt(direccion.x * direccion.x + direccion.y * direccion.y);
+            if (distancia > 0) // Evitar divisi贸n por cero 
+            {
+				direccion.x /= distancia;
+                direccion.y /= distancia;
+                
+                // Aplicar el empuje al enemigo
+                enemigo.pushBack(direccion, EMPUJE_JUGADOR);
+            }
+        }
+    }
+    // 2. Colisiones Enemigo-Enemigo
+    for (size_t i = 0; i < _enemies.size(); i++)
+    {
+        for (size_t j = i + 1; j < _enemies.size(); j++)
+        {
+            // Obtener posiciones
+            sf::Vector2f pos1 = _enemies[i].getPosition(); 
+            sf::Vector2f pos2 = _enemies[j].getPosition();
+
+            // Calcular distancia entre enemigos
+            sf::Vector2f diff = pos1 - pos2;
+            float distancia = std::sqrt(diff.x * diff.x + diff.y * diff.y);
+            
+            // Si est谩n muy cerca o colisionando
+            if (distancia < DIST_MINIMA)
+            {
+                // Calcular direcci贸n de separaci贸n
+                sf::Vector2f direccion;
+                if (distancia > 0)
+                {
+                    direccion.x = diff.x / distancia; 
+                    direccion.y = diff.y / distancia;
+                }
+                else // Si est谩n exactamente en el mismo punto
+                {
+                    direccion.x = 1.0f; 
+                    direccion.y = 0.0f;
+                }
+
+                // Separar ambos enemigos en direcciones opuestas
+                _enemies[i].pushBack(direccion, EMPUJE_ENEMIGO);
+                _enemies[j].pushBack(-direccion, EMPUJE_ENEMIGO);
             }
         }
     }
 }
+

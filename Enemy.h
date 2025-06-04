@@ -2,6 +2,7 @@
 #define ENEMY_H
 
 #include "Entity.h"
+#include "Player.h"
 
 class Enemy : public Entity {
 private:
@@ -12,9 +13,7 @@ public:
     void update(float dt) override;
     void chase(sf::Vector2f target, float dt);
 
-
-    void quieto(float x, float y);
-
+    void pushBack(sf::Vector2f dir, float fuerza);
 
 };
 

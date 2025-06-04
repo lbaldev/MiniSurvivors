@@ -60,3 +60,4 @@ sf::Vector2f Entity::getPrevPosition() const
 {
     return _prevPosition;
 }
+

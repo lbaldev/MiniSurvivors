@@ -28,6 +28,8 @@ public:
 	void move(float desplazamientoX, float desplazamientoY); // Método para mover la entidad en el espacio 2D
 	sf::Vector2f getPrevPosition() const;
 
+
+
 protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override; // Método protegido para dibujar la entidad, se implementa en la clase base
 };

@@ -1,4 +1,5 @@
 #include "Enemy.h"
+#include <SFML/Graphics.hpp>
 #include <cmath>
 
 Enemy::Enemy(float health, float speed, float damage, const std::string& texturePath, sf::Vector2f startPosition)
@@ -6,7 +7,7 @@ Enemy::Enemy(float health, float speed, float damage, const std::string& texture
 }
 
 void Enemy::update(float dt) {
-	// Placeholder; actual logic will go in chase() // español // Lógica de actualización del enemigo
+	// Placeholder;  Lógica de actualización del enemigo
 }
 
 void Enemy::chase(sf::Vector2f target, float dt) {
@@ -19,11 +20,9 @@ void Enemy::chase(sf::Vector2f target, float dt) {
 	//_position += dir * _speed * dt; //  
 	//_sprite.setPosition(_position); // Actualiza la posición del sprite
 }
-void Enemy::quieto(float x, float y) {
-	_speed = 0; // Detiene el enemigo
-	_position.x = x; // Actualiza la posición del sprite
-	_position.y = y; // Actualiza la posición del sprite
-	_sprite.setPosition(_position); // Actualiza la posición del sprite
+
+void Enemy::pushBack(sf::Vector2f dir, float fuerza)
+{
+    _position += dir * fuerza;
+    _sprite.setPosition(_position); 
 }
-
-

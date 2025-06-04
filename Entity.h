@@ -7,7 +7,7 @@
 class Entity : public sf::Drawable {
 protected:
     float _health;
-    float _speed;
+    float velocidadProyectil;
     sf::Vector2f _position;
     sf::Texture _texture;
     sf::Sprite _sprite;

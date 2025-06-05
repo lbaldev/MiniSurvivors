@@ -13,6 +13,6 @@ void Enemy::chase(sf::Vector2f target, float dt) {
     sf::Vector2f dir = target - _position;
     float length = std::sqrt(dir.x * dir.x + dir.y * dir.y);
     if (length != 0) dir /= length;
-    _position += dir * _speed * dt;
+    _position += dir * velocidadProyectil * dt;
     _sprite.setPosition(_position);
 }

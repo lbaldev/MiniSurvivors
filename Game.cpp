@@ -11,7 +11,8 @@ Game::Game(sf::RenderWindow& window)
     : _window(window),
     _player(100.0f, 200.0f, "assets/mago.png")
 {
-    _backgroundTexture.loadFromFile("assets/fondo.png");
+    //Mariano - Agregando el fondo
+    _backgroundTexture.loadFromFile("assets/fondo.png"); 
     _backgroundSprite.setTexture(_backgroundTexture);
     _backgroundSprite.setOrigin(
         _backgroundTexture.getSize().x / 2.f,
@@ -59,7 +60,7 @@ void Game::update(float dt)
 
 	checkCollisions(); 
 
-    // Deseamos que el centro de la cámara esté dentro del mapa
+    // Mariano - centrar y lockear camara al borde del mapa
     sf::Vector2f center = _player.getPosition();
 
     float halfW = _camera.getSize().x / 2.f;

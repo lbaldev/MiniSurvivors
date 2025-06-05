@@ -30,7 +30,7 @@ void Proyectil::update(float dt) {
     _lifetime -= dt;
 }
 
-// Devuelve la posición actual del proyectil (por si la necesitás)
+// Devuelve la posición actual del proyectil
 sf::Vector2f Proyectil::getPosition() const {
     return _position;
 }

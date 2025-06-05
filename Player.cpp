@@ -35,7 +35,7 @@ void Player::handleInput(float dt) {
     sf::Vector2f newPos = _position + direction * _speed * dt;
     
 
-    // Límites del mundo
+    // Mariano - limites del mapa
     const float minX = MAP_MIN_X, maxX = MAP_MAX_X;
 	const float minY = MAP_MIN_Y, maxY = MAP_MAX_Y;
 

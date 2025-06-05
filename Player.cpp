@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Globals.h"
 #include <cmath>
 
 
@@ -25,10 +26,23 @@ void Player::handleInput(float dt) {
   if (direction.x != 0 || direction.y != 0)
         ultima_direccion = direction;
   
-    move(direction.x * _speed * dt, direction.y * _speed * dt);
+    
     //_position += direction * _speed * dt;
     //_sprite.setPosition(_position);
 
+
+// Nueva posición tentativa
+    sf::Vector2f newPos = _position + direction * _speed * dt;
+    
+
+    // Límites del mundo
+    const float minX = MAP_MIN_X, maxX = MAP_MAX_X;
+	const float minY = MAP_MIN_Y, maxY = MAP_MAX_Y;
+
+    if (newPos.x >= minX && newPos.x <= maxX && newPos.y >= minY && newPos.y <= maxY) {
+        move(direction.x * _speed * dt, direction.y * _speed * dt);
+    }
+    
 }
  
 void Player::update(float dt) {

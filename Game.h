@@ -16,6 +16,8 @@ private:
 	std::vector<Enemy> _enemies; // Vector para almacenar enemigos
     Spawner _spawner;
     sf::View _camera;
+    sf::Texture _backgroundTexture;
+    sf::Sprite _backgroundSprite;
 
     void processEvents();
     void update(float deltaTime);

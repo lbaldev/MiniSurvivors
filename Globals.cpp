@@ -12,3 +12,8 @@ const char* ENEMY_TEXTURE_PATH = "assets/enemy.png";
 
 int GLOBAL_SCORE = 0;
 
+const float MAP_MIN_X = -1000.0f;
+const float MAP_MAX_X = 1000.0f;
+const float MAP_MIN_Y = -1000.0f;
+const float MAP_MAX_Y = 1000.0f;
+

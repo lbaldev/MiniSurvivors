@@ -11,6 +11,13 @@ Game::Game(sf::RenderWindow& window)
     : _window(window),
     _player(100.0f, 200.0f, "assets/mago.png")
 {
+    _backgroundTexture.loadFromFile("assets/fondo.png");
+    _backgroundSprite.setTexture(_backgroundTexture);
+    _backgroundSprite.setOrigin(
+        _backgroundTexture.getSize().x / 2.f,
+        _backgroundTexture.getSize().y / 2.f
+    );
+    _backgroundSprite.setPosition(0.f, 0.f); // posición del centro del mapa
 
 }
 
@@ -18,8 +25,9 @@ void Game::run()
 {
     sf::Clock clock;
 
-    _camera.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    _camera.setCenter(_player.getPosition());
+    //_camera.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    //_camera.setCenter(_player.getPosition());
+
 
     while (_window.isOpen())
     {
@@ -51,13 +59,31 @@ void Game::update(float dt)
 
 	checkCollisions(); 
 
-    _camera.setCenter(_player.getPosition());
+    // Deseamos que el centro de la cámara esté dentro del mapa
+    sf::Vector2f center = _player.getPosition();
+
+    float halfW = _camera.getSize().x / 2.f;
+    float halfH = _camera.getSize().y / 2.f;
+
+    float minX = MAP_MIN_X + halfW;
+    float maxX = MAP_MAX_X - halfW;
+    float minY = MAP_MIN_Y + halfH;
+    float maxY = MAP_MAX_Y - halfH;
+
+    center.x = std::max(minX, std::min(center.x, maxX));
+    center.y = std::max(minY, std::min(center.y, maxY));
+
+    _camera.setCenter(center);
     _window.setView(_camera);
+
+
+
 }
 
 void Game::render()
 {
     _window.clear(); 
+    _window.draw(_backgroundSprite);
 	_window.draw(_player); // Dibujar el jugador
 
     // Ema

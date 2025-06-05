@@ -3,7 +3,7 @@
 const int WINDOW_WIDTH = 1280;
 const int WINDOW_HEIGHT = 720;
 
-float PLAYER_BASE_SPEED = 200.0f;
+float PLAYER_BASEvelocidadProyectil = 200.0f;
 float ENEMY_INTERVAL = 0.2f;
 int MAX_ENEMIES = 3;
 

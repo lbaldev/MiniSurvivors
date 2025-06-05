@@ -8,7 +8,7 @@
 extern const int WINDOW_WIDTH;
 extern const int WINDOW_HEIGHT;
 
-extern float PLAYER_BASE_SPEED;
+extern float PLAYER_BASEvelocidadProyectil;
 extern int MAX_ENEMIES;
 extern float ENEMY_INTERVAL;
 

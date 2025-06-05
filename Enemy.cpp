@@ -7,18 +7,17 @@ Enemy::Enemy(float health, float speed, float damage, const std::string& texture
 }
 
 void Enemy::update(float dt) {
-	// Placeholder;  Lógica de actualización del enemigo
+	// Placeholder;  Lï¿½gica de actualizaciï¿½n del enemigo
 }
 
 void Enemy::chase(sf::Vector2f target, float dt) {
     sf::Vector2f dir = target - _position;
     float length = std::sqrt(dir.x * dir.x + dir.y * dir.y);
     if (length != 0) dir /= length;
-
 	move(dir.x * _speed * dt, dir.y * _speed * dt); // Mueve el enemigo hacia el objetivo
 
 	//_position += dir * _speed * dt; //  
-	//_sprite.setPosition(_position); // Actualiza la posición del sprite
+	//_sprite.setPosition(_position); // Actualiza la posiciï¿½n del sprite
 }
 
 void Enemy::pushBack(sf::Vector2f dir, float fuerza)

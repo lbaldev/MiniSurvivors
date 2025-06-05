@@ -2,9 +2,6 @@
 #include <vector>
 #include <string>
 
-
-
-
 Entity::Entity(float health, float speed, const std::string& texturePath, sf::Vector2f position) // Constructor de la clase Entity
     : _health(health), _speed(speed), _position(position) {
 
@@ -16,7 +13,7 @@ Entity::Entity(float health, float speed, const std::string& texturePath, sf::Ve
     _sprite.setOrigin(_sprite.getGlobalBounds().width / 2, _sprite.getGlobalBounds().height / 2);
 }
 
-Entity::Entity(float health, float speed, const std::string& texturePath) // Constructor de la clase Entity con posición por defecto
+Entity::Entity(float health, float speed, const std::string& texturePath) // Constructor de la clase Entity con posiciï¿½n por defecto
     : _health(health), _speed(speed) {
 
     sf::Texture* texture = new sf::Texture();
@@ -26,21 +23,22 @@ Entity::Entity(float health, float speed, const std::string& texturePath) // Con
 	//_texture.loadFromFile(texturePath); 
     _sprite.setTexture(*texture);
 	_sprite.setOrigin(_sprite.getGlobalBounds().width / 2, _sprite.getGlobalBounds().height / 2); // Establece el origen del sprite al centro de su bounding box
+
 }
 
 Entity::~Entity() {}
 
-void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const { // Método para dibujar la entidad en la ventana de renderizado
+void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const { // Mï¿½todo para dibujar la entidad en la ventana de renderizado
     target.draw(_sprite, states);
 }
 
-sf::Vector2f Entity::getPosition() const { // Método para obtener la posición de la entidad
+sf::Vector2f Entity::getPosition() const { // Mï¿½todo para obtener la posiciï¿½n de la entidad
     return _position;   
 }
 
-void Entity::setPosition(sf::Vector2f pos) { // Método para establecer la posición de la entidad
-	_position = pos; // Actualiza la posición interna
-	_sprite.setPosition(pos); // Actualiza la posición del sprite
+void Entity::setPosition(sf::Vector2f pos) { // Mï¿½todo para establecer la posiciï¿½n de la entidad
+	_position = pos; // Actualiza la posiciï¿½n interna
+	_sprite.setPosition(pos); // Actualiza la posiciï¿½n del sprite
 }
 
 sf::FloatRect Entity::getGlobalBounds() const {
@@ -49,10 +47,10 @@ sf::FloatRect Entity::getGlobalBounds() const {
 
 void Entity::move(float desplazamientoX, float desplazamientoY)
 {
-	_prevPosition = _position; // Guarda la posición anterior antes de mover
+	_prevPosition = _position; // Guarda la posiciï¿½n anterior antes de mover
 	_position.x += desplazamientoX;
     _position.y += desplazamientoY;
-	_sprite.setPosition(_position); // Actualiza la posición del sprite
+	_sprite.setPosition(_position); // Actualiza la posiciï¿½n del sprite
 
 }
 

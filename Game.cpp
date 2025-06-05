@@ -59,6 +59,14 @@ void Game::render()
     _window.clear(); 
 	_window.draw(_player); // Dibujar el jugador
 
+    // Ema
+    // Dibujar todos los proyectiles activos del jugador
+    for (const auto& projectile : _player.getProjectiles()) {
+        _window.draw(projectile);
+    }
+    //**************************************
+
+
     for (const auto& enemy : _enemies)
         _window.draw(enemy);
 
@@ -129,4 +137,3 @@ void Game::checkCollisions()
         }
     }
 }
-

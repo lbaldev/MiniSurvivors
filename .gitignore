@@ -27,3 +27,33 @@
 *.depend
 /Survivors/x64
 /.vs
+
+# Carpeta oculta de Visual Studio
+.vs/
+
+# Archivos de configuración del usuario (personales)
+*.user
+*.suo
+
+# Archivos de compilación y binarios
+*.exe
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.ipch
+*.aps
+*.ncb
+*.log
+*.tlog
+*.lastbuildstate
+*.cache
+*.db
+
+# Carpetas de salida de compilación
+x64/
+Debug/
+Release/
+
+# Archivos de filtros de VS (opcionales, pero suelen evitarse)
+*.vcxproj.filters

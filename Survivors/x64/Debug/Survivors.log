@@ -1,2 +1,7 @@
-﻿  Proyectil.cpp
+﻿  Survivors.cpp
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Player.h(32,28): warning C4305: 'inicializando': truncamiento de 'double' a 'const float'
+  (compilando archivo de origen "Survivors.cpp")
+  
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Survivors.cpp(9,29): warning C4244: 'argumento': conversión de 'const int' a 'float'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Survivors.cpp(9,15): warning C4244: 'argumento': conversión de 'const int' a 'float'; posible pérdida de datos
   Survivors.vcxproj -> F:\dev\Projects\programacion2\programacion2\MiniSurvivors\x64\Debug\Survivors.exe

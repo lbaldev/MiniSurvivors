@@ -11,7 +11,7 @@
 
 class Game {
 private:
-	sf::RenderWindow _window; // La ventana principal para renderizar
+	sf::RenderWindow& _window; // La ventana principal para renderizar
     Player _player;
 	std::vector<Enemy> _enemies; // Vector para almacenar enemigos
     Spawner _spawner;
@@ -24,7 +24,7 @@ private:
 
 
 public:
-    Game();
+    Game(sf::RenderWindow& window);
     void run();
 };
 

@@ -7,18 +7,19 @@
 
 
 
-Game::Game()
-    : _window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mini Survivors"),
+Game::Game(sf::RenderWindow& window)
+    : _window(window),
     _player(100.0f, 200.0f, "assets/mago.png")
 {
-    _camera.setSize(WINDOW_WIDTH, WINDOW_HEIGHT); 
-    _camera.setCenter(_player.getPosition());     
 
 }
 
 void Game::run()
 {
     sf::Clock clock;
+
+    _camera.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    _camera.setCenter(_player.getPosition());
 
     while (_window.isOpen())
     {

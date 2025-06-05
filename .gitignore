@@ -26,3 +26,5 @@
 *.layout
 *.depend
 /Survivors/x64
+/.vs/MiniSurvivors/v17/ipch/AutoPCH
+/.vs/MiniSurvivors/FileContentIndex

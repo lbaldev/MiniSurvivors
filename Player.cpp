@@ -2,11 +2,12 @@
 #include <cmath>
 
 
-Player::Player(float health, float speed, const std::string& texturePath)
-    : Entity(health, speed, texturePath), _level(1), _exp(0), _baseDamage(10.0f), _defense(0.1f)
+
+Player::Player(float health, float speed, const std::string& texturePath) // El constructor inicializa al jugador con salud, velocidad y textura
+	: Entity(health, speed, texturePath), _level(1), _exp(0), _baseDamage(10.0f), _defense(0.1f)  // Inicializa el nivel, experiencia, daÃ±o base y defensa del jugador
 {
     // Ema
-    ultima_direccion = sf::Vector2f(0.f, -1.f); // Dirección inicial hacia arriba
+    ultima_direccion = sf::Vector2f(0.f, -1.f); // DirecciÃ³n inicial hacia arriba
     //***************************************************************
 }
 
@@ -17,18 +18,17 @@ void Player::handleInput(float dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) direction.y += 1.f;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) direction.x -= 1.f;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) direction.x += 1.f;
-
-    if (direction.x != 0 || direction.y != 0)
-        direction /= std::sqrt(direction.x * direction.x + direction.y * direction.y);
-    // Ema
-    //***************************************************************
-    // Actualiza la dirección si se está moviendo
-    if (direction.x != 0 || direction.y != 0)
+    
+	if (direction.x != 0 || direction.y != 0) // Verifica si hay movimiento
+		direction /= std::sqrt(direction.x * direction.x + direction.y * direction.y); // Normaliza la direcciÃ³n para que el jugador se mueva a una velocidad constante
+  
+  if (direction.x != 0 || direction.y != 0)
         ultima_direccion = direction;
+  
+    move(direction.x * _speed * dt, direction.y * _speed * dt);
+    //_position += direction * _speed * dt;
+    //_sprite.setPosition(_position);
 
-    //***************************************************************   
-    _position += direction * velocidadProyectil * dt;
-    _sprite.setPosition(_position);
 }
  
 void Player::update(float dt) {
@@ -36,7 +36,7 @@ void Player::update(float dt) {
     // Ema
     updateProjectiles(dt);   // Actualizar proyectiles activos
 
-    // Disparo automático si pasó el cooldown
+    // Disparo automÃ¡tico si pasÃ³ el cooldown
     if (_cooldownAtaque.getElapsedTime().asSeconds() >= CDataque) {
         if (ultima_direccion.x != 0 || ultima_direccion.y != 0) {
             Proyectiles.emplace_back(_position, ultima_direccion);

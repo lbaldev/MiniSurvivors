@@ -1,3 +1,5 @@
+#include <memory>
+#include <SFML/Graphics.hpp>
 #ifndef GLOBALS_H
 #define GLOBALS_H
 

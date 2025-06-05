@@ -10,12 +10,12 @@ protected:
     float _speed;
     float velocidadProyectil;
     sf::Vector2f _position;
-    sf::Texture _texture;
+	std::shared_ptr<sf::Texture> _texture;
     sf::Sprite _sprite;
     sf::Vector2f _prevPosition;
 
 public:
-	Entity(float health, float speed, const std::string& texturePath); // Constructor sin posici�n, se usar� la posici�n por defecto (0, 0)
+
 	Entity(float health, float speed, const std::string& texturePath, sf::Vector2f position); // Constructor con posici�n
 	virtual ~Entity(); // Destructor virtual para permitir la limpieza de recursos en clases derivadas
 

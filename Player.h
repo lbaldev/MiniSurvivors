@@ -43,6 +43,12 @@ public:
     const std::vector<Proyectil>& getProjectiles() const; // Permite acceder a los proyectiles desde fuera
     void updateProjectiles(float dt);                      // Actualiza posición y vida de proyectiles
     //***************************************
+
+    //Mariano - Getters para barra de exp y nivel
+    int getLevel() const { return _level; }
+    int getExp() const { return _exp; }
+    int getExpToNextLevel() const { return _level * 100; } // ejemplo simple
+
 };
 
 #endif

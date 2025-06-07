@@ -20,6 +20,36 @@ Game::Game(sf::RenderWindow& window)
     );
     _backgroundSprite.setPosition(0.f, 0.f); // posición del centro del mapa
 
+    if (!_font.loadFromFile("assets/font.otf")) {
+        std::cout << "Error: no se pudo cargar la fuente.\n";
+    }
+
+    // Mariano - Agregando la barra de experiencia y nivel
+    _levelText.setFont(_font);
+    _levelText.setCharacterSize(20);
+    _levelText.setFillColor(sf::Color::White);
+
+    float barWidth = 300.f;
+    float barHeight = 20.f;
+    float centerX = WINDOW_WIDTH / 2.f;
+	
+    _expBarBackground.setSize(sf::Vector2f(barWidth, barHeight));
+    _expBarBackground.setFillColor(sf::Color(50, 50, 50));
+    _expBarBackground.setPosition(centerX - barWidth / 2.f, WINDOW_HEIGHT - 60.f);
+
+    _expBarFill.setSize(sf::Vector2f(0.f, barHeight));
+    _expBarFill.setFillColor(sf::Color::Green);
+    _expBarFill.setPosition(_expBarBackground.getPosition());
+
+    _levelText.setString("Nivel: 1");
+    // Centrados
+    sf::FloatRect textBounds = _levelText.getLocalBounds();
+    _levelText.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
+    _levelText.setPosition(centerX, _expBarBackground.getPosition().y - 25.f);
+
+
+
+
 }
 
 void Game::run()
@@ -77,6 +107,21 @@ void Game::update(float dt)
     _camera.setCenter(center);
     _window.setView(_camera);
 
+    // Mariano Actualizar HUD
+    int exp = _player.getExp();
+    int expToLevel = _player.getExpToNextLevel();
+    float fillRatio = static_cast<float>(exp) / expToLevel;
+    fillRatio = std::min(fillRatio, 1.f); // evitar que se pase
+
+    _expBarFill.setSize(sf::Vector2f(300.f * fillRatio, 20.f));
+
+    _levelText.setString("Nivel: " + std::to_string(_player.getLevel()));
+
+    // Recentrar el texto cada vez que cambia (opcional si el número cambia mucho)
+    sf::FloatRect textBounds = _levelText.getLocalBounds();
+    _levelText.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
+    _levelText.setPosition(WINDOW_WIDTH / 2.f, _expBarBackground.getPosition().y - 25.f);
+
 
 
 }
@@ -98,7 +143,16 @@ void Game::render()
     for (const auto& enemy : _enemies)
         _window.draw(enemy);
 
+    //HUD
+    _window.setView(_window.getDefaultView()); // HUD en pantalla, no en mundo
+    _window.draw(_expBarBackground);
+    _window.draw(_expBarFill);
+    _window.draw(_levelText);
+
+
     _window.display();
+
+
 }
 
 

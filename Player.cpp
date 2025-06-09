@@ -10,6 +10,14 @@ Player::Player(float health, float speed, const std::string& texturePath) // El 
     // Ema
     ultima_direccion = sf::Vector2f(0.f, -1.f); // Dirección inicial hacia arriba
     //***************************************************************
+
+    //Mariano barra de vida
+    _healthBarBackground.setSize(sf::Vector2f(40.f, 6.f));
+    _healthBarBackground.setFillColor(sf::Color(50, 50, 50));
+
+    _healthBarFill.setSize(sf::Vector2f(40.f, 6.f)); // llena al inicio
+    _healthBarFill.setFillColor(sf::Color::Red);
+
 }
 
 void Player::handleInput(float dt) {
@@ -26,10 +34,6 @@ void Player::handleInput(float dt) {
   if (direction.x != 0 || direction.y != 0)
         ultima_direccion = direction;
   
-    
-    //_position += direction * _speed * dt;
-    //_sprite.setPosition(_position);
-
 
 // Nueva posición tentativa
     sf::Vector2f newPos = _position + direction * _speed * dt;
@@ -42,6 +46,12 @@ void Player::handleInput(float dt) {
     if (newPos.x >= minX && newPos.x <= maxX && newPos.y >= minY && newPos.y <= maxY) {
         move(direction.x * _speed * dt, direction.y * _speed * dt);
     }
+
+    //Para testear el incremento de experincia
+    if (direction.x != 0 || direction.y != 0) {
+        addExp(1); 
+    }
+
     
 }
  
@@ -57,6 +67,19 @@ void Player::update(float dt) {
             _cooldownAtaque.restart();
         }
     }
+
+    // Posicionarla debajo del sprite
+    sf::Vector2f spritePos = _sprite.getPosition();
+    _healthBarBackground.setPosition(spritePos.x - 20.f, spritePos.y + _sprite.getGlobalBounds().height / 2.f + 5.f);
+    _healthBarFill.setPosition(_healthBarBackground.getPosition());
+
+    // Escalar el tamaño según la salud actual
+    float vidaRatio = _health / 100.f; // suponiendo 100 es la salud máxima
+    vidaRatio = std::max(0.f, std::min(vidaRatio, 1.f));
+
+    _healthBarFill.setSize(sf::Vector2f(40.f * vidaRatio, 6.f));
+
+
 
 }
 // ******************************
@@ -75,3 +98,24 @@ const std::vector<Proyectil>& Player::getProjectiles() const {
 }
 
 //***************************************************************
+
+void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+    // Dibujar sprite del jugador
+    target.draw(_sprite, states);
+
+    // Dibujar la barra de salud
+    target.draw(_healthBarBackground, states);
+    target.draw(_healthBarFill, states);
+}
+
+void Player::addExp(int amount) {
+    _exp += amount;
+
+    // Subir de nivel si alcanza el umbral
+    while (_exp >= getExpToNextLevel()) {
+        _exp -= getExpToNextLevel();
+        _level++;
+       // cout << "Subiste al nivel " << _level << "!\n";
+    }
+}
+

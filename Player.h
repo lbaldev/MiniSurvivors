@@ -31,6 +31,10 @@ private:
     sf::Clock _cooldownAtaque;                // Reloj para medir cooldown entre disparos
     const float CDataque = 0.3;     // Tiempo mínimo entre disparos (en segundos)
     //******************************************
+    // Mariano - Barra de salud 
+    sf::RectangleShape _healthBarBackground;
+    sf::RectangleShape _healthBarFill;
+
 
 
 public:
@@ -45,9 +49,15 @@ public:
     //***************************************
 
     //Mariano - Getters para barra de exp y nivel
+
     int getLevel() const { return _level; }
     int getExp() const { return _exp; }
     int getExpToNextLevel() const { return _level * 100; } // ejemplo simple
+
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+    void addExp(int amount);
+
 
 };
 

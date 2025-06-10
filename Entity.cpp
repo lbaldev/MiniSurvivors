@@ -46,3 +46,13 @@ sf::Vector2f Entity::getPrevPosition() const
     return _prevPosition;
 }
 
+void Entity::pushBack(sf::Vector2f dir, float fuerza)
+{
+    _position += dir * fuerza;
+    _sprite.setPosition(_position);
+}
+
+void Entity::takeDamage(float cantidad)
+{
+    _health -= cantidad;
+}

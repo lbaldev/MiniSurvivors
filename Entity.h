@@ -27,7 +27,8 @@ public:
 
 	void move(float desplazamientoX, float desplazamientoY); // M�todo para mover la entidad en el espacio 2D
 	sf::Vector2f getPrevPosition() const;
-
+	void pushBack(sf::Vector2f dir, float fuerza);
+	void takeDamage(float vida);
 
 
 protected:

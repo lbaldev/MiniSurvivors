@@ -13,7 +13,10 @@ public:
     void update(float dt) override;
     void chase(sf::Vector2f target, float dt);
 
-    void pushBack(sf::Vector2f dir, float fuerza);
+	void colisionesPlayerEnemy(Player& player);
+	void colisionesEnemyEnemy(Entity& otro);
+
+    sf::Clock relojIntervaloDamage;
 
 };
 

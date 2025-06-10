@@ -71,7 +71,7 @@ void Player::updateProjectiles(float dt) {
 
 }
 
-const std::vector<Proyectil>& Player::getProjectiles() const {
+std::vector<Proyectil>& Player::getProjectiles() {
     return Proyectiles;
 }
 

@@ -108,14 +108,13 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(_healthBarFill, states);
 }
 
-void Player::addExp(int amount) {
-    _exp += amount;
+void Player::addExp(int cantidad) {
+    _exp += cantidad;
 
     // Subir de nivel si alcanza el umbral
     while (_exp >= getExpToNextLevel()) {
         _exp -= getExpToNextLevel();
         _level++;
-       // cout << "Subiste al nivel " << _level << "!\n";
     }
 }
 

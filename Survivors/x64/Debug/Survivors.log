@@ -1,5 +1,5 @@
-﻿  Player.cpp
+﻿  Game.cpp
 C:\Users\Usuario\source\repos\lbaldev\MiniSurvivors\Player.h(32,28): warning C4305: 'inicializando': truncamiento de 'double' a 'const float'
-  (compilando archivo de origen "Player.cpp")
+  (compilando archivo de origen "Game.cpp")
   
   Survivors.vcxproj -> C:\Users\Usuario\source\repos\lbaldev\MiniSurvivors\x64\Debug\Survivors.exe

@@ -116,14 +116,7 @@ void Game::update(float dt)
     _expBarFill.setSize(sf::Vector2f(300.f * fillRatio, 20.f));
 
     _levelText.setString("Nivel: " + std::to_string(_player.getLevel()));
-
-    // Recentrar el texto cada vez que cambia (opcional si el número cambia mucho)
-    sf::FloatRect textBounds = _levelText.getLocalBounds();
-    _levelText.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
-    _levelText.setPosition(WINDOW_WIDTH / 2.f, _expBarBackground.getPosition().y - 25.f);
-
-
-
+   
 }
 
 void Game::render()

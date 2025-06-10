@@ -46,3 +46,13 @@ sf::Vector2f Entity::getPrevPosition() const
     return _prevPosition;
 }
 
+float Entity::getHealth() const { 
+    return _health;
+}
+
+void Entity::receiveDamage(float damage) {
+    _health -= damage;
+    if (_health < 0) {
+        _health = 0; // Evita que la salud sea negativa
+    }
+}

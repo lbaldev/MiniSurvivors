@@ -25,6 +25,7 @@ private:
     int _exp;
     float _baseDamage;
     float _defense;
+    float pickupRadius;
     void handleInput(float deltaTime);
     // Ema
     std::vector<Proyectil> Proyectiles;  // Lista de proyectiles activos

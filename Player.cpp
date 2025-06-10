@@ -5,8 +5,8 @@
 
 
 Player::Player(float health, float speed, const std::string& texturePath) // El constructor inicializa al jugador con salud, velocidad y textura
-	: Entity(health, speed, texturePath, sf::Vector2f(0,0)), _level(1), _exp(0), _baseDamage(10.0f), _defense(0.1f)  // Inicializa el nivel, experiencia, daño base y defensa del jugador
-{
+	: Entity(health, speed, texturePath, sf::Vector2f(0,0)), _level(1), _exp(0), _baseDamage(10.0f), _defense(0.1f), pickupRadius(20.0f)  // Inicializa el nivel, experiencia, daño base y defensa del jugador
+{   
     // Ema
     ultima_direccion = sf::Vector2f(0.f, -1.f); // Dirección inicial hacia arriba
     //***************************************************************

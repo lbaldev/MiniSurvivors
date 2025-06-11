@@ -120,4 +120,24 @@ void Game::checkCollisions()
             _enemies[i].colisionesEnemyEnemy(_enemies[j]);
         }
     }
+    // Ema
+    // 3. Colisiones Proyectil-Enemigo
+    const float radioProyectil = 5.f;  // El radio del proyectil
+    const float radioEnemigo = 20.f;   // Aproximado para el sprite del enemigo
+
+    auto& projectiles = _player.getProjectiles();  // Ahora podemos modificarlos
+
+    for (auto& enemy : _enemies) {
+        projectiles.erase(
+            std::remove_if(projectiles.begin(), projectiles.end(),
+                [&enemy, radioProyectil, radioEnemigo](const Proyectil& proyectil) {
+                    float dx = proyectil.getPosition().x - enemy.getPosition().x;
+                    float dy = proyectil.getPosition().y - enemy.getPosition().y;
+                    float distancia = std::sqrt(dx * dx + dy * dy);
+                    return distancia < (radioProyectil + radioEnemigo);
+                }),
+            projectiles.end()
+        );
+    }
+
 }

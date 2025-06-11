@@ -40,7 +40,7 @@ public:
 
     // Ema
     sf::Vector2f ultima_direccion;
-    const std::vector<Proyectil>& getProjectiles() const; // Permite acceder a los proyectiles desde fuera
+    std::vector<Proyectil>& getProjectiles(); // Permite acceder a los proyectiles desde fuera
     void updateProjectiles(float dt);                      // Actualiza posición y vida de proyectiles
     //***************************************
 };

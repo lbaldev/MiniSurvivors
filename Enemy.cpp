@@ -25,7 +25,7 @@ void Enemy::chase(sf::Vector2f target, float dt) {
 void Enemy::colisionesPlayerEnemy(Player& player)
 {
     const float EMPUJE_JUGADOR = 2.5f;  // Fuerza del empuje al jugador
-	const float INTERVALO_DAMAGE = 1.0f; 
+	const float INTERVALO_DAMAGE = 2.0f; 
 
 	sf::Vector2f direccion = _position - player.getPosition();
 

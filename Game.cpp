@@ -11,6 +11,8 @@ Game::Game(sf::RenderWindow& window)
     : _window(window),dt(0),
     _player(100.0f, 200.0f, "assets/mago.png")
 {
+
+	_font.loadFromFile("assets/font.otf");
     _backgroundTexture.loadFromFile("assets/fondo.png");
     _backgroundSprite.setTexture(_backgroundTexture);
     _backgroundSprite.setOrigin(
@@ -18,6 +20,29 @@ Game::Game(sf::RenderWindow& window)
         _backgroundTexture.getSize().y / 2.f
     );
     _backgroundSprite.setPosition(0.f, 0.f); // posición del centro del mapa
+
+    // Mariano - Agregando la barra de experiencia y nivel
+    _levelText.setFont(_font);
+    _levelText.setCharacterSize(20);
+    _levelText.setFillColor(sf::Color::White);
+
+    float barWidth = 300.f;
+    float barHeight = 20.f;
+    float centerX = WINDOW_WIDTH / 2.f;
+
+    _expBarBackground.setSize(sf::Vector2f(barWidth, barHeight));
+    _expBarBackground.setFillColor(sf::Color(50, 50, 50));
+    _expBarBackground.setPosition(centerX - barWidth / 2.f, WINDOW_HEIGHT - 60.f);
+
+    _expBarFill.setSize(sf::Vector2f(0.f, barHeight));
+    _expBarFill.setFillColor(sf::Color::Green);
+    _expBarFill.setPosition(_expBarBackground.getPosition());
+
+    _levelText.setString("Nivel: 1");
+    // Centrados
+    sf::FloatRect textBounds = _levelText.getLocalBounds();
+    _levelText.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
+    _levelText.setPosition(centerX, _expBarBackground.getPosition().y - 25.f);
 }
 
 void Game::run()
@@ -51,8 +76,8 @@ void Game::processEvents()
 void Game::update(float dt)
 {
     if (_player.getHealth() <= 0) {
-        std::cout << "Game Over!" << std::endl;
-        _window.close();
+        //std::cout << "Game Over!" << std::endl;
+        //_window.close();
 		//Aca faltan cosas como mostrar un mensaje de Game Over, reiniciar el juego, etc.
     }
 	_player.update(dt);
@@ -83,7 +108,15 @@ void Game::update(float dt)
     _camera.setCenter(center);
     _window.setView(_camera);
 
+    // Mariano Actualizar HUD
+    int exp = _player.getExp();
+    int expToLevel = _player.getExpToNextLevel();
+    float fillRatio = static_cast<float>(exp) / expToLevel;
+    fillRatio = std::min(fillRatio, 1.f); // evitar que se pase
 
+    _expBarFill.setSize(sf::Vector2f(300.f * fillRatio, 20.f));
+
+    _levelText.setString("Nivel: " + std::to_string(_player.getLevel()));
 
 }
 
@@ -105,6 +138,11 @@ void Game::render()
 
     for (const auto& orb : _expOrbs)
         _window.draw(orb);
+
+    _window.setView(_window.getDefaultView()); // HUD en pantalla, no en mundo
+    _window.draw(_expBarBackground);
+    _window.draw(_expBarFill);
+    _window.draw(_levelText);
 
     _window.display();
 }
@@ -136,18 +174,23 @@ void Game::checkCollisions()
 
     auto& projectiles = _player.getProjectiles();  // Ahora podemos modificarlos
 
-    for (auto& enemy : _enemies) {
-        projectiles.erase(
-            std::remove_if(projectiles.begin(), projectiles.end(),
-                [&enemy, radioProyectil, radioEnemigo](const Proyectil& proyectil) {
+    projectiles.erase(
+        std::remove_if(projectiles.begin(), projectiles.end(),
+            [this, radioProyectil, radioEnemigo](const Proyectil& proyectil) {
+                for (auto& enemy : _enemies) {
                     float dx = proyectil.getPosition().x - enemy.getPosition().x;
                     float dy = proyectil.getPosition().y - enemy.getPosition().y;
                     float distancia = std::sqrt(dx * dx + dy * dy);
-                    return distancia < (radioProyectil + radioEnemigo);
-                }),
-            projectiles.end()
-        );
-    }
+                    if (distancia < (radioProyectil + radioEnemigo)) {
+                        enemy.takeDamage(100);
+                        return true; // Eliminar este proyectil
+                    }
+                }
+                return false;
+            }),
+        projectiles.end()
+    );
+
 
 }
 

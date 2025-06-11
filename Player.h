@@ -10,15 +10,6 @@
 //****************
 
 
-
-
-struct Skill {
-    std::string name;
-    float damage;
-    float cooldown;
-    float area;
-};
-
 class Player : public Entity {
 private:
     int _level;
@@ -30,9 +21,18 @@ private:
     // Ema
     std::vector<Proyectil> Proyectiles;  // Lista de proyectiles activos
     sf::Clock _cooldownAtaque;                // Reloj para medir cooldown entre disparos
-    const float CDataque = 0.3;     // Tiempo mínimo entre disparos (en segundos)
+    float CDataque = 0.3;     // Tiempo mínimo entre disparos (en segundos)
     //******************************************
+    // Mariano - Barra de salud 
+    sf::RectangleShape _healthBarBackground;
+    sf::RectangleShape _healthBarFill;
     
+    //Skills
+    bool _autoAim;
+	bool _auraDamage;
+    int _piercing;
+    bool _dash;
+    bool _shield;
 
 public:
     Player(float health, float speed, const std::string& texturePath);
@@ -44,6 +44,15 @@ public:
     std::vector<Proyectil>& getProjectiles(); // Permite acceder a los proyectiles desde fuera
     void updateProjectiles(float dt);                      // Actualiza posición y vida de proyectiles
     //***************************************
+    //Mariano - Getters para barra de exp y nivel
+
+    int getLevel() const { return _level; }
+    int getExp() const { return _exp; }
+    int getExpToNextLevel() const { return _level * 100; } // ejemplo simple
+
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+    void addExp(int amount);
 };
 
 #endif

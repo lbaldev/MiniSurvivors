@@ -9,7 +9,7 @@ Enemy::Enemy(float health, float speed, float damage, const std::string& texture
 }
 
 void Enemy::update(float dt) {
-	// Placeholder;  L�gica de actualizaci�n del enemigo
+	
 }
 
 void Enemy::chase(sf::Vector2f target, float dt) {

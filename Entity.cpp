@@ -46,6 +46,10 @@ sf::Vector2f Entity::getPrevPosition() const
     return _prevPosition;
 }
 
+float Entity::getHealth() const { 
+    return _health;
+}
+
 void Entity::pushBack(sf::Vector2f dir, float fuerza)
 {
     _position += dir * fuerza;

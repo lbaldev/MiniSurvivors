@@ -8,7 +8,7 @@
 
 
 Game::Game(sf::RenderWindow& window)
-    : _window(window),
+    : _window(window),dt(0),
     _player(100.0f, 200.0f, "assets/mago.png")
 {
     _backgroundTexture.loadFromFile("assets/fondo.png");
@@ -18,7 +18,6 @@ Game::Game(sf::RenderWindow& window)
         _backgroundTexture.getSize().y / 2.f
     );
     _backgroundSprite.setPosition(0.f, 0.f); // posición del centro del mapa
-
 }
 
 void Game::run()
@@ -31,7 +30,7 @@ void Game::run()
 
     while (_window.isOpen())
     {
-        float dt = clock.restart().asSeconds();
+        dt = clock.restart().asSeconds();
         processEvents();
         update(dt);
         render();
@@ -51,12 +50,20 @@ void Game::processEvents()
 
 void Game::update(float dt)
 {
+    if (_player.getHealth() <= 0) {
+        std::cout << "Game Over!" << std::endl;
+        _window.close();
+		//Aca faltan cosas como mostrar un mensaje de Game Over, reiniciar el juego, etc.
+    }
 	_player.update(dt);
 	_spawner.spawnEnemies(_enemies, _player.getPosition()); 
 
-	for (auto& enemy : _enemies) 
-		enemy.chase(_player.getPosition(), dt); 
-
+    
+    for (auto& enemy : _enemies) {
+        enemy.chase(_player.getPosition(), dt);
+    }
+	
+    checkHitpoints();
 	checkCollisions(); 
 
     // Deseamos que el centro de la cámara esté dentro del mapa
@@ -93,9 +100,11 @@ void Game::render()
     }
     //**************************************
 
-
     for (const auto& enemy : _enemies)
         _window.draw(enemy);
+
+    for (const auto& orb : _expOrbs)
+        _window.draw(orb);
 
     _window.display();
 }
@@ -138,6 +147,21 @@ void Game::checkCollisions()
                 }),
             projectiles.end()
         );
+    }
+
+}
+
+void Game::checkHitpoints() {
+
+    for (auto it = _enemies.begin(); it != _enemies.end(); ) {
+        if (it->getHealth() <= 0) {
+            _expOrbs.emplace_back(it->getPosition(), 10);
+            it = _enemies.erase(it); 
+        }
+        else {
+            it->chase(_player.getPosition(), dt);
+            ++it;
+        }
     }
 
 }

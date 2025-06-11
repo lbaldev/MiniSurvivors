@@ -7,6 +7,8 @@
 #include <vector>
 #include "Spawner.h"
 #include "Globals.h"
+#include "Entity.h"
+#include "ExpOrb.h"
 
 
 class Game {
@@ -14,16 +16,18 @@ private:
 	sf::RenderWindow& _window; // La ventana principal para renderizar
     Player _player;
 	std::vector<Enemy> _enemies; // Vector para almacenar enemigos
+    std::vector<ExpOrb> _expOrbs;
     Spawner _spawner;
     sf::View _camera;
     sf::Texture _backgroundTexture;
     sf::Sprite _backgroundSprite;
+    float dt;
 
     void processEvents();
     void update(float deltaTime);
     void render();
 	void checkCollisions();
-
+    void checkHitpoints();
 
 public:
     Game(sf::RenderWindow& window);

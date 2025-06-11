@@ -4,9 +4,9 @@ Menu::Menu(float width, float height) : _selectedIndex(0) {
     _options = { "Continuar", "Nueva Partida", "Opciones", "Puntuaciones", "Salir" };
 
     if (!_font.loadFromFile("assets/font.otf")) {
-        // Error de fuente
+        
     }
-
+	// Hace el texto con todas las opciones
     for (size_t i = 0; i < _options.size(); ++i) {
         sf::Text text;
         text.setFont(_font);

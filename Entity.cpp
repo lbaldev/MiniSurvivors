@@ -50,9 +50,13 @@ float Entity::getHealth() const {
     return _health;
 }
 
-void Entity::receiveDamage(float damage) {
-    _health -= damage;
-    if (_health < 0) {
-        _health = 0; // Evita que la salud sea negativa
-    }
+void Entity::pushBack(sf::Vector2f dir, float fuerza)
+{
+    _position += dir * fuerza;
+    _sprite.setPosition(_position);
+}
+
+void Entity::takeDamage(float cantidad)
+{
+    _health -= cantidad;
 }

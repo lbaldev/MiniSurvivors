@@ -32,7 +32,7 @@ private:
     sf::Clock _cooldownAtaque;                // Reloj para medir cooldown entre disparos
     const float CDataque = 0.3;     // Tiempo mínimo entre disparos (en segundos)
     //******************************************
-
+    
 
 public:
     Player(float health, float speed, const std::string& texturePath);
@@ -41,7 +41,7 @@ public:
 
     // Ema
     sf::Vector2f ultima_direccion;
-    const std::vector<Proyectil>& getProjectiles() const; // Permite acceder a los proyectiles desde fuera
+    std::vector<Proyectil>& getProjectiles(); // Permite acceder a los proyectiles desde fuera
     void updateProjectiles(float dt);                      // Actualiza posición y vida de proyectiles
     //***************************************
 };

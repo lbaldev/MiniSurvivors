@@ -29,8 +29,8 @@ public:
 	sf::Vector2f getPrevPosition() const;
 
 	float getHealth() const; // M�todo para verificar si la entidad est� viva (salud > 0)
-
-	void receiveDamage(float damage); // M�todo para recibir daño, reduce la salud de la entidad
+	void pushBack(sf::Vector2f dir, float fuerza);
+	void takeDamage(float vida);
 
 protected:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override; // M�todo protegido para dibujar la entidad, se implementa en la clase base

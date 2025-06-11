@@ -31,7 +31,7 @@ private:
     sf::Clock _cooldownAtaque;                // Reloj para medir cooldown entre disparos
     const float CDataque = 0.3;     // Tiempo mínimo entre disparos (en segundos)
     //******************************************
-
+    
 
 public:
     Player(float health, float speed, const std::string& texturePath);

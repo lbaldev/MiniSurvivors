@@ -25,4 +25,5 @@ extern const float MAP_MIN_Y;
 extern const float MAP_MAX_Y;
 
 
+
 #endif // GLOBALS_H

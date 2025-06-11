@@ -33,6 +33,7 @@ private:
     int _piercing;
     bool _dash;
     bool _shield;
+    bool _recovery;
 
 public:
     Player(float health, float speed, const std::string& texturePath);

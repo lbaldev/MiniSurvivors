@@ -59,6 +59,13 @@ public:
 
     bool justLeveledUp();
 
+    void incrementarDanioBase(float extra) { _baseDamage += extra; }
+    void incrementarVelocidad(float extra) { _speed += extra; }
+    void reducirCooldownDisparo(float cantidad) {
+        CDataque = std::max(0.05f, CDataque - cantidad); 
+    }
+
+
 };
 
 #endif

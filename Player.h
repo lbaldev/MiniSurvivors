@@ -28,12 +28,14 @@ private:
     sf::RectangleShape _healthBarFill;
     
     //Skills
+    /**
     bool _autoAim;
 	bool _auraDamage;
     int _piercing;
     bool _dash;
     bool _shield;
     bool _recovery;
+    */
 
 public:
     Player(float health, float speed, const std::string& texturePath);
@@ -54,6 +56,9 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     void addExp(int amount);
+
+    bool justLeveledUp();
+
 };
 
 #endif

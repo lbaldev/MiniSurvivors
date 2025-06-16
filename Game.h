@@ -11,6 +11,8 @@
 #include "ExpOrb.h"
 
 
+
+
 class Game {
 private:
 	sf::RenderWindow& _window; // La ventana principal para renderizar

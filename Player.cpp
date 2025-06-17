@@ -50,9 +50,9 @@ void Player::handleInput(float dt) {
         move(direction.x * _speed * dt, direction.y * _speed * dt);
     }
     //Para testear el incremento de experincia
-    if (direction.x != 0 || direction.y != 0) {
-        addExp(1);
-    }
+    //if (direction.x != 0 || direction.y != 0) {
+    //    addExp(1);
+    //}
 }
  
 void Player::update(float dt) {

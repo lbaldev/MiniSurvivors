@@ -1,5 +1,5 @@
-﻿  Enemy.cpp
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Player.h(33,28): warning C4305: 'inicializando': truncamiento de 'double' a 'const float'
-  (compilando archivo de origen "Enemy.cpp")
+﻿  Player.cpp
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Player.h(24,22): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+  (compilando archivo de origen "Player.cpp")
   
   Survivors.vcxproj -> F:\dev\Projects\programacion2\programacion2\MiniSurvivors\x64\Debug\Survivors.exe

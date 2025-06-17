@@ -28,11 +28,14 @@ private:
     sf::RectangleShape _healthBarFill;
     
     //Skills
+    /**
     bool _autoAim;
 	bool _auraDamage;
     int _piercing;
     bool _dash;
     bool _shield;
+    bool _recovery;
+    */
 
 public:
     Player(float health, float speed, const std::string& texturePath);
@@ -53,6 +56,16 @@ public:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     void addExp(int amount);
+
+    bool justLeveledUp();
+
+    void incrementarDanioBase(float extra) { _baseDamage += extra; }
+    void incrementarVelocidad(float extra) { _speed += extra; }
+    void reducirCooldownDisparo(float cantidad) {
+        CDataque = std::max(0.05f, CDataque - cantidad); 
+    }
+
+
 };
 
 #endif

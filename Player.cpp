@@ -102,6 +102,7 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(_healthBarFill, states);
 }
 
+/**
 void Player::addExp(int cantidad) {
     _exp += cantidad;
 
@@ -111,5 +112,23 @@ void Player::addExp(int cantidad) {
         _level++;
     }
 }
+*/
 
 //***************************************************************
+
+bool _leveledUp = false;
+
+void Player::addExp(int cantidad) {
+    _exp += cantidad;
+    while (_exp >= getExpToNextLevel()) {
+        _exp -= getExpToNextLevel();
+        _level++;
+        _leveledUp = true;
+    }
+}
+
+bool Player::justLeveledUp() {
+    bool result = _leveledUp;
+    _leveledUp = false;
+    return result;
+}

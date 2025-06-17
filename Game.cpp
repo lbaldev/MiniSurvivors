@@ -4,8 +4,10 @@
 
 
 #include "Game.h"
+#include <random> 
 
 
+//probando git
 
 Game::Game(sf::RenderWindow& window)
     : _window(window),dt(0),
@@ -117,6 +119,36 @@ void Game::update(float dt)
     _expBarFill.setSize(sf::Vector2f(300.f * fillRatio, 20.f));
 
     _levelText.setString("Nivel: " + std::to_string(_player.getLevel()));
+
+    // Detectar si el jugador subió de nivel
+    static int ultimoNivel = _player.getLevel();
+    if (_player.getLevel() > ultimoNivel) {
+        ultimoNivel = _player.getLevel();
+
+        // Pool de mejoras
+        std::vector<std::string> mejoras = { "danio", "velocidad", "cadencia" };
+
+        // Elegir una mejora aleatoria
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> dist(0, mejoras.size() - 1);
+        std::string mejora = mejoras[dist(gen)];
+
+        // Aplicar la mejora al jugador
+        if (mejora == "danio") {
+            _player.incrementarDanioBase(5.0f);
+            std::cout << "Mejora: +5 de danio base" << std::endl;
+        }
+        else if (mejora == "velocidad") {
+            _player.incrementarVelocidad(50.0f);
+            std::cout << "Mejora: +50 de velocidad" << std::endl;
+        }
+        else if (mejora == "cadencia") {
+            _player.reducirCooldownDisparo(0.05f); 
+            std::cout << "Mejora: -0.05s cooldown de disparo" << std::endl;
+        }
+    }
+
 
 }
 

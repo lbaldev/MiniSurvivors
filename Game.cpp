@@ -167,8 +167,19 @@ void Game::checkCollisions()
             _enemies[i].colisionesEnemyEnemy(_enemies[j]);
         }
     }
+	// 3. Colisiones Jugador-Orbe de EXP
+    for (auto it = _expOrbs.begin(); it != _expOrbs.end(); ) {
+        if (_player.getGlobalBounds().intersects(it->getBounds())) {
+            _player.addExp(it->getAmount());  // Sumar EXP
+            it = _expOrbs.erase(it);          // Eliminar el orbe y actualizar el iterador
+        }
+        else {
+            ++it;  // Solo avanzar si no se eliminó el orbe
+        }
+    }
+
     // Ema
-    // 3. Colisiones Proyectil-Enemigo
+    // 4. Colisiones Proyectil-Enemigo
     const float radioProyectil = 5.f;  // El radio del proyectil
     const float radioEnemigo = 20.f;   // Aproximado para el sprite del enemigo
 
@@ -198,7 +209,7 @@ void Game::checkHitpoints() {
 
     for (auto it = _enemies.begin(); it != _enemies.end(); ) {
         if (it->getHealth() <= 0) {
-            _expOrbs.emplace_back(it->getPosition(), 10);
+            _expOrbs.emplace_back(it->getPosition(), 10); 
             it = _enemies.erase(it); 
         }
         else {

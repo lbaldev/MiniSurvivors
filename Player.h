@@ -21,9 +21,9 @@ private:
     // Ema
     std::vector<Proyectil> Proyectiles;  // Lista de proyectiles activos
     sf::Clock _cooldownAtaque;                // Reloj para medir cooldown entre disparos
-    float CDataque = 0.3;     // Tiempo mínimo entre disparos (en segundos)
+    float CDataque = 1.0;     // Tiempo mínimo entre disparos (en segundos)
     //mariano   
-    float rangoProyectil=0;  //no me funcionaaaaaa
+    float rangoProyectil = 3;
     float velocidadProyectil = 50.f; 
 
     //******************************************

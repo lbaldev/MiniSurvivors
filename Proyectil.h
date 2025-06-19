@@ -27,6 +27,11 @@ public:
     // Devuelve la posición actual del proyectil
     sf::Vector2f getPosition() const;
 
+    float getLifetime() const {
+        return rangoProyectil;
+    }
+
+
 protected:
     // Método para dibujar el proyectil
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

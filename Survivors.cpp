@@ -7,7 +7,6 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mini Survivors - Menú");
     Menu menu(WINDOW_WIDTH, WINDOW_HEIGHT);
-    Game game(window);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -24,7 +23,10 @@ int main()
                     switch (selected) {
                     case 0: /* Continuar */ break;
                     case 1: 
-                        game.run();
+                        {
+                            Game game(window);   // Crear un nuevo objeto Game CADA VEZ
+                            game.run();          // Corre el juego. Cuando termina, vuelve al menú
+                        }
                         break;
                     case 2: /* Opciones */ break;
                     case 3: /* Puntuaciones */ break;
@@ -38,7 +40,6 @@ int main()
         menu.draw(window);
         window.display();
     }
-    
 
     return 0;
 }

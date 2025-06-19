@@ -45,6 +45,31 @@ Game::Game(sf::RenderWindow& window)
     sf::FloatRect textBounds = _levelText.getLocalBounds();
     _levelText.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
     _levelText.setPosition(centerX, _expBarBackground.getPosition().y - 25.f);
+
+    //pantalla game over
+    _gameOverText.setFont(_font);
+    _gameOverText.setCharacterSize(48);
+    _gameOverText.setFillColor(sf::Color::Red);
+    _gameOverText.setString("            GAME OVER\n Nombre de jugador: Pepe \n Puntuacion: 1234");
+    _gameOverBackground.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
+    _gameOverBackground.setFillColor(sf::Color::Black);
+    _gameOverBackground.setPosition(0.f, 0.f);
+
+    _gameOverPrompt.setFont(_font);
+    _gameOverPrompt.setCharacterSize(20);
+    _gameOverPrompt.setFillColor(sf::Color::White);
+    _gameOverPrompt.setString("\n Presiona cualquier tecla para volver al menu");
+
+    sf::FloatRect promptBounds = _gameOverPrompt.getLocalBounds();
+    _gameOverPrompt.setOrigin(promptBounds.width / 2.f, promptBounds.height / 2.f);
+    _gameOverPrompt.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f + 100.f);
+
+
+
+    sf::FloatRect bounds = _gameOverText.getLocalBounds();
+    _gameOverText.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+    _gameOverText.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f);
+
 }
 
 void Game::run()
@@ -71,17 +96,27 @@ void Game::processEvents()
     {
         if (event.type == sf::Event::Closed)
             _window.close();
+
+        if (_state == GameState::GameOver && event.type == sf::Event::KeyPressed) {
+            // Aquí podrías cambiar de estado a "Menu" en lugar de cerrar
+            _window.close();  // Por ahora cerramos
+        }
+
     }
+
 }
 
 
 void Game::update(float dt)
 {
-    if (_player.getHealth() <= 0) {
-        std::cout << "Game Over!" << std::endl;
-        _window.close();
-		//Aca faltan cosas como mostrar un mensaje de Game Over, reiniciar el juego, etc.
+    if (_state == GameState::GameOver) return;
+
+    if (_player.getHealth() <= 0 && _state != GameState::GameOver) {
+        _state = GameState::GameOver;
     }
+
+
+
 	_player.update(dt);
 	_spawner.spawnEnemies(_enemies, _player.getPosition()); 
 
@@ -177,6 +212,16 @@ void Game::render()
     _window.draw(_expBarBackground);
     _window.draw(_expBarFill);
     _window.draw(_levelText);
+
+    if (_state == GameState::GameOver) {
+        _window.draw(_gameOverBackground);
+        _window.draw(_gameOverText);
+        _window.draw(_gameOverPrompt);
+        _window.display();
+        return;
+    }
+
+
 
     _window.display();
 }

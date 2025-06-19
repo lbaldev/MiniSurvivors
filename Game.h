@@ -10,8 +10,10 @@
 #include "Entity.h"
 #include "ExpOrb.h"
 
-
-
+enum class GameState {
+    Playing,
+    GameOver
+};
 
 class Game {
 private:
@@ -24,11 +26,21 @@ private:
     sf::Texture _backgroundTexture;
     sf::Sprite _backgroundSprite;
     float dt;
+    GameState _state = GameState::Playing;
+
     // Mariano elementos del HUD
     sf::Font _font;
     sf::Text _levelText;
     sf::RectangleShape _expBarBackground;
     sf::RectangleShape _expBarFill;
+
+    //pantalla game over
+    sf::Text _gameOverText;
+	sf::Clock _gameOverClock;
+    sf::RectangleShape _gameOverBackground;
+    sf::Text _gameOverPrompt;
+
+
 
     void processEvents();
     void update(float deltaTime);

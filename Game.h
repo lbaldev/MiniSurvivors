@@ -12,7 +12,8 @@
 
 enum class GameState {
     Playing,
-    GameOver
+    GameOver,
+    ExitToMenu
 };
 
 class Game {
@@ -47,10 +48,12 @@ private:
     void render();
 	void checkCollisions();
     void checkHitpoints();
+    bool _shouldExitToMenu;
 
 public:
     Game(sf::RenderWindow& window);
     void run();
+    bool shouldExitToMenu() const { return _shouldExitToMenu; }
 };
 
 #endif

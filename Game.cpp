@@ -11,7 +11,8 @@
 
 Game::Game(sf::RenderWindow& window)
     : _window(window),dt(0),
-    _player(100.0f, 200.0f, "assets/mago.png")
+    _player(100.0f, 200.0f, "assets/mago.png"),
+    _shouldExitToMenu(false) 
 {
 
 	_font.loadFromFile("assets/font.otf");
@@ -72,38 +73,33 @@ Game::Game(sf::RenderWindow& window)
 
 }
 
-void Game::run()
-{
-    sf::Clock clock;
 
-    //_camera.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    //_camera.setCenter(_player.getPosition());
+void Game::processEvents() {
+    sf::Event event;
+    while (_window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            _window.close();
+        }
 
-
-    while (_window.isOpen())
-    {
-        dt = clock.restart().asSeconds();
-        processEvents();
-        update(dt);
-        render();
+        if (_state == GameState::GameOver && event.type == sf::Event::KeyPressed) {
+            _shouldExitToMenu = true;  
+            return;  
+        }
     }
 }
 
-void Game::processEvents()
-{
-    sf::Event event;
-    while (_window.pollEvent(event))
-    {
-        if (event.type == sf::Event::Closed)
-            _window.close();
+void Game::run() {
+    sf::Clock clock;
 
-        if (_state == GameState::GameOver && event.type == sf::Event::KeyPressed) {
-            // Aquí podrías cambiar de estado a "Menu" en lugar de cerrar
-            _window.close();  // Por ahora cerramos
-        }
+    while (_window.isOpen() && !_shouldExitToMenu) {
+        dt = clock.restart().asSeconds();
+        processEvents();
 
+        if (_shouldExitToMenu) break; 
+
+        update(dt);
+        render();
     }
-
 }
 
 

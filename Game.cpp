@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 
 #include "Game.h"
@@ -10,11 +11,21 @@
 //probando git
 
 Game::Game(sf::RenderWindow& window)
-    : _window(window),dt(0),
+    : _window(window), dt(0),
     _player(100.0f, 200.0f, "assets/mago.png")
 {
+    // Música de fondo
+    musicaFondo.openFromFile("assets/MusicaFondo.ogg");
+    musicaFondo.setLoop(true);
+    musicaFondo.setVolume(10);
 
-	_font.loadFromFile("assets/font.otf");
+    // Sonido de ataque
+    bufferAtaque.loadFromFile("assets/Hit.ogg");
+    sonidoAtaque.setBuffer(bufferAtaque);
+    sonidoAtaque.setVolume(100);
+
+
+    _font.loadFromFile("assets/font.otf");
     _backgroundTexture.loadFromFile("assets/fondo.png");
     _backgroundSprite.setTexture(_backgroundTexture);
     _backgroundSprite.setOrigin(
@@ -22,6 +33,7 @@ Game::Game(sf::RenderWindow& window)
         _backgroundTexture.getSize().y / 2.f
     );
     _backgroundSprite.setPosition(0.f, 0.f); // posición del centro del mapa
+
 
     // Mariano - Agregando la barra de experiencia y nivel
     _levelText.setFont(_font);
@@ -50,6 +62,8 @@ Game::Game(sf::RenderWindow& window)
 void Game::run()
 {
     sf::Clock clock;
+    ///Ema- Musica de fondo
+    musicaFondo.play(); // Iniciar música de fondo
 
     //_camera.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     //_camera.setCenter(_player.getPosition());
@@ -80,18 +94,18 @@ void Game::update(float dt)
     if (_player.getHealth() <= 0) {
         //std::cout << "Game Over!" << std::endl;
         //_window.close();
-		//Aca faltan cosas como mostrar un mensaje de Game Over, reiniciar el juego, etc.
+        //Aca faltan cosas como mostrar un mensaje de Game Over, reiniciar el juego, etc.
     }
-	_player.update(dt);
-	_spawner.spawnEnemies(_enemies, _player.getPosition()); 
+    _player.update(dt);
+    _spawner.spawnEnemies(_enemies, _player.getPosition());
 
-    
+
     for (auto& enemy : _enemies) {
         enemy.chase(_player.getPosition(), dt);
     }
-	
+
     checkHitpoints();
-	checkCollisions(); 
+    checkCollisions();
 
     // Deseamos que el centro de la cámara esté dentro del mapa
     sf::Vector2f center = _player.getPosition();
@@ -144,7 +158,7 @@ void Game::update(float dt)
             std::cout << "Mejora: +50 de velocidad" << std::endl;
         }
         else if (mejora == "cadencia") {
-            _player.reducirCooldownDisparo(0.05f); 
+            _player.reducirCooldownDisparo(0.05f);
             std::cout << "Mejora: -0.05s cooldown de disparo" << std::endl;
         }
     }
@@ -154,9 +168,9 @@ void Game::update(float dt)
 
 void Game::render()
 {
-    _window.clear(); 
+    _window.clear();
     _window.draw(_backgroundSprite);
-	_window.draw(_player); // Dibujar el jugador
+    _window.draw(_player); // Dibujar el jugador
 
     // Ema
     // Dibujar todos los proyectiles activos del jugador
@@ -199,7 +213,7 @@ void Game::checkCollisions()
             _enemies[i].colisionesEnemyEnemy(_enemies[j]);
         }
     }
-	// 3. Colisiones Jugador-Orbe de EXP
+    // 3. Colisiones Jugador-Orbe de EXP
     for (auto it = _expOrbs.begin(); it != _expOrbs.end(); ) {
         if (_player.getGlobalBounds().intersects(it->getBounds())) {
             _player.addExp(it->getAmount());  // Sumar EXP
@@ -225,6 +239,7 @@ void Game::checkCollisions()
                     float dy = proyectil.getPosition().y - enemy.getPosition().y;
                     float distancia = std::sqrt(dx * dx + dy * dy);
                     if (distancia < (radioProyectil + radioEnemigo)) {
+                        sonidoAtaque.play();
                         enemy.takeDamage(100);
                         return true; // Eliminar este proyectil
                     }
@@ -241,8 +256,8 @@ void Game::checkHitpoints() {
 
     for (auto it = _enemies.begin(); it != _enemies.end(); ) {
         if (it->getHealth() <= 0) {
-            _expOrbs.emplace_back(it->getPosition(), 10); 
-            it = _enemies.erase(it); 
+            _expOrbs.emplace_back(it->getPosition(), 10);
+            it = _enemies.erase(it);
         }
         else {
             it->chase(_player.getPosition(), dt);

@@ -11,7 +11,9 @@ private:
     sf::Vector2f direccionProyectil;    // Dirección normalizada en la que se mueve
     float velocidadProyectil;               // Velocidad de movimiento (pixeles por segundo)
     float _lifetime;            // Tiempo de vida
-    sf::CircleShape _shape;     // Representación gráfica del proyectil
+
+    sf::Sprite _sprite;
+    static sf::Texture _texture;
 
 public:
     // Constructor del proyectil

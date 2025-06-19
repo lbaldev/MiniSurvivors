@@ -9,15 +9,17 @@
 #include "Globals.h"
 #include "Entity.h"
 #include "ExpOrb.h"
+#include <SFML/Audio.hpp>
+
 
 
 
 
 class Game {
 private:
-	sf::RenderWindow& _window; // La ventana principal para renderizar
+    sf::RenderWindow& _window; // La ventana principal para renderizar
     Player _player;
-	std::vector<Enemy> _enemies; // Vector para almacenar enemigos
+    std::vector<Enemy> _enemies; // Vector para almacenar enemigos
     std::vector<ExpOrb> _expOrbs;
     Spawner _spawner;
     sf::View _camera;
@@ -30,10 +32,17 @@ private:
     sf::RectangleShape _expBarBackground;
     sf::RectangleShape _expBarFill;
 
+    //Ema - Musica y sonidos
+    sf::Music musicaFondo;
+    sf::SoundBuffer bufferAtaque;
+    sf::Sound sonidoAtaque;
+
+
+
     void processEvents();
     void update(float deltaTime);
     void render();
-	void checkCollisions();
+    void checkCollisions();
     void checkHitpoints();
 
 public:

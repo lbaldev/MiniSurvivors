@@ -120,32 +120,34 @@ void Game::update(float dt)
 
     _levelText.setString("Nivel: " + std::to_string(_player.getLevel()));
 
-    // Detectar si el jugador subió de nivel
+
     static int ultimoNivel = _player.getLevel();
     if (_player.getLevel() > ultimoNivel) {
         ultimoNivel = _player.getLevel();
 
-        // Pool de mejoras
-        std::vector<std::string> mejoras = { "danio", "velocidad", "cadencia" };
+        int mejora = (rand() % 5) + 1;
 
-        // Elegir una mejora aleatoria
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dist(0, mejoras.size() - 1);
-        std::string mejora = mejoras[dist(gen)];
-
-        // Aplicar la mejora al jugador
-        if (mejora == "danio") {
+        switch (mejora) {
+        case 1:
             _player.incrementarDanioBase(5.0f);
-            std::cout << "Mejora: +5 de danio base" << std::endl;
-        }
-        else if (mejora == "velocidad") {
+            std::cout << "+5 de danio base" << std::endl;
+            break;
+        case 2:
             _player.incrementarVelocidad(50.0f);
-            std::cout << "Mejora: +50 de velocidad" << std::endl;
-        }
-        else if (mejora == "cadencia") {
-            _player.reducirCooldownDisparo(0.05f); 
-            std::cout << "Mejora: -0.05s cooldown de disparo" << std::endl;
+            std::cout << "+50 de velocidad" << std::endl;
+            break;
+        case 3:
+            _player.reducirCooldownDisparo(0.05f);
+            std::cout << "-0.05s cooldown de disparo" << std::endl;
+            break;
+        case 4:
+            _player.aumentarRangoProyectil(0.1f);
+            std::cout << "+0.5s duracion del proyectil" << std::endl;
+            break;
+        case 5:
+            _player.aumentarVelocidadProyectil(50.f);
+            std::cout << "+50 de velocidad del proyectil" << std::endl;
+            break;
         }
     }
 

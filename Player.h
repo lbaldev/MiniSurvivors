@@ -22,6 +22,10 @@ private:
     std::vector<Proyectil> Proyectiles;  // Lista de proyectiles activos
     sf::Clock _cooldownAtaque;                // Reloj para medir cooldown entre disparos
     float CDataque = 0.3;     // Tiempo mínimo entre disparos (en segundos)
+    //mariano   
+    float rangoProyectil=0;  //no me funcionaaaaaa
+    float velocidadProyectil = 50.f; 
+
     //******************************************
     // Mariano - Barra de salud 
     sf::RectangleShape _healthBarBackground;
@@ -64,8 +68,8 @@ public:
     void reducirCooldownDisparo(float cantidad) {
         CDataque = std::max(0.05f, CDataque - cantidad); 
     }
-
-
+    void aumentarRangoProyectil(float extra) { rangoProyectil += extra; }
+    void aumentarVelocidadProyectil(float extra) { velocidadProyectil += extra; }
 };
 
 #endif

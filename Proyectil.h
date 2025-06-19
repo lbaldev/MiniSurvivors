@@ -10,7 +10,7 @@ private:
     sf::Vector2f _position;     // Posición actual del proyectil
     sf::Vector2f direccionProyectil;    // Dirección normalizada en la que se mueve
     float velocidadProyectil;               // Velocidad de movimiento (pixeles por segundo)
-    float _lifetime;            // Tiempo de vida
+    float rangoProyectil;            // Tiempo de vida
     sf::CircleShape _shape;     // Representación gráfica del proyectil
 
 public:
@@ -19,7 +19,7 @@ public:
     // - direccionProyectil: dirección en la que se moverá 
     // - velocidadProyectil: velocidad del proyectil 
     // - lifetime: tiempo de vida en segundos 
-    Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed = 500.f, float lifetime = 3.f);
+    Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed, float lifetime);
 
     // Actualiza la posición del proyectil y reduce su tiempo de vida
     void update(float dt);

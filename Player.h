@@ -28,9 +28,9 @@ private:
     sf::RectangleShape _healthBarFill;
     
     //Skills
-    /**
     bool _autoAim;
-	bool _auraDamage;
+    /**
+    bool _auraDamage;
     int _piercing;
     bool _dash;
     bool _shield;

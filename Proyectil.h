@@ -26,6 +26,7 @@ public:
 
     // Devuelve la posición actual del proyectil
     sf::Vector2f getPosition() const;
+    float getLifetime() const;
 
 protected:
     // Método para dibujar el proyectil

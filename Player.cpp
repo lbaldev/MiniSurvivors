@@ -63,7 +63,7 @@ void Player::update(float dt) {
     // Disparo automático si pasó el cooldown
     if (_cooldownAtaque.getElapsedTime().asSeconds() >= CDataque) {
         if (ultima_direccion.x != 0 || ultima_direccion.y != 0) {
-            Proyectiles.emplace_back(_position, ultima_direccion);
+            Proyectiles.emplace_back(_position, ultima_direccion, 500.f, 0.5f);
             _cooldownAtaque.restart();
         }
     }

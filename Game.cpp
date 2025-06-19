@@ -220,19 +220,25 @@ void Game::checkCollisions()
     projectiles.erase(
         std::remove_if(projectiles.begin(), projectiles.end(),
             [this, radioProyectil, radioEnemigo](const Proyectil& proyectil) {
+                if (proyectil.getLifetime() <= 0) {
+                    return true; // eliminar por tiempo
+                }
+
                 for (auto& enemy : _enemies) {
                     float dx = proyectil.getPosition().x - enemy.getPosition().x;
                     float dy = proyectil.getPosition().y - enemy.getPosition().y;
                     float distancia = std::sqrt(dx * dx + dy * dy);
                     if (distancia < (radioProyectil + radioEnemigo)) {
                         enemy.takeDamage(100);
-                        return true; // Eliminar este proyectil
+                        return true; // eliminar por colisión
                     }
                 }
-                return false;
+
+                return false; // no eliminar
             }),
         projectiles.end()
     );
+
 
 
 }

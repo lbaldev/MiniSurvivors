@@ -7,28 +7,36 @@
 // Clase que representa un proyectil disparado por el jugador
 class Proyectil : public sf::Drawable {
 private:
-    sf::Vector2f _position;     // Posición actual del proyectil
-    sf::Vector2f direccionProyectil;    // Dirección normalizada en la que se mueve
+    sf::Vector2f _position;     // PosiciÃ³n actual del proyectil
+    sf::Vector2f direccionProyectil;    // DirecciÃ³n normalizada en la que se mueve
     float velocidadProyectil;               // Velocidad de movimiento (pixeles por segundo)
     float _lifetime;            // Tiempo de vida
-    sf::CircleShape _shape;     // Representación gráfica del proyectil
+
+    sf::Sprite _sprite;
+    static sf::Texture _texture;
+    float rangoProyectil;            // Tiempo de vida
+
 
 public:
     // Constructor del proyectil
-    // - position: posición inicial
-    // - direccionProyectil: dirección en la que se moverá 
+    // - position: posiciÃ³n inicial
+    // - direccionProyectil: direcciÃ³n en la que se moverÃ¡ 
     // - velocidadProyectil: velocidad del proyectil 
     // - lifetime: tiempo de vida en segundos 
-    Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed = 500.f, float lifetime = 3.f);
+    Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed, float lifetime);
 
-    // Actualiza la posición del proyectil y reduce su tiempo de vida
+
+    // Actualiza la posiciÃ³n del proyectil y reduce su tiempo de vida
     void update(float dt);
 
-    // Devuelve la posición actual del proyectil
+    // Devuelve la posiciÃ³n actual del proyectil
     sf::Vector2f getPosition() const;
 
+    float getLifetime() const;
+
+
 protected:
-    // Método para dibujar el proyectil
+    // MÃ©todo para dibujar el proyectil
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };
 

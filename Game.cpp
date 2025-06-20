@@ -1,6 +1,7 @@
 #include <cmath>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 
 #include "Game.h"
@@ -11,10 +12,21 @@
 
 Game::Game(sf::RenderWindow& window)
     : _window(window),dt(0),
-    _player(100.0f, 200.0f, "assets/mago.png")
+    _player(100.0f, 200.0f, "assets/mago.png"),
+    _shouldExitToMenu(false) 
 {
+    // Música de fondo
+    musicaFondo.openFromFile("assets/MusicaFondo.ogg");
+    musicaFondo.setLoop(true);
+    musicaFondo.setVolume(10);
 
-	_font.loadFromFile("assets/font.otf");
+    // Sonido de ataque
+    bufferAtaque.loadFromFile("assets/Hit.ogg");
+    sonidoAtaque.setBuffer(bufferAtaque);
+    sonidoAtaque.setVolume(100);
+
+
+    _font.loadFromFile("assets/font.otf");
     _backgroundTexture.loadFromFile("assets/fondo.png");
     _backgroundSprite.setTexture(_backgroundTexture);
     _backgroundSprite.setOrigin(
@@ -22,6 +34,7 @@ Game::Game(sf::RenderWindow& window)
         _backgroundTexture.getSize().y / 2.f
     );
     _backgroundSprite.setPosition(0.f, 0.f); // posición del centro del mapa
+
 
     // Mariano - Agregando la barra de experiencia y nivel
     _levelText.setFont(_font); 
@@ -46,6 +59,7 @@ Game::Game(sf::RenderWindow& window)
     _levelText.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
     _levelText.setPosition(centerX, _expBarBackground.getPosition().y - 25.f);
 
+
 	// Timer
     _timerTexto.setFont(_font);
     _timerTexto.setCharacterSize(24);
@@ -58,39 +72,74 @@ Game::Game(sf::RenderWindow& window)
     _textoPuntuacion.setFillColor(sf::Color::Red);
     _textoPuntuacion.setPosition(900.f, 20.f);
 
+    //pantalla game over
+    _gameOverText.setFont(_font);
+    _gameOverText.setCharacterSize(48);
+    _gameOverText.setFillColor(sf::Color::Red);
+    _gameOverText.setString("            GAME OVER\n Nombre de jugador: Pepe \n Puntuacion: 1234");
+    _gameOverBackground.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
+    _gameOverBackground.setFillColor(sf::Color::Black);
+    _gameOverBackground.setPosition(0.f, 0.f);
+
+    _gameOverPrompt.setFont(_font);
+    _gameOverPrompt.setCharacterSize(20);
+    _gameOverPrompt.setFillColor(sf::Color::White);
+    _gameOverPrompt.setString("\n Presiona cualquier tecla para volver al menu");
+
+    sf::FloatRect promptBounds = _gameOverPrompt.getLocalBounds();
+    _gameOverPrompt.setOrigin(promptBounds.width / 2.f, promptBounds.height / 2.f);
+    _gameOverPrompt.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f + 100.f);
+
+
+
+    sf::FloatRect bounds = _gameOverText.getLocalBounds();
+    _gameOverText.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+    _gameOverText.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f);
+
 }
 
-void Game::run()
-{
-    sf::Clock clock; 
+void Game::processEvents() {
+    sf::Event event;
+    while (_window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            _window.close();
+        }
 
-    //_camera.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    //_camera.setCenter(_player.getPosition());
-
-    while (_window.isOpen())
-    {
-        dt = clock.restart().asSeconds();
-        processEvents();
-        update(dt); 
-        render();
+        if (_state == GameState::GameOver && event.type == sf::Event::KeyPressed) {
+            _shouldExitToMenu = true;  
+            return;  
+        }
     }
 }
 
-void Game::processEvents()
-{
-    sf::Event event;
-    while (_window.pollEvent(event))
-    {
-        if (event.type == sf::Event::Closed)
-            _window.close();
+
+void Game::run() {
+    sf::Clock clock;
+    musicaFondo.play();
+    while (_window.isOpen() && !_shouldExitToMenu) {
+
+        dt = clock.restart().asSeconds();
+        processEvents();
+
+        if (_shouldExitToMenu) break; 
+
+        update(dt);
+        render();
     }
 }
 
 
 void Game::update(float dt)
 {
-	// Reloj para el tiempo de juego
-	int tiempoSeg = _timer.getElapsedTime().asSeconds(); // Tiempo de juego en segundos 
+
+
+    if (_state == GameState::GameOver) return;
+
+    if (_player.getHealth() <= 0 && _state != GameState::GameOver) {
+        _state = GameState::GameOver;
+    }
+      
+      int tiempoSeg = _timer.getElapsedTime().asSeconds(); // Tiempo de juego en segundos 
     _timerTexto.setString("Tiempo: " + std::to_string(tiempoSeg) + "s");
 
     int minutos = tiempoSeg / 60;
@@ -101,21 +150,17 @@ void Game::update(float dt)
     );
 
 
-    if (_player.getHealth() <= 0) {
-        //std::cout << "Game Over!" << std::endl;
-        //_window.close();
-		//Aca faltan cosas como mostrar un mensaje de Game Over, reiniciar el juego, etc.
-    }
+
 	_player.update(dt);
+    _player.attack(getClosestEnemy());
 	_spawner.spawnEnemies(_enemies, _player.getPosition()); 
 
-    
     for (auto& enemy : _enemies) {
         enemy.chase(_player.getPosition(), dt);
     }
-	
+
     checkHitpoints();
-	checkCollisions(); 
+    checkCollisions();
 
     // Deseamos que el centro de la cámara esté dentro del mapa
     sf::Vector2f center = _player.getPosition();
@@ -145,41 +190,43 @@ void Game::update(float dt)
     _levelText.setString("Nivel: " + std::to_string(_player.getLevel()));
 	_textoPuntuacion.setString("Score: " + std::to_string(_puntuacion));
 
-    // Detectar si el jugador subió de nivel
+
     static int ultimoNivel = _player.getLevel();
     if (_player.getLevel() > ultimoNivel) {
         ultimoNivel = _player.getLevel();
 
-        // Pool de mejoras
-        std::vector<std::string> mejoras = { "danio", "velocidad", "cadencia" };
+        int mejora = (rand() % 5) + 1;
 
-        // Elegir una mejora aleatoria
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dist(0, mejoras.size() - 1);
-        std::string mejora = mejoras[dist(gen)];
-
-        // Aplicar la mejora al jugador
-        if (mejora == "danio") {
+        switch (mejora) {
+        case 1:
             _player.incrementarDanioBase(5.0f);
-            std::cout << "Mejora: +5 de danio base" << std::endl;
-        }
-        else if (mejora == "velocidad") {
+            std::cout << "+5 de danio base" << std::endl;
+            break;
+        case 2:
             _player.incrementarVelocidad(50.0f);
-            std::cout << "Mejora: +50 de velocidad" << std::endl;
-        }
-        else if (mejora == "cadencia") {
-            _player.reducirCooldownDisparo(0.05f); 
-            std::cout << "Mejora: -0.05s cooldown de disparo" << std::endl;
+            std::cout << "+50 de velocidad" << std::endl;
+            break;
+        case 3:
+            _player.reducirCooldownDisparo(0.05f);
+            std::cout << "-0.05s cooldown de disparo" << std::endl;
+            break;
+        case 4:
+            _player.aumentarRangoProyectil(0.1f);
+            std::cout << "+0.5s duracion del proyectil" << std::endl;
+            break;
+        case 5:
+            _player.aumentarVelocidadProyectil(50.f);
+            std::cout << "+50 de velocidad del proyectil" << std::endl;
+            break;
         }
     }
 }
 
 void Game::render()
 {
-    _window.clear(); 
+    _window.clear();
     _window.draw(_backgroundSprite);
-	_window.draw(_player); // Dibujar el jugador
+    _window.draw(_player); // Dibujar el jugador
 
     // Ema
     // Dibujar todos los proyectiles activos del jugador
@@ -200,6 +247,16 @@ void Game::render()
     _window.draw(_levelText);
     _window.draw(_timerTexto);
 	_window.draw(_textoPuntuacion);
+
+    if (_state == GameState::GameOver) {
+        _window.draw(_gameOverBackground);
+        _window.draw(_gameOverText);
+        _window.draw(_gameOverPrompt);
+        _window.display();
+        return;
+    }
+
+
 
     _window.display();
 }
@@ -224,7 +281,7 @@ void Game::checkCollisions()
             _enemies[i].colisionesEnemyEnemy(_enemies[j]);
         }
     }
-	// 3. Colisiones Jugador-Orbe de EXP
+    // 3. Colisiones Jugador-Orbe de EXP
     for (auto it = _expOrbs.begin(); it != _expOrbs.end(); ) {
         if (_player.getGlobalBounds().intersects(it->getBounds())) {
             _player.addExp(it->getAmount());  // Sumar EXP
@@ -244,33 +301,59 @@ void Game::checkCollisions()
 
     projectiles.erase(
         std::remove_if(projectiles.begin(), projectiles.end(),
-            [this, radioProyectil, radioEnemigo](const Proyectil& proyectil) {
+            [this, radioProyectil, radioEnemigo](Proyectil& proyectil) {
+                // Verificar si se agotó el tiempo de vida
+                if (proyectil.getLifetime() <= 0) {
+                    return true; // eliminar por tiempo
+                }
+
                 for (auto& enemy : _enemies) {
                     float dx = proyectil.getPosition().x - enemy.getPosition().x;
                     float dy = proyectil.getPosition().y - enemy.getPosition().y;
                     float distancia = std::sqrt(dx * dx + dy * dy);
                     if (distancia < (radioProyectil + radioEnemigo)) {
+                        sonidoAtaque.play();
                         enemy.takeDamage(100);
-                        return true; // Eliminar este proyectil
+                        return true; // eliminar por colisión
                     }
                 }
-                return false;
+
+                return false; // no eliminar
             }),
         projectiles.end()
     );
+
 }
 
 void Game::checkHitpoints() {
+
 
     for (auto it = _enemies.begin(); it != _enemies.end(); ) { 
         if (it->getHealth() <= 0) { 
             _expOrbs.emplace_back(it->getPosition(), 10); 
             it = _enemies.erase(it);
 			_puntuacion += 10; // Aumentar el puntaje por eliminar un enemigo
+
         }
         else {
             it->chase(_player.getPosition(), dt);
             ++it;
         }
     }
+
+
+}
+
+sf::Vector2f Game::getClosestEnemy() {
+	float minDistance = std::numeric_limits<float>::max();
+	sf::Vector2f closestEnemyPosition;
+    for(Enemy& enemy : _enemies) {
+        float distance = std::hypot(enemy.getPosition().x - _player.getPosition().x, 
+                                    enemy.getPosition().y - _player.getPosition().y);
+        if (distance < minDistance) {
+            minDistance = distance;
+			closestEnemyPosition = enemy.getPosition();
+		}
+	}
+    return closestEnemyPosition;
 }

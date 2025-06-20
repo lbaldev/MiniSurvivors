@@ -49,6 +49,7 @@ private:
 	void checkCollisions();
     void checkHitpoints();
     bool _shouldExitToMenu;
+    sf::Vector2f getClosestEnemy();
 
 public:
     Game(sf::RenderWindow& window);

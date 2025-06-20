@@ -4,7 +4,7 @@
 #include "Globals.h"
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mini Survivors - Menú");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mini Survivors - MenÃº");
 
     while (window.isOpen()) {
         Menu menu(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -43,6 +43,7 @@ int main() {
                             break;
                             
                         }
+
                     }
                 }
             }

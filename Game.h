@@ -32,10 +32,14 @@ private:
     GameState _state = GameState::Playing;
 
     // Mariano elementos del HUD
-    sf::Font _font;
+	sf::Font _font; // Fuente para el HUD
     sf::Text _levelText;
     sf::RectangleShape _expBarBackground;
     sf::RectangleShape _expBarFill;
+    sf::Clock _timer;
+    sf::Text _timerTexto;
+    int _puntuacion;
+    sf::Text _textoPuntuacion;
 
     //Ema - Musica y sonidos
     sf::Music musicaFondo;

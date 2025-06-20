@@ -5,7 +5,7 @@
 
 
 Player::Player(float health, float speed, const std::string& texturePath) // El constructor inicializa al jugador con salud, velocidad y textura
-	: Entity(health, speed, texturePath, sf::Vector2f(0,0)), _level(1), _exp(0), _baseDamage(10.0f), _defense(0.1f), pickupRadius(20.0f)  // Inicializa el nivel, experiencia, daño base y defensa del jugador
+	: Entity(health, speed, texturePath, sf::Vector2f(0,0)), _level(1), _exp(0), _baseDamage(10.0f), _defense(0.1f), pickupRadius(20.0f), _rangoAtaque(1000.f)  // Inicializa el nivel, experiencia, daño base y defensa del jugador
 {   
     // Ema
     ultima_direccion = sf::Vector2f(0.f, -1.f); // Dirección inicial hacia arriba
@@ -61,12 +61,7 @@ void Player::update(float dt) {
     updateProjectiles(dt);   // Actualizar proyectiles activos
 
     // Disparo automático si pasó el cooldown
-    if (_cooldownAtaque.getElapsedTime().asSeconds() >= CDataque) {
-        if (ultima_direccion.x != 0 || ultima_direccion.y != 0) {
-            Proyectiles.emplace_back(_position, ultima_direccion, 500.f, 0.5f);
-            _cooldownAtaque.restart();
-        }
-    }
+    
     // Posicionarla debajo del sprite
     sf::Vector2f spritePos = _sprite.getPosition();
     _healthBarBackground.setPosition(spritePos.x - 20.f, spritePos.y + _sprite.getGlobalBounds().height / 2.f + 5.f);
@@ -78,7 +73,31 @@ void Player::update(float dt) {
 
     _healthBarFill.setSize(sf::Vector2f(40.f * vidaRatio, 6.f));
 }
-// ******************************
+
+void Player::attack(sf::Vector2f EnemyPosition) {
+    if (_cooldownAtaque.getElapsedTime().asSeconds() >= CDataque) {
+        if (_autoAim) {
+            if (_rangoAtaque > std::sqrt(EnemyPosition.x* EnemyPosition.x + EnemyPosition.y * EnemyPosition.y)) {
+                sf::Vector2f dir = EnemyPosition - _position;
+                float mag = std::sqrt(dir.x * dir.x + dir.y * dir.y);
+                if (mag != 0)
+                    ultima_direccion = dir / mag;
+                else
+                    ultima_direccion = { 0.f, 0.f };
+            }
+            else {
+                ultima_direccion = { 0.f, 0.f };
+            }
+        }
+
+        // Dispara en la última dirección conocida
+        if (ultima_direccion.x != 0.f || ultima_direccion.y != 0.f) {
+            Proyectiles.emplace_back(_position, ultima_direccion, 200.f , _rangoAtaque * 0.002); // velocidad, lifetime
+            _cooldownAtaque.restart();
+        }
+    }
+}
+
 
 
 // Ema
@@ -102,19 +121,15 @@ void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(_healthBarFill, states);
 }
 
-/**
-void Player::addExp(int cantidad) {
-    _exp += cantidad;
+void Player::takeDamage(float damage) {
 
-    // Subir de nivel si alcanza el umbral
-    while (_exp >= getExpToNextLevel()) {
-        _exp -= getExpToNextLevel();
-        _level++;
+    if (relojIntervaloDamage.getElapsedTime().asSeconds() >= tiempoInmune) {
+         
+        _health -= damage;
+        relojIntervaloDamage.restart(); // Reinicia el reloj para el pr��ximo ataque
     }
+    
 }
-*/
-
-//***************************************************************
 
 bool _leveledUp = false;
 

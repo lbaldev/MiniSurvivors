@@ -55,7 +55,7 @@ void Game::run()
     //_camera.setCenter(_player.getPosition());
 
 
-    while (_window.isOpen())
+    while (_window.isOpen() && _player.getHealth() > 0)
     {
         dt = clock.restart().asSeconds();
         processEvents();
@@ -83,6 +83,7 @@ void Game::update(float dt)
 		//Aca faltan cosas como mostrar un mensaje de Game Over, reiniciar el juego, etc.
     }
 	_player.update(dt);
+    _player.attack(getClosestEnemy());
 	_spawner.spawnEnemies(_enemies, _player.getPosition()); 
 
     
@@ -148,8 +149,6 @@ void Game::update(float dt)
             std::cout << "Mejora: -0.05s cooldown de disparo" << std::endl;
         }
     }
-
-
 }
 
 void Game::render()
@@ -256,4 +255,18 @@ void Game::checkHitpoints() {
         }
     }
 
+}
+
+sf::Vector2f Game::getClosestEnemy() {
+	float minDistance = std::numeric_limits<float>::max();
+	sf::Vector2f closestEnemyPosition;
+    for(Enemy& enemy : _enemies) {
+        float distance = std::hypot(enemy.getPosition().x - _player.getPosition().x, 
+                                    enemy.getPosition().y - _player.getPosition().y);
+        if (distance < minDistance) {
+            minDistance = distance;
+			closestEnemyPosition = enemy.getPosition();
+		}
+	}
+    return closestEnemyPosition;
 }

@@ -7,9 +7,10 @@ int main()
 {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mini Survivors - Menú");
     Menu menu(WINDOW_WIDTH, WINDOW_HEIGHT);
-    Game game(window);
+    
 
     while (window.isOpen()) {
+        Game game(window);
         sf::Event event;
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)

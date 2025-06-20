@@ -24,11 +24,9 @@ void Enemy::chase(sf::Vector2f target, float dt) {
 
 void Enemy::colisionesPlayerEnemy(Player& player)
 {
-    const float EMPUJE_JUGADOR = 2.5f;  // Fuerza del empuje al jugador
-	const float INTERVALO_DAMAGE = 2.0f; 
+    const float EMPUJE_JUGADOR = 2.f;  // Fuerza del empuje al jugador
 
 	sf::Vector2f direccion = _position - player.getPosition();
-
 
     // Normalizar el vector (convertirlo en dirección unitaria)
     float distancia = std::sqrt(direccion.x * direccion.x + direccion.y * direccion.y);
@@ -39,11 +37,8 @@ void Enemy::colisionesPlayerEnemy(Player& player)
         // Aplicar el empuje al enemigo
         pushBack(direccion, EMPUJE_JUGADOR);
     }
-    if (relojIntervaloDamage.getElapsedTime().asSeconds() >= INTERVALO_DAMAGE ) {
-
-        player.takeDamage(10.f);
-		relojIntervaloDamage.restart(); // Reinicia el reloj para el pr��ximo ataque
-    }
+	player.takeDamage(_damage); // El jugador recibe da��o
+    
 }
 
 void Enemy::colisionesEnemyEnemy(Entity& otro)

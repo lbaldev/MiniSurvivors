@@ -24,7 +24,7 @@ Game::Game(sf::RenderWindow& window)
     _backgroundSprite.setPosition(0.f, 0.f); // posición del centro del mapa
 
     // Mariano - Agregando la barra de experiencia y nivel
-    _levelText.setFont(_font);
+    _levelText.setFont(_font); 
     _levelText.setCharacterSize(20);
     _levelText.setFillColor(sf::Color::White);
 
@@ -45,21 +45,33 @@ Game::Game(sf::RenderWindow& window)
     sf::FloatRect textBounds = _levelText.getLocalBounds();
     _levelText.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
     _levelText.setPosition(centerX, _expBarBackground.getPosition().y - 25.f);
+
+	// Timer
+    _timerTexto.setFont(_font);
+    _timerTexto.setCharacterSize(24);
+    _timerTexto.setFillColor(sf::Color::Green);
+    _timerTexto.setPosition(600.f, 20.f);
+
+    // Puntuacion
+    _textoPuntuacion.setFont(_font);
+    _textoPuntuacion.setCharacterSize(24);
+    _textoPuntuacion.setFillColor(sf::Color::Red);
+    _textoPuntuacion.setPosition(900.f, 20.f);
+
 }
 
 void Game::run()
 {
-    sf::Clock clock;
+    sf::Clock clock; 
 
     //_camera.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     //_camera.setCenter(_player.getPosition());
-
 
     while (_window.isOpen())
     {
         dt = clock.restart().asSeconds();
         processEvents();
-        update(dt);
+        update(dt); 
         render();
     }
 }
@@ -77,6 +89,18 @@ void Game::processEvents()
 
 void Game::update(float dt)
 {
+	// Reloj para el tiempo de juego
+	int tiempoSeg = _timer.getElapsedTime().asSeconds(); // Tiempo de juego en segundos 
+    _timerTexto.setString("Tiempo: " + std::to_string(tiempoSeg) + "s");
+
+    int minutos = tiempoSeg / 60;
+    tiempoSeg %= 60;
+    _timerTexto.setString(
+        (minutos < 10 ? "0" : "") + std::to_string(minutos) + ":" +
+        (tiempoSeg < 10 ? "0" : "") + std::to_string(tiempoSeg)
+    );
+
+
     if (_player.getHealth() <= 0) {
         //std::cout << "Game Over!" << std::endl;
         //_window.close();
@@ -119,6 +143,7 @@ void Game::update(float dt)
     _expBarFill.setSize(sf::Vector2f(300.f * fillRatio, 20.f));
 
     _levelText.setString("Nivel: " + std::to_string(_player.getLevel()));
+	_textoPuntuacion.setString("Score: " + std::to_string(_puntuacion));
 
     // Detectar si el jugador subió de nivel
     static int ultimoNivel = _player.getLevel();
@@ -148,8 +173,6 @@ void Game::update(float dt)
             std::cout << "Mejora: -0.05s cooldown de disparo" << std::endl;
         }
     }
-
-
 }
 
 void Game::render()
@@ -175,6 +198,8 @@ void Game::render()
     _window.draw(_expBarBackground);
     _window.draw(_expBarFill);
     _window.draw(_levelText);
+    _window.draw(_timerTexto);
+	_window.draw(_textoPuntuacion);
 
     _window.display();
 }
@@ -233,21 +258,19 @@ void Game::checkCollisions()
             }),
         projectiles.end()
     );
-
-
 }
 
 void Game::checkHitpoints() {
 
-    for (auto it = _enemies.begin(); it != _enemies.end(); ) {
-        if (it->getHealth() <= 0) {
+    for (auto it = _enemies.begin(); it != _enemies.end(); ) { 
+        if (it->getHealth() <= 0) { 
             _expOrbs.emplace_back(it->getPosition(), 10); 
-            it = _enemies.erase(it); 
+            it = _enemies.erase(it);
+			_puntuacion += 10; // Aumentar el puntaje por eliminar un enemigo
         }
         else {
             it->chase(_player.getPosition(), dt);
             ++it;
         }
     }
-
 }

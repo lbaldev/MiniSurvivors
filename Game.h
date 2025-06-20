@@ -25,10 +25,14 @@ private:
     sf::Sprite _backgroundSprite;
     float dt;
     // Mariano elementos del HUD
-    sf::Font _font;
+	sf::Font _font; // Fuente para el HUD
     sf::Text _levelText;
     sf::RectangleShape _expBarBackground;
     sf::RectangleShape _expBarFill;
+    sf::Clock _timer;
+    sf::Text _timerTexto;
+    int _puntuacion;
+    sf::Text _textoPuntuacion;
 
     void processEvents();
     void update(float deltaTime);

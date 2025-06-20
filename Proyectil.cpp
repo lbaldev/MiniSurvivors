@@ -35,7 +35,7 @@ sf::Vector2f Proyectil::getPosition() const {
 }
 
  float Proyectil::getLifetime() const {
-    return _lifetime;
+     return rangoProyectil;
 }
 
 // Dibuja el proyectil en pantalla

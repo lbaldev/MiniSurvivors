@@ -25,16 +25,16 @@ private:
     float CDataque = 1.0;     // Tiempo mínimo entre disparos (en segundos)
     //mariano   
     float rangoProyectil = 3;
-    float velocidadProyectil = 50.f; 
-
-
+    float velocidadProyectil = 300.f; 
+    sf::Vector2f ultima_direccion;
+    float tiempoInmune = 0.5f;
     //******************************************
     // Mariano - Barra de salud 
     sf::RectangleShape _healthBarBackground;
     sf::RectangleShape _healthBarFill;
-    
+    sf::Clock relojIntervaloDamage;
     //Skills
-    bool _autoAim = false;
+    bool _autoAim = true;
     /**
     bool _auraDamage;
     int _piercing;
@@ -49,7 +49,7 @@ public:
     void update(float deltaTime) override;
 
     // Ema
-    sf::Vector2f ultima_direccion;
+    
     std::vector<Proyectil>& getProjectiles(); // Permite acceder a los proyectiles desde fuera
     void updateProjectiles(float dt);                      // Actualiza posición y vida de proyectiles
     //***************************************
@@ -58,8 +58,8 @@ public:
     int getLevel() const { return _level; }
     int getExp() const { return _exp; }
     int getExpToNextLevel() const { return _level * 100; } // ejemplo simple
-    sf::Clock relojIntervaloDamage;
-    float tiempoInmune = 0.5f;
+    
+    
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 

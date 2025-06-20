@@ -27,11 +27,8 @@ public:
 
     // Devuelve la posición actual del proyectil
     sf::Vector2f getPosition() const;
-    float getLifetime() const;
 
-    float getLifetime() const {
-        return rangoProyectil;
-    }
+    float getLifetime() const;
 
 
 protected:

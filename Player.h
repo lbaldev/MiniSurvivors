@@ -21,8 +21,13 @@ private:
     void handleInput(float deltaTime);
     // Ema
     std::vector<Proyectil> Proyectiles;  // Lista de proyectiles activos
-    sf::Clock _cooldownAtaque;                // Reloj para medir cooldown entre disparos
-    float CDataque = 1;     // Tiempo mínimo entre disparos (en segundos)
+    sf::Clock _cooldownAtaque;         
+    float CDataque = 1.0;     // Tiempo mÃ­nimo entre disparos (en segundos)
+    //mariano   
+    float rangoProyectil = 3;
+    float velocidadProyectil = 50.f; 
+
+
     //******************************************
     // Mariano - Barra de salud 
     sf::RectangleShape _healthBarBackground;
@@ -46,7 +51,7 @@ public:
     // Ema
     sf::Vector2f ultima_direccion;
     std::vector<Proyectil>& getProjectiles(); // Permite acceder a los proyectiles desde fuera
-    void updateProjectiles(float dt);                      // Actualiza posición y vida de proyectiles
+    void updateProjectiles(float dt);                      // Actualiza posiciÃ³n y vida de proyectiles
     //***************************************
     //Mariano - Getters para barra de exp y nivel
 
@@ -67,6 +72,8 @@ public:
     void reducirCooldownDisparo(float cantidad) {
         CDataque = std::max(0.05f, CDataque - cantidad); 
     }
+    void aumentarRangoProyectil(float extra) { rangoProyectil += extra; }
+    void aumentarVelocidadProyectil(float extra) { velocidadProyectil += extra; }
     void attack(sf::Vector2f position);
 
     virtual void takeDamage(float damage);

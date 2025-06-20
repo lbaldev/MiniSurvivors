@@ -11,7 +11,8 @@
 
 Game::Game(sf::RenderWindow& window)
     : _window(window),dt(0),
-    _player(100.0f, 200.0f, "assets/mago.png")
+    _player(100.0f, 200.0f, "assets/mago.png"),
+    _shouldExitToMenu(false) 
 {
 
 	_font.loadFromFile("assets/font.otf");
@@ -45,43 +46,74 @@ Game::Game(sf::RenderWindow& window)
     sf::FloatRect textBounds = _levelText.getLocalBounds();
     _levelText.setOrigin(textBounds.width / 2.f, textBounds.height / 2.f);
     _levelText.setPosition(centerX, _expBarBackground.getPosition().y - 25.f);
+
+    //pantalla game over
+    _gameOverText.setFont(_font);
+    _gameOverText.setCharacterSize(48);
+    _gameOverText.setFillColor(sf::Color::Red);
+    _gameOverText.setString("            GAME OVER\n Nombre de jugador: Pepe \n Puntuacion: 1234");
+    _gameOverBackground.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
+    _gameOverBackground.setFillColor(sf::Color::Black);
+    _gameOverBackground.setPosition(0.f, 0.f);
+
+    _gameOverPrompt.setFont(_font);
+    _gameOverPrompt.setCharacterSize(20);
+    _gameOverPrompt.setFillColor(sf::Color::White);
+    _gameOverPrompt.setString("\n Presiona cualquier tecla para volver al menu");
+
+    sf::FloatRect promptBounds = _gameOverPrompt.getLocalBounds();
+    _gameOverPrompt.setOrigin(promptBounds.width / 2.f, promptBounds.height / 2.f);
+    _gameOverPrompt.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f + 100.f);
+
+
+
+    sf::FloatRect bounds = _gameOverText.getLocalBounds();
+    _gameOverText.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
+    _gameOverText.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f);
+
 }
 
-void Game::run()
-{
-    sf::Clock clock;
 
-    //_camera.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    //_camera.setCenter(_player.getPosition());
+void Game::processEvents() {
+    sf::Event event;
+    while (_window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            _window.close();
+        }
 
-
-    while (_window.isOpen() && _player.getHealth() > 0)
-    {
-        dt = clock.restart().asSeconds();
-        processEvents();
-        update(dt);
-        render();
+        if (_state == GameState::GameOver && event.type == sf::Event::KeyPressed) {
+            _shouldExitToMenu = true;  
+            return;  
+        }
     }
 }
 
-void Game::processEvents()
-{
-    sf::Event event;
-    while (_window.pollEvent(event))
-    {
-        if (event.type == sf::Event::Closed)
-            _window.close();
+void Game::run() {
+    sf::Clock clock;
+
+    while (_window.isOpen() && !_shouldExitToMenu) {
+
+        dt = clock.restart().asSeconds();
+        processEvents();
+
+        if (_shouldExitToMenu) break; 
+
+        update(dt);
+        render();
     }
 }
 
 
 void Game::update(float dt)
 {
-    if (_player.getHealth() <= 0) {
-        //std::cout << "Game Over!" << std::endl;
-        //_window.close();
-		//Aca faltan cosas como mostrar un mensaje de Game Over, reiniciar el juego, etc.
+    if (_state == GameState::GameOver) return;
+
+    if (_player.getHealth() <= 0 && _state != GameState::GameOver) {
+        _state = GameState::GameOver;
     }
+
+
+
 	_player.update(dt);
     _player.attack(getClosestEnemy());
 	_spawner.spawnEnemies(_enemies, _player.getPosition()); 
@@ -121,32 +153,34 @@ void Game::update(float dt)
 
     _levelText.setString("Nivel: " + std::to_string(_player.getLevel()));
 
-    // Detectar si el jugador subió de nivel
+
     static int ultimoNivel = _player.getLevel();
     if (_player.getLevel() > ultimoNivel) {
         ultimoNivel = _player.getLevel();
 
-        // Pool de mejoras
-        std::vector<std::string> mejoras = { "danio", "velocidad", "cadencia" };
+        int mejora = (rand() % 5) + 1;
 
-        // Elegir una mejora aleatoria
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_int_distribution<> dist(0, mejoras.size() - 1);
-        std::string mejora = mejoras[dist(gen)];
-
-        // Aplicar la mejora al jugador
-        if (mejora == "danio") {
+        switch (mejora) {
+        case 1:
             _player.incrementarDanioBase(5.0f);
-            std::cout << "Mejora: +5 de danio base" << std::endl;
-        }
-        else if (mejora == "velocidad") {
+            std::cout << "+5 de danio base" << std::endl;
+            break;
+        case 2:
             _player.incrementarVelocidad(50.0f);
-            std::cout << "Mejora: +50 de velocidad" << std::endl;
-        }
-        else if (mejora == "cadencia") {
-            _player.reducirCooldownDisparo(0.05f); 
-            std::cout << "Mejora: -0.05s cooldown de disparo" << std::endl;
+            std::cout << "+50 de velocidad" << std::endl;
+            break;
+        case 3:
+            _player.reducirCooldownDisparo(0.05f);
+            std::cout << "-0.05s cooldown de disparo" << std::endl;
+            break;
+        case 4:
+            _player.aumentarRangoProyectil(0.1f);
+            std::cout << "+0.5s duracion del proyectil" << std::endl;
+            break;
+        case 5:
+            _player.aumentarVelocidadProyectil(50.f);
+            std::cout << "+50 de velocidad del proyectil" << std::endl;
+            break;
         }
     }
 }
@@ -174,6 +208,16 @@ void Game::render()
     _window.draw(_expBarBackground);
     _window.draw(_expBarFill);
     _window.draw(_levelText);
+
+    if (_state == GameState::GameOver) {
+        _window.draw(_gameOverBackground);
+        _window.draw(_gameOverText);
+        _window.draw(_gameOverPrompt);
+        _window.display();
+        return;
+    }
+
+
 
     _window.display();
 }
@@ -218,7 +262,8 @@ void Game::checkCollisions()
 
     projectiles.erase(
         std::remove_if(projectiles.begin(), projectiles.end(),
-            [this, radioProyectil, radioEnemigo](const Proyectil& proyectil) {
+            [this, radioProyectil, radioEnemigo](Proyectil& proyectil) {
+                // Verificar si se agotó el tiempo de vida
                 if (proyectil.getLifetime() <= 0) {
                     return true; // eliminar por tiempo
                 }

@@ -61,7 +61,6 @@ void Player::update(float dt) {
     updateProjectiles(dt);   // Actualizar proyectiles activos
 
     // Disparo automático si pasó el cooldown
-    
     // Posicionarla debajo del sprite
     sf::Vector2f spritePos = _sprite.getPosition();
     _healthBarBackground.setPosition(spritePos.x - 20.f, spritePos.y + _sprite.getGlobalBounds().height / 2.f + 5.f);
@@ -92,7 +91,7 @@ void Player::attack(sf::Vector2f EnemyPosition) {
 
         // Dispara en la última dirección conocida
         if (ultima_direccion.x != 0.f || ultima_direccion.y != 0.f) {
-            Proyectiles.emplace_back(_position, ultima_direccion, 200.f , _rangoAtaque * 0.002); // velocidad, lifetime
+            Proyectiles.emplace_back(_position, ultima_direccion, velocidadProyectil, rangoProyectil); // velocidad, lifetime
             _cooldownAtaque.restart();
         }
     }

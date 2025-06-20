@@ -3,7 +3,7 @@
 
 // Constructor del proyectil
 Proyectil::Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed, float lifetime)
-    : _position(position), direccionProyectil(direction), velocidadProyectil(speed), _lifetime(lifetime)
+    : _position(position), direccionProyectil(direction), velocidadProyectil(speed), rangoProyectil(lifetime)
 {
     // Si la dirección no es cero, la normalizamos
     if (direccionProyectil.x != 0 || direccionProyectil.y != 0) {
@@ -27,7 +27,7 @@ void Proyectil::update(float dt) {
     _shape.setPosition(_position);
 
     // Reducimos el tiempo de vida restante
-    _lifetime -= dt;
+    rangoProyectil -= dt;
 }
 
 sf::Vector2f Proyectil::getPosition() const {

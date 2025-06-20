@@ -34,6 +34,10 @@ sf::Vector2f Proyectil::getPosition() const {
     return _position;
 }
 
+ float Proyectil::getLifetime() const {
+    return _lifetime;
+}
+
 // Dibuja el proyectil en pantalla
 void Proyectil::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(_shape, states);

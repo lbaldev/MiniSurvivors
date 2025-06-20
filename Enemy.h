@@ -16,7 +16,7 @@ public:
 	void colisionesPlayerEnemy(Player& player);
 	void colisionesEnemyEnemy(Entity& otro);
 
-    sf::Clock relojIntervaloDamage;
+    
 
 };
 

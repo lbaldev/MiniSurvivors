@@ -35,6 +35,7 @@ private:
     void render();
 	void checkCollisions();
     void checkHitpoints();
+    sf::Vector2f getClosestEnemy();
 
 public:
     Game(sf::RenderWindow& window);

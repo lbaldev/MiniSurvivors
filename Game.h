@@ -12,8 +12,11 @@
 #include <SFML/Audio.hpp>
 
 
-
-
+enum class GameState {
+    Playing,
+    GameOver,
+    ExitToMenu
+};
 
 class Game {
 private:
@@ -26,6 +29,8 @@ private:
     sf::Texture _backgroundTexture;
     sf::Sprite _backgroundSprite;
     float dt;
+    GameState _state = GameState::Playing;
+
     // Mariano elementos del HUD
     sf::Font _font;
     sf::Text _levelText;
@@ -36,6 +41,11 @@ private:
     sf::Music musicaFondo;
     sf::SoundBuffer bufferAtaque;
     sf::Sound sonidoAtaque;
+    //pantalla game over
+    sf::Text _gameOverText;
+	sf::Clock _gameOverClock;
+    sf::RectangleShape _gameOverBackground;
+    sf::Text _gameOverPrompt;
 
 
 
@@ -44,10 +54,13 @@ private:
     void render();
     void checkCollisions();
     void checkHitpoints();
+    bool _shouldExitToMenu;
+    sf::Vector2f getClosestEnemy();
 
 public:
     Game(sf::RenderWindow& window);
     void run();
+    bool shouldExitToMenu() const { return _shouldExitToMenu; }
 };
 
 #endif

@@ -72,6 +72,11 @@ void Player::update(float dt) {
     vidaRatio = std::max(0.f, std::min(vidaRatio, 1.f));
 
     _healthBarFill.setSize(sf::Vector2f(40.f * vidaRatio, 6.f));
+
+    
+    if (relojIntervaloDamage.getElapsedTime().asSeconds() >= tiempoInmune) {
+		_sprite.setColor(sf::Color::White);
+    }
 }
 
 void Player::attack(sf::Vector2f EnemyPosition) {
@@ -125,6 +130,9 @@ void Player::takeDamage(float damage) {
          
         _health -= damage;
         relojIntervaloDamage.restart(); // Reinicia el reloj para el pr��ximo ataque
+    }
+    else {
+		_sprite.setColor(sf::Color::Red); // Cambia el color del sprite a rojo si est�� en invulnerabilidad
     }
     
 }

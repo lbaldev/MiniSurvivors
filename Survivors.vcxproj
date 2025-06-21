@@ -137,6 +137,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="pauseMenu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Proyectil.cpp" />
     <ClCompile Include="Spawner.cpp" />
@@ -149,6 +150,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="pauseMenu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Proyectil.h" />
     <ClInclude Include="Spawner.h" />

@@ -8,8 +8,9 @@ FileManager::FileManager(const std::string& archivoPartida, const std::string& a
 }
 
 bool FileManager::guardarPartida(const Player& jugador, const std::vector<Enemy>& enemigos) {
-    FILE* pArchivo = fopen(_archivoPartida.c_str(), "wb");
-    if (pArchivo == NULL) return false;
+    FILE* pArchivo;
+    errno_t err = fopen_s(&pArchivo, _archivoPartida.c_str(), "wb");
+    if (err != 0 || pArchivo == NULL) return false;
 
     sf::Vector2f pos = jugador.getPosition();
     int vida = jugador.getHealth();
@@ -38,8 +39,9 @@ bool FileManager::guardarPartida(const Player& jugador, const std::vector<Enemy>
 }
 
 bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos) {
-    FILE* pArchivo = fopen(_archivoPartida.c_str(), "rb");
-    if (pArchivo == NULL) return false;
+    FILE* pArchivo;
+    errno_t err = fopen_s(&pArchivo, _archivoPartida.c_str(), "wb");
+    if (err != 0 || pArchivo == NULL) return false;
 
     sf::Vector2f pos;
     int vida, nivel, exp;
@@ -76,8 +78,9 @@ bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos) {
 }
 
 bool FileManager::guardarPuntaje(const ScoreEntry& entry) {
-    FILE* pArchivo = fopen(_archivoPuntajes.c_str(), "ab");
-    if (pArchivo == NULL) return false;
+    FILE* pArchivo;
+    errno_t err = fopen_s(&pArchivo, _archivoPuntajes.c_str(), "wb");
+    if (err != 0 || pArchivo == NULL) return false;
 
     fwrite(&entry, sizeof(ScoreEntry), 1, pArchivo);
     fclose(pArchivo);
@@ -86,8 +89,9 @@ bool FileManager::guardarPuntaje(const ScoreEntry& entry) {
 
 std::vector<ScoreEntry> FileManager::leerPuntajes() {
     std::vector<ScoreEntry> resultados;
-    FILE* pArchivo = fopen(_archivoPuntajes.c_str(), "rb");
-    if (pArchivo == NULL) return resultados;
+    FILE* pArchivo;
+    errno_t err = fopen_s(&pArchivo, _archivoPuntajes.c_str(), "wb");
+    if (err != 0 || pArchivo == NULL) return resultados;
 
     ScoreEntry temp;
     while (fread(&temp, sizeof(ScoreEntry), 1, pArchivo)) {

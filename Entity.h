@@ -22,11 +22,11 @@ public:
 	virtual void update(float deltaTime) = 0; // M�todo virtual puro para actualizar la entidad, debe ser implementado por las clases derivadas
 
 	//Getters
-	sf::Vector2f getPosition() { return _position; } // M�todo para obtener la posici�n de la entidad
-	sf::FloatRect getGlobalBounds() { return _sprite.getGlobalBounds(); } // M�todo para obtener los l�mites globales del sprite de la entidad
-	sf::Vector2f getPrevPosition() { return _prevPosition; }
-	std::string getTexturePath() { return _texturePath; } // M�todo para obtener la ruta de la textura de la entidad
-	float getHealth() { return _health; } // M�todo para verificar si la entidad est� viva (salud > 0)
+	sf::Vector2f getPosition() const { return _position; } // M�todo para obtener la posici�n de la entidad
+	sf::FloatRect getGlobalBounds() const { return _sprite.getGlobalBounds(); } // M�todo para obtener los l�mites globales del sprite de la entidad
+	sf::Vector2f getPrevPosition() const { return _prevPosition; }
+	std::string getTexturePath() const { return _texturePath; } // M�todo para obtener la ruta de la textura de la entidad
+	float getHealth() const { return _health; } // M�todo para verificar si la entidad est� viva (salud > 0)
 
 	//Setters
 	void setPosition(sf::Vector2f pos) { _position = pos; } // M�todo para establecer la posici�n de la entidad

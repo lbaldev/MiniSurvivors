@@ -213,7 +213,7 @@ void Game::update(float dt)
   
     if(_state == GameState::Paused) {
         return;
-	  }
+	}
     updatePlayerStatsDisplay();
 
     _timer = _timer + dt;
@@ -306,6 +306,7 @@ void Game::render()
     _window.clear();
 
     if (_state == GameState::GameOver) {
+        _window.setView(_window.getDefaultView());
         _window.draw(_gameOverBackground);
         _window.draw(_gameOverText);
         _window.draw(_gameOverPrompt);
@@ -346,17 +347,6 @@ void Game::render()
     _window.draw(_statsBackground);
     _window.draw(_playerIcon);
     _window.draw(_statsText);
-
-    if (_state == GameState::GameOver) {
-        _window.draw(_gameOverBackground);
-        _window.draw(_gameOverText);
-        _window.draw(_gameOverPrompt);
-        _window.display();
-        return;
-    }
-
-
-
 
     _window.display();
 }

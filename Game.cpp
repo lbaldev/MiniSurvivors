@@ -193,9 +193,9 @@ void Game::updatePlayerStatsDisplay() {
 
     stats << "Ataque: " << _player.getBaseDamage() << "\n"
         << "Velocidad: " << _player.getSpeed() << "\n"
-        << "Cadencia: " << (1.0f / _player.getAttackCooldown()) << "/s\n"
-        << "Rango: " << _player.getProjectileRange() << "\n"
-        << "Vel. Disparo: " << _player.getProjectileSpeed();
+        << "Cadencia: " << (1.0f / _player.getCooldownAtaque()) << "/s\n"
+        << "Rango: " << _player.getRangoProyectil() << "\n"
+        << "Vel. Disparo: " << _player.getVelocidadProyectil();
 
     _statsText.setString(stats.str());
 }

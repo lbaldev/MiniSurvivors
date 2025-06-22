@@ -27,7 +27,7 @@ public:
 	sf::Vector2f getPrevPosition() const { return _prevPosition; }
 	std::string getTexturePath() const { return _texturePath; } // M�todo para obtener la ruta de la textura de la entidad
 	float getHealth() const { return _health; } // M�todo para verificar si la entidad est� viva (salud > 0)
-
+	float getSpeed() const { return _speed; } // M�todo para obtener la velocidad de la entidad
 	//Setters
 	void setPosition(sf::Vector2f pos) { _position = pos; } // M�todo para establecer la posici�n de la entidad
 	void setHealth(float health) { _health = health; }

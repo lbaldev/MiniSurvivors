@@ -1,10 +1,10 @@
 #include "PauseMenu.h"
 
 PauseMenu::PauseMenu(float width, float height) : _selectedIndex(0) {
-    _font.loadFromFile("assets/fonts/arial.ttf");  // Asegurate de tener una fuente
+    
 
     std::vector<std::string> labels = { "Continuar", "Guardar partida", "Salir" };
-
+    _font.loadFromFile("assets/font.otf");
     for (size_t i = 0; i < labels.size(); ++i) {
         sf::Text text;
         text.setFont(_font);

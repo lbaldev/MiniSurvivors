@@ -18,6 +18,7 @@ Game::Game(sf::RenderWindow& window)
 	_timer(0.f),
     _pauseMenu(WINDOW_WIDTH, WINDOW_HEIGHT)
 {
+    _font.loadFromFile("assets/font.otf");
     // Música de fondo
     musicaFondo.openFromFile("assets/MusicaFondo.ogg");
     musicaFondo.setLoop(true);
@@ -29,7 +30,7 @@ Game::Game(sf::RenderWindow& window)
     sonidoAtaque.setVolume(100);
 
 
-    _font.loadFromFile("assets/font.otf");
+    ;
     _backgroundTexture.loadFromFile("assets/fondo.png");
     _backgroundSprite.setTexture(_backgroundTexture);
     _backgroundSprite.setOrigin(
@@ -37,7 +38,7 @@ Game::Game(sf::RenderWindow& window)
         _backgroundTexture.getSize().y / 2.f
     );
     _backgroundSprite.setPosition(0.f, 0.f); // posición del centro del mapa
-
+    
 
     // Mariano - Agregando la barra de experiencia y nivel
     _levelText.setFont(_font); 
@@ -139,12 +140,8 @@ void Game::processEvents() {
                     case 2:
                         _shouldExitToMenu = true; // Volver al menú principal
                         break;
-
                     }
-
                 }
-
-
             }
         }
     }

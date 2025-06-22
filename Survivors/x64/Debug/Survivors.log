@@ -1,19 +1,49 @@
-﻿  Game.cpp
+﻿  Enemy.cpp
+  Entity.cpp
+  FileManager.cpp
+  Game.cpp
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(15,14): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(18,27): error C2039: "getBaseDamage": no es un miembro de "Player"
+      F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Player.h(13,7):
+      vea la declaración de 'Player'
+  
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(26,26): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(11,22): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(55,13): error C2039: "setHealth": no es un miembro de "Player"
+      F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Player.h(13,7):
+      vea la declaración de 'Player'
+  
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(56,13): error C2039: "setLevel": no es un miembro de "Player"
+      F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Player.h(13,7):
+      vea la declaración de 'Player'
+  
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(57,13): error C2039: "setExp": no es un miembro de "Player"
+      F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Player.h(13,7):
+      vea la declaración de 'Player'
+  
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(58,13): error C2039: "setBaseDamage": no es un miembro de "Player"
+      F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Player.h(13,7):
+      vea la declaración de 'Player'
+  
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(41,22): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(76,22): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(86,22): error C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(19,30): warning C4244: 'argumento': conversión de 'const int' a 'float'; posible pérdida de datos
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(19,16): warning C4244: 'argumento': conversión de 'const int' a 'float'; posible pérdida de datos
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(83,60): warning C4244: 'argumento': conversión de 'const int' a 'T'; posible pérdida de datos
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(83,60): warning C4244:         with
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(83,60): warning C4244:         [
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(83,60): warning C4244:             T=float
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(83,60): warning C4244:         ]
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(83,46): warning C4244: 'argumento': conversión de 'const int' a 'T'; posible pérdida de datos
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(83,46): warning C4244:         with
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(83,46): warning C4244:         [
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(83,46): warning C4244:             T=float
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(83,46): warning C4244:         ]
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(184,21): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(84,60): warning C4244: 'argumento': conversión de 'const int' a 'T'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(84,60): warning C4244:         with
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(84,60): warning C4244:         [
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(84,60): warning C4244:             T=float
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(84,60): warning C4244:         ]
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(84,46): warning C4244: 'argumento': conversión de 'const int' a 'T'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(84,46): warning C4244:         with
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(84,46): warning C4244:         [
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(84,46): warning C4244:             T=float
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(84,46): warning C4244:         ]
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(182,21): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+  Player.cpp
+  Spawner.cpp
   Survivors.cpp
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Survivors.cpp(10,33): warning C4244: 'argumento': conversión de 'const int' a 'float'; posible pérdida de datos
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Survivors.cpp(10,19): warning C4244: 'argumento': conversión de 'const int' a 'float'; posible pérdida de datos
   Generando código...
-  Survivors.vcxproj -> F:\dev\Projects\programacion2\programacion2\MiniSurvivors\x64\Debug\Survivors.exe

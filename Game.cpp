@@ -13,7 +13,7 @@
 Game::Game(sf::RenderWindow& window)
     : _window(window),dt(0),
     _player(100.0f, 200.0f, "assets/mago.png"),
-    _shouldExitToMenu(false) 
+    _shouldExitToMenu(false), _puntuacion(0)
 {
     // Música de fondo
     musicaFondo.openFromFile("assets/MusicaFondo.ogg");
@@ -76,7 +76,7 @@ Game::Game(sf::RenderWindow& window)
     _gameOverText.setFont(_font);
     _gameOverText.setCharacterSize(48);
     _gameOverText.setFillColor(sf::Color::Red);
-    _gameOverText.setString("            GAME OVER\n Nombre de jugador: Pepe \n Puntuacion: 1234");
+    _gameOverText.setString("            GAME OVER\n\nPuntuacion: 0");    
     _gameOverBackground.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
     _gameOverBackground.setFillColor(sf::Color::Black);
     _gameOverBackground.setPosition(0.f, 0.f);
@@ -89,8 +89,6 @@ Game::Game(sf::RenderWindow& window)
     sf::FloatRect promptBounds = _gameOverPrompt.getLocalBounds();
     _gameOverPrompt.setOrigin(promptBounds.width / 2.f, promptBounds.height / 2.f);
     _gameOverPrompt.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f + 100.f);
-
-
 
     sf::FloatRect bounds = _gameOverText.getLocalBounds();
     _gameOverText.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
@@ -137,6 +135,7 @@ void Game::update(float dt)
 
     if (_player.getHealth() <= 0 && _state != GameState::GameOver) {
         _state = GameState::GameOver;
+        _gameOverText.setString("    GAME OVER\n\nPuntuacion: " + std::to_string(_puntuacion));
     }
       
       int tiempoSeg = _timer.getElapsedTime().asSeconds(); // Tiempo de juego en segundos 
@@ -191,6 +190,7 @@ void Game::update(float dt)
 	_textoPuntuacion.setString("Score: " + std::to_string(_puntuacion));
 
 
+    // Pool de mejoras al azar al subir de nivel
     static int ultimoNivel = _player.getLevel();
     if (_player.getLevel() > ultimoNivel) {
         ultimoNivel = _player.getLevel();

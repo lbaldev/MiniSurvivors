@@ -18,7 +18,7 @@ private:
     float _defense;
     float pickupRadius;
 	float _rangoAtaque;
-    void handleInput(float deltaTime);
+    
     // Ema
     std::vector<Proyectil> Proyectiles;  // Lista de proyectiles activos
     sf::Clock _cooldownAtaque;         
@@ -28,8 +28,6 @@ private:
     float velocidadProyectil = 300.f; 
     sf::Vector2f ultima_direccion;
     float tiempoInmune = 0.5f;
-    //******************************************
-    // Mariano - Barra de salud 
     sf::RectangleShape _healthBarBackground;
     sf::RectangleShape _healthBarFill;
     sf::Clock relojIntervaloDamage;
@@ -42,7 +40,8 @@ private:
     bool _shield;
     bool _recovery;
     */
-
+	//****************
+    void handleInput(float deltaTime);
 public:
     Player(float health, float speed, const std::string& texturePath);
 
@@ -50,28 +49,44 @@ public:
 
     // Ema
     
-    std::vector<Proyectil>& getProjectiles(); // Permite acceder a los proyectiles desde fuera
+     // Permite acceder a los proyectiles desde fuera
     void updateProjectiles(float dt);                      // Actualiza posición y vida de proyectiles
     //***************************************
-    //Mariano - Getters para barra de exp y nivel
+    //Getters
 
     int getLevel() const { return _level; }
     int getExp() const { return _exp; }
     int getExpToNextLevel() const { return _level * 100; } // ejemplo simple
-    
-    //getters para stats en pantalla
-    float getBaseDamage() const { return _baseDamage; }
-    float getSpeed() const { return _speed; }
-    float getAttackCooldown() const { return CDataque; }
-    float getProjectileRange() const { return rangoProyectil; }
-    float getProjectileSpeed() const { return velocidadProyectil; }
+	float getBaseDamage() const { return _baseDamage; }
+	float getDefense() const { return _defense; }
+	float getPickupRadius() const { return pickupRadius; }
+	float getRangoAtaque() const { return _rangoAtaque; }
+    std::vector<Proyectil>& getProjectiles();
+	float getCooldownAtaque() const { return CDataque; }
+	float getRangoProyectil() const { return rangoProyectil; }
+	float getVelocidadProyectil() const { return velocidadProyectil; }
+	float getTiempoInmune() const { return tiempoInmune; }
+    bool isAutoAimEnabled() const { return _autoAim; }
+
+    //Setters
+	void setLevel(int level) { _level = level; }
+	void setExp(int exp) { _exp = exp; }
+	void setBaseDamage(float damage) { _baseDamage = damage; }
+	void setDefense(float defense) { _defense = defense; }
+	void setPickupRadius(float radius) { pickupRadius = radius; }
+    void setRangoAtaque(float rango) { _rangoAtaque = rango; }
+    void setCooldownAtaque(float cooldown) { CDataque = cooldown; }
+    void setRangoProyectil(float rango) { rangoProyectil = rango; }
+    void setVelocidadProyectil(float velocidad) { velocidadProyectil = velocidad; }
+    void setTiempoInmune(float tiempo) { tiempoInmune = tiempo; }
+	//*****************
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
     void addExp(int amount);
 
     bool justLeveledUp();
-
+    void toggleAutoAim() { _autoAim = !_autoAim; }
     void incrementarDanioBase(float extra) { _baseDamage += extra; }
     void incrementarVelocidad(float extra) { _speed += extra; }
     void reducirCooldownDisparo(float cantidad) {

@@ -10,11 +10,13 @@
 #include "Entity.h"
 #include "ExpOrb.h"
 #include <SFML/Audio.hpp>
+#include "PauseMenu.h"
 
 
 enum class GameState {
     Playing,
     GameOver,
+	Paused,
     ExitToMenu
 };
 
@@ -30,13 +32,14 @@ private:
     sf::Sprite _backgroundSprite;
     float dt;
     GameState _state = GameState::Playing;
+    PauseMenu _pauseMenu;
 
     // Mariano elementos del HUD
 	sf::Font _font; // Fuente para el HUD
     sf::Text _levelText;
     sf::RectangleShape _expBarBackground;
     sf::RectangleShape _expBarFill;
-    sf::Clock _timer;
+    float _timer;
     sf::Text _timerTexto;
     int _puntuacion;
     sf::Text _textoPuntuacion;

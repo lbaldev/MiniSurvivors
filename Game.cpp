@@ -15,8 +15,13 @@
 Game::Game(sf::RenderWindow& window)
     : _window(window),dt(0),
     _player(100.0f, 200.0f, "assets/mago.png"),
-    _shouldExitToMenu(false), _puntuacion(0)
+
+    _shouldExitToMenu(false),
+	_puntuacion(0),
+	_timer(0.f),
+    _pauseMenu(WINDOW_WIDTH, WINDOW_HEIGHT)
 {
+    _font.loadFromFile("assets/font.otf");
     // Música de fondo
     musicaFondo.openFromFile("assets/MusicaFondo.ogg");
     musicaFondo.setLoop(true);
@@ -32,7 +37,7 @@ Game::Game(sf::RenderWindow& window)
     _playerIcon.setTexture(_playerIconTexture); 
     _playerIcon.setPosition(20.f, 20.f);
 
-    _font.loadFromFile("assets/font.otf");
+    ;
     _backgroundTexture.loadFromFile("assets/fondo.png");
     _backgroundSprite.setTexture(_backgroundTexture);
     _backgroundSprite.setOrigin(
@@ -40,7 +45,7 @@ Game::Game(sf::RenderWindow& window)
         _backgroundTexture.getSize().y / 2.f
     );
     _backgroundSprite.setPosition(0.f, 0.f); // posición del centro del mapa
-
+    
 
     // Mariano - Agregando la barra de experiencia y nivel
     _levelText.setFont(_font); 
@@ -121,7 +126,7 @@ Game::Game(sf::RenderWindow& window)
 
 }
 
-void Game::processEvents() {
+void Game::processEvents() {  
     sf::Event event;
     while (_window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -129,8 +134,39 @@ void Game::processEvents() {
         }
 
         if (_state == GameState::GameOver && event.type == sf::Event::KeyPressed) {
-            _shouldExitToMenu = true;  
-            return;  
+            _shouldExitToMenu = true;
+            return;
+        }
+
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape) {
+                if (_state == GameState::Paused) {
+                    _state = GameState::Playing;
+                }
+                else {
+                    _state = GameState::Paused;
+                }
+            }
+            if (_state == GameState::Paused) {
+                if (event.key.code == sf::Keyboard::Up)
+                    _pauseMenu.moveUp();
+                if (event.key.code == sf::Keyboard::Down)
+                    _pauseMenu.moveDown();
+                if (event.key.code == sf::Keyboard::Enter) {
+                    int selected = _pauseMenu.getSelectedIndex();
+                    switch (selected) {
+                    case 0:
+                        _state = GameState::Playing; // Continuar juego
+                        break;
+                    case 1:
+                        //TODO: Guardar partida
+                        break;
+                    case 2:
+                        _shouldExitToMenu = true; // Volver al menú principal
+                        break;
+                    }
+                }
+            }
         }
     }
 }
@@ -174,9 +210,14 @@ void Game::update(float dt)
         _state = GameState::GameOver;
         _gameOverText.setString("    GAME OVER\n\nPuntuacion: " + std::to_string(_puntuacion));
     }
+  
+    if(_state == GameState::Paused) {
+        return;
+	  }
     updatePlayerStatsDisplay();
 
-      int tiempoSeg = _timer.getElapsedTime().asSeconds(); // Tiempo de juego en segundos 
+    _timer = _timer + dt;
+      int tiempoSeg = _timer; // Tiempo de juego en segundos
     _timerTexto.setString("Tiempo: " + std::to_string(tiempoSeg) + "s");
 
     int minutos = tiempoSeg / 60;
@@ -263,6 +304,21 @@ void Game::update(float dt)
 void Game::render()
 {
     _window.clear();
+
+    if (_state == GameState::GameOver) {
+        _window.draw(_gameOverBackground);
+        _window.draw(_gameOverText);
+        _window.draw(_gameOverPrompt);
+        _window.display();
+        return;
+    }
+
+    if( _state == GameState::Paused) {
+        _pauseMenu.draw(_window);
+        _window.display();
+        return;
+	}
+
     _window.draw(_backgroundSprite);
     _window.draw(_player); // Dibujar el jugador
 
@@ -298,6 +354,7 @@ void Game::render()
         _window.display();
         return;
     }
+
 
 
 

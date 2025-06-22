@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
+#include <SFML/Audio.hpp>
 
 class Menu {
 private:
@@ -13,6 +14,10 @@ private:
     int _selectedIndex;
     sf::Texture _backgroundTexture;  // Textura de fondo
     sf::Sprite _backgroundSprite;    // Sprite de fondo
+    sf::SoundBuffer _moveSoundBuffer;
+    sf::SoundBuffer _selectSoundBuffer;
+    sf::Sound _moveSound;
+    sf::Sound _selectSound;
 
 public:
     Menu(float width, float height);
@@ -21,6 +26,7 @@ public:
     void moveDown();
     int getSelectedIndex() const;
     bool loadBackground(const std::string& filename); // Método para cargar el fondo
+    void playSelectSound();
 };
 
 #endif

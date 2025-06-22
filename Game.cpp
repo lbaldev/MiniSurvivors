@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include <sstream>  // Para std::stringstream
-#include <iomanip>  // Para std::fixed y std::setprecision
+#include <iomanip>  // Para std::fixed y std::setprecision  ambos usados para stats en pantalla
 
 
 #include "Game.h"
@@ -87,7 +87,7 @@ Game::Game(sf::RenderWindow& window)
     // Fondo semitransparente para las stats
     _statsBackground.setSize(sf::Vector2f(200.f, 180.f));
     _statsBackground.setFillColor(sf::Color(0, 0, 0, 150)); // Negro semitransparente
-    _statsBackground.setPosition(10.f, 120.f); // Debajo del icono
+    _statsBackground.setPosition(10.f, 120.f); 
 
     // Texto de estadísticas
     _statsText.setFont(_font);
@@ -153,7 +153,7 @@ void Game::run() {
 
 void Game::updatePlayerStatsDisplay() {
     std::stringstream stats;
-    stats << std::fixed << std::setprecision(1); // 1 decimal
+    stats << std::fixed << std::setprecision(1); // cantidad de decimales
 
     stats << "Ataque: " << _player.getBaseDamage() << "\n"
         << "Velocidad: " << _player.getSpeed() << "\n"

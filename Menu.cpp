@@ -21,6 +21,12 @@ Menu::Menu(float width, float height) : _selectedIndex(0) {
         height / _backgroundSprite.getLocalBounds().height
     );
 
+    //sonidos
+    _moveSoundBuffer.loadFromFile("assets/menu_move.ogg");
+    _selectSoundBuffer.loadFromFile("assets/menu_select.ogg");
+    _moveSound.setBuffer(_moveSoundBuffer);
+    _selectSound.setBuffer(_selectSoundBuffer);
+
     // Hace el texto con todas las opciones
     for (size_t i = 0; i < _options.size(); ++i) {
         sf::Text text;
@@ -58,6 +64,7 @@ void Menu::moveUp() {
         _texts[_selectedIndex].setFillColor(sf::Color::White);
         _selectedIndex--;
         _texts[_selectedIndex].setFillColor(sf::Color::Yellow);
+        _moveSound.play(); 
     }
 }
 
@@ -66,6 +73,13 @@ void Menu::moveDown() {
         _texts[_selectedIndex].setFillColor(sf::Color::White);
         _selectedIndex++;
         _texts[_selectedIndex].setFillColor(sf::Color::Yellow);
+        _moveSound.play();
+    }
+}
+
+void Menu::playSelectSound() {
+    if (_selectSound.getStatus() != sf::Sound::Playing) {
+        _selectSound.play();
     }
 }
 

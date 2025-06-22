@@ -38,7 +38,7 @@ Game::Game(sf::RenderWindow& window)
     _playerIcon.setPosition(20.f, 20.f);
 
     ;
-    _backgroundTexture.loadFromFile("assets/fondo.png");
+    _backgroundTexture.loadFromFile("assets/fondo-.png");
     _backgroundSprite.setTexture(_backgroundTexture);
     _backgroundSprite.setOrigin(
         _backgroundTexture.getSize().x / 2.f,
@@ -59,9 +59,11 @@ Game::Game(sf::RenderWindow& window)
     _expBarBackground.setSize(sf::Vector2f(barWidth, barHeight));
     _expBarBackground.setFillColor(sf::Color(50, 50, 50));
     _expBarBackground.setPosition(centerX - barWidth / 2.f, WINDOW_HEIGHT - 60.f);
+    _expBarBackground.setOutlineThickness(2.f);
+    _expBarBackground.setOutlineColor(sf::Color::Black);
 
     _expBarFill.setSize(sf::Vector2f(0.f, barHeight));
-    _expBarFill.setFillColor(sf::Color::Green);
+    _expBarFill.setFillColor(sf::Color::Yellow);
     _expBarFill.setPosition(_expBarBackground.getPosition());
 
     _levelText.setString("Nivel: 1");
@@ -99,6 +101,16 @@ Game::Game(sf::RenderWindow& window)
     _statsText.setCharacterSize(18);
     _statsText.setFillColor(sf::Color::White);
     _statsText.setPosition(20.f, 125.f);
+
+    //Bordes de textos
+    _levelText.setOutlineThickness(2.f);
+    _levelText.setOutlineColor(sf::Color::Black);
+
+    _timerTexto.setOutlineThickness(2.f);
+    _timerTexto.setOutlineColor(sf::Color::Black);
+
+    _textoPuntuacion.setOutlineThickness(2.f);
+    _textoPuntuacion.setOutlineColor(sf::Color::Black);
 
     updatePlayerStatsDisplay();
 

@@ -7,6 +7,7 @@
 // Ema
 #include "Proyectil.h"
 #include <SFML/System/Clock.hpp>
+#include <SFML/Audio.hpp>
 //****************
 
 
@@ -33,6 +34,7 @@ private:
     sf::Clock relojIntervaloDamage;
     //Skills
     bool _autoAim = true;
+    int _disparosAdicionales = 0;
     /**
     bool _auraDamage;
     int _piercing;
@@ -42,6 +44,8 @@ private:
     */
 	//****************
     void handleInput(float deltaTime);
+    sf::SoundBuffer _levelUpBuffer;
+    sf::Sound _levelUpSound;
 public:
     Player(float health, float speed, const std::string& texturePath);
 
@@ -94,9 +98,13 @@ public:
     }
     void aumentarRangoProyectil(float extra) { rangoProyectil += extra; }
     void aumentarVelocidadProyectil(float extra) { velocidadProyectil += extra; }
+    void agregarDisparoAdicional() { _disparosAdicionales++; }
+    int getDisparosAdicionales() const { return _disparosAdicionales; }
+
     void attack(sf::Vector2f position);
 
     virtual void takeDamage(float damage);
+
 
 };
 

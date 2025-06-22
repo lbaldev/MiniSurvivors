@@ -10,7 +10,7 @@
 #include <random> 
 
 
-//probando git Nueva rama
+//probando git
 
 Game::Game(sf::RenderWindow& window)
     : _window(window),dt(0),
@@ -274,7 +274,7 @@ void Game::update(float dt)
     if (_player.getLevel() > ultimoNivel) {
         ultimoNivel = _player.getLevel();
 
-        int mejora = (rand() % 5) + 1;
+        int mejora = (rand() % 6) + 1;
 
         switch (mejora) {
         case 1:
@@ -282,20 +282,24 @@ void Game::update(float dt)
             std::cout << "+5 de danio base" << std::endl;
             break;
         case 2:
-            _player.incrementarVelocidad(50.0f);
-            std::cout << "+50 de velocidad" << std::endl;
+            _player.incrementarVelocidad(100.0f);
+            std::cout << "+100 de velocidad" << std::endl;
             break;
         case 3:
-            _player.reducirCooldownDisparo(0.05f);
-            std::cout << "-0.05s cooldown de disparo" << std::endl;
+            _player.reducirCooldownDisparo(0.2f);
+            std::cout << "-0.2s cooldown de disparo" << std::endl;
             break;
         case 4:
             _player.aumentarRangoProyectil(0.1f);
             std::cout << "+0.5s duracion del proyectil" << std::endl;
             break;
         case 5:
-            _player.aumentarVelocidadProyectil(50.f);
-            std::cout << "+50 de velocidad del proyectil" << std::endl;
+            _player.aumentarVelocidadProyectil(100.f);
+            std::cout << "+100 de velocidad del proyectil" << std::endl;
+            break;
+        case 6:  
+            _player.agregarDisparoAdicional();
+            std::cout << "+1 disparo adicional" << std::endl;
             break;
         }
     }
@@ -374,7 +378,7 @@ void Game::checkCollisions()
     // 3. Colisiones Jugador-Orbe de EXP
     for (auto it = _expOrbs.begin(); it != _expOrbs.end(); ) {
         if (_player.getGlobalBounds().intersects(it->getBounds())) {
-            _player.addExp(it->getAmount());  // Sumar EXP
+            _player.addExp(200);  // Sumar EXP
             it = _expOrbs.erase(it);          // Eliminar el orbe y actualizar el iterador
         }
         else {

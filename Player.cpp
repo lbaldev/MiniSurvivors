@@ -17,6 +17,10 @@ Player::Player(float health, float speed, const std::string& texturePath) // El 
 
     _healthBarFill.setSize(sf::Vector2f(40.f, 6.f)); // llena al inicio
     _healthBarFill.setFillColor(sf::Color::Red);
+
+    _levelUpBuffer.loadFromFile("assets/levelup.ogg");
+    _levelUpSound.setBuffer(_levelUpBuffer);
+    _levelUpSound.setVolume(40);
 }
 
 void Player::handleInput(float dt) {
@@ -93,7 +97,17 @@ void Player::attack(sf::Vector2f EnemyPosition) {
         }
 
         if (direccion.x != 0.f || direccion.y != 0.f) {
+       
             Proyectiles.emplace_back(_position, direccion, velocidadProyectil, rangoProyectil);
+
+            // Disparos adicionales 
+            const float separation = 20.0f; //distancia entre disparos adicionales
+            for (int i = 0; i < _disparosAdicionales; ++i) {
+                float offset = separation * (i + 1);
+                sf::Vector2f posAdicional = _position - (direccion * offset);
+                Proyectiles.emplace_back(posAdicional, direccion, velocidadProyectil, rangoProyectil);
+            }
+
             _cooldownAtaque.restart();
         }
     }
@@ -145,6 +159,7 @@ void Player::addExp(int cantidad) {
         _exp -= getExpToNextLevel();
         _level++;
         _leveledUp = true;
+        _levelUpSound.play(); 
     }
 }
 

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <sstream>  // Para std::stringstream
+#include <iomanip>  // Para std::fixed y std::setprecision
 
 
 #include "Game.h"
@@ -25,6 +27,10 @@ Game::Game(sf::RenderWindow& window)
     sonidoAtaque.setBuffer(bufferAtaque);
     sonidoAtaque.setVolume(100);
 
+    //Icono de jugador
+    _playerIconTexture.loadFromFile("assets/player_icon.png");
+    _playerIcon.setTexture(_playerIconTexture); 
+    _playerIcon.setPosition(20.f, 20.f);
 
     _font.loadFromFile("assets/font.otf");
     _backgroundTexture.loadFromFile("assets/fondo.png");
@@ -71,6 +77,25 @@ Game::Game(sf::RenderWindow& window)
     _textoPuntuacion.setCharacterSize(24);
     _textoPuntuacion.setFillColor(sf::Color::Red);
     _textoPuntuacion.setPosition(900.f, 20.f);
+
+    // Icono jugador
+    _playerIcon.setTexture(_playerIconTexture);
+    _playerIcon.setPosition(20.f, 20.f); 
+    _playerIcon.setScale(90.f / _playerIcon.getLocalBounds().width,
+        90.f / _playerIcon.getLocalBounds().height); 
+
+    // Fondo semitransparente para las stats
+    _statsBackground.setSize(sf::Vector2f(200.f, 180.f));
+    _statsBackground.setFillColor(sf::Color(0, 0, 0, 150)); // Negro semitransparente
+    _statsBackground.setPosition(10.f, 120.f); // Debajo del icono
+
+    // Texto de estadísticas
+    _statsText.setFont(_font);
+    _statsText.setCharacterSize(18);
+    _statsText.setFillColor(sf::Color::White);
+    _statsText.setPosition(20.f, 125.f);
+
+    updatePlayerStatsDisplay();
 
     //pantalla game over
     _gameOverText.setFont(_font);
@@ -126,6 +151,18 @@ void Game::run() {
     }
 }
 
+void Game::updatePlayerStatsDisplay() {
+    std::stringstream stats;
+    stats << std::fixed << std::setprecision(1); // 1 decimal
+
+    stats << "Ataque: " << _player.getBaseDamage() << "\n"
+        << "Velocidad: " << _player.getSpeed() << "\n"
+        << "Cadencia: " << (1.0f / _player.getAttackCooldown()) << "/s\n"
+        << "Rango: " << _player.getProjectileRange() << "\n"
+        << "Vel. Disparo: " << _player.getProjectileSpeed();
+
+    _statsText.setString(stats.str());
+}
 
 void Game::update(float dt)
 {
@@ -137,7 +174,8 @@ void Game::update(float dt)
         _state = GameState::GameOver;
         _gameOverText.setString("    GAME OVER\n\nPuntuacion: " + std::to_string(_puntuacion));
     }
-      
+    updatePlayerStatsDisplay();
+
       int tiempoSeg = _timer.getElapsedTime().asSeconds(); // Tiempo de juego en segundos 
     _timerTexto.setString("Tiempo: " + std::to_string(tiempoSeg) + "s");
 
@@ -161,7 +199,7 @@ void Game::update(float dt)
     checkHitpoints();
     checkCollisions();
 
-    // Deseamos que el centro de la cámara esté dentro del mapa
+	// Bloquea la camara al jugador y limita su movimiento al mapa
     sf::Vector2f center = _player.getPosition();
 
     float halfW = _camera.getSize().x / 2.f;
@@ -247,6 +285,11 @@ void Game::render()
     _window.draw(_levelText);
     _window.draw(_timerTexto);
 	_window.draw(_textoPuntuacion);
+
+    //stats a la izq
+    _window.draw(_statsBackground);
+    _window.draw(_playerIcon);
+    _window.draw(_statsText);
 
     if (_state == GameState::GameOver) {
         _window.draw(_gameOverBackground);

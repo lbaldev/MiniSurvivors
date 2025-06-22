@@ -40,6 +40,11 @@ private:
     sf::Text _timerTexto;
     int _puntuacion;
     sf::Text _textoPuntuacion;
+    sf::Sprite _playerIcon;
+    sf::Texture _playerIconTexture;
+    sf::Text _statsText;
+    sf::RectangleShape _statsBackground;
+
 
     //Ema - Musica y sonidos
     sf::Music musicaFondo;
@@ -55,6 +60,7 @@ private:
 
     void processEvents();
     void update(float deltaTime);
+    void updatePlayerStatsDisplay();
     void render();
     void checkCollisions();
     void checkHitpoints();

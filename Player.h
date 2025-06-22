@@ -59,7 +59,12 @@ public:
     int getExp() const { return _exp; }
     int getExpToNextLevel() const { return _level * 100; } // ejemplo simple
     
-    
+    //getters para stats en pantalla
+    float getBaseDamage() const { return _baseDamage; }
+    float getSpeed() const { return _speed; }
+    float getAttackCooldown() const { return CDataque; }
+    float getProjectileRange() const { return rangoProyectil; }
+    float getProjectileSpeed() const { return velocidadProyectil; }
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 

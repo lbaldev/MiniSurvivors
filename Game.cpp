@@ -2,6 +2,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <sstream>  // Para std::stringstream
+#include <iomanip>  // Para std::fixed y std::setprecision  ambos usados para stats en pantalla
 
 
 #include "Game.h"
@@ -13,6 +15,7 @@
 Game::Game(sf::RenderWindow& window)
     : _window(window),dt(0),
     _player(100.0f, 200.0f, "assets/mago.png"),
+
     _shouldExitToMenu(false),
 	_puntuacion(0),
 	_timer(0.f),
@@ -29,6 +32,10 @@ Game::Game(sf::RenderWindow& window)
     sonidoAtaque.setBuffer(bufferAtaque);
     sonidoAtaque.setVolume(100);
 
+    //Icono de jugador
+    _playerIconTexture.loadFromFile("assets/player_icon.png");
+    _playerIcon.setTexture(_playerIconTexture); 
+    _playerIcon.setPosition(20.f, 20.f);
 
     ;
     _backgroundTexture.loadFromFile("assets/fondo.png");
@@ -76,11 +83,30 @@ Game::Game(sf::RenderWindow& window)
     _textoPuntuacion.setFillColor(sf::Color::Red);
     _textoPuntuacion.setPosition(900.f, 20.f);
 
+    // Icono jugador
+    _playerIcon.setTexture(_playerIconTexture);
+    _playerIcon.setPosition(20.f, 20.f); 
+    _playerIcon.setScale(90.f / _playerIcon.getLocalBounds().width,
+        90.f / _playerIcon.getLocalBounds().height); 
+
+    // Fondo semitransparente para las stats
+    _statsBackground.setSize(sf::Vector2f(200.f, 180.f));
+    _statsBackground.setFillColor(sf::Color(0, 0, 0, 150)); // Negro semitransparente
+    _statsBackground.setPosition(10.f, 120.f); 
+
+    // Texto de estadísticas
+    _statsText.setFont(_font);
+    _statsText.setCharacterSize(18);
+    _statsText.setFillColor(sf::Color::White);
+    _statsText.setPosition(20.f, 125.f);
+
+    updatePlayerStatsDisplay();
+
     //pantalla game over
     _gameOverText.setFont(_font);
     _gameOverText.setCharacterSize(48);
     _gameOverText.setFillColor(sf::Color::Red);
-    _gameOverText.setString("            GAME OVER\n Nombre de jugador: Pepe \n Puntuacion: 1234");
+    _gameOverText.setString("            GAME OVER\n\nPuntuacion: 0");    
     _gameOverBackground.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
     _gameOverBackground.setFillColor(sf::Color::Black);
     _gameOverBackground.setPosition(0.f, 0.f);
@@ -93,8 +119,6 @@ Game::Game(sf::RenderWindow& window)
     sf::FloatRect promptBounds = _gameOverPrompt.getLocalBounds();
     _gameOverPrompt.setOrigin(promptBounds.width / 2.f, promptBounds.height / 2.f);
     _gameOverPrompt.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f + 100.f);
-
-
 
     sf::FloatRect bounds = _gameOverText.getLocalBounds();
     _gameOverText.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
@@ -163,6 +187,18 @@ void Game::run() {
     }
 }
 
+void Game::updatePlayerStatsDisplay() {
+    std::stringstream stats;
+    stats << std::fixed << std::setprecision(1); // cantidad de decimales
+
+    stats << "Ataque: " << _player.getBaseDamage() << "\n"
+        << "Velocidad: " << _player.getSpeed() << "\n"
+        << "Cadencia: " << (1.0f / _player.getAttackCooldown()) << "/s\n"
+        << "Rango: " << _player.getProjectileRange() << "\n"
+        << "Vel. Disparo: " << _player.getProjectileSpeed();
+
+    _statsText.setString(stats.str());
+}
 
 void Game::update(float dt)
 {
@@ -172,14 +208,16 @@ void Game::update(float dt)
 
     if (_player.getHealth() <= 0 && _state != GameState::GameOver) {
         _state = GameState::GameOver;
+        _gameOverText.setString("    GAME OVER\n\nPuntuacion: " + std::to_string(_puntuacion));
     }
-
+  
     if(_state == GameState::Paused) {
         return;
-	}
-    
+	  }
+    updatePlayerStatsDisplay();
+
     _timer = _timer + dt;
-      int tiempoSeg = _timer; // Tiempo de juego en segundos 
+      int tiempoSeg = _timer; // Tiempo de juego en segundos
     _timerTexto.setString("Tiempo: " + std::to_string(tiempoSeg) + "s");
 
     int minutos = tiempoSeg / 60;
@@ -202,7 +240,7 @@ void Game::update(float dt)
     checkHitpoints();
     checkCollisions();
 
-    // Deseamos que el centro de la cámara esté dentro del mapa
+	// Bloquea la camara al jugador y limita su movimiento al mapa
     sf::Vector2f center = _player.getPosition();
 
     float halfW = _camera.getSize().x / 2.f;
@@ -231,6 +269,7 @@ void Game::update(float dt)
 	_textoPuntuacion.setString("Score: " + std::to_string(_puntuacion));
 
 
+    // Pool de mejoras al azar al subir de nivel
     static int ultimoNivel = _player.getLevel();
     if (_player.getLevel() > ultimoNivel) {
         ultimoNivel = _player.getLevel();
@@ -302,6 +341,20 @@ void Game::render()
     _window.draw(_levelText);
     _window.draw(_timerTexto);
 	_window.draw(_textoPuntuacion);
+
+    //stats a la izq
+    _window.draw(_statsBackground);
+    _window.draw(_playerIcon);
+    _window.draw(_statsText);
+
+    if (_state == GameState::GameOver) {
+        _window.draw(_gameOverBackground);
+        _window.draw(_gameOverText);
+        _window.draw(_gameOverPrompt);
+        _window.display();
+        return;
+    }
+
 
 
 

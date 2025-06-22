@@ -24,7 +24,7 @@ private:
     sf::Clock _cooldownAtaque;         
     float CDataque = 1.0;     // Tiempo mínimo entre disparos (en segundos)
     //mariano   
-    float rangoProyectil = 3;
+    float rangoProyectil = 0.5;
     float velocidadProyectil = 300.f; 
     sf::Vector2f ultima_direccion;
     float tiempoInmune = 0.5f;

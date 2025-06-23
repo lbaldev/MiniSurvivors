@@ -39,7 +39,7 @@ Game::Game(sf::RenderWindow& window)
     _playerIcon.setPosition(20.f, 20.f);
 
     ;
-    _backgroundTexture.loadFromFile("assets/fondo.png");
+    _backgroundTexture.loadFromFile("assets/fondo-.png");
     _backgroundSprite.setTexture(_backgroundTexture);
     _backgroundSprite.setOrigin(
         _backgroundTexture.getSize().x / 2.f,
@@ -60,9 +60,11 @@ Game::Game(sf::RenderWindow& window)
     _expBarBackground.setSize(sf::Vector2f(barWidth, barHeight));
     _expBarBackground.setFillColor(sf::Color(50, 50, 50));
     _expBarBackground.setPosition(centerX - barWidth / 2.f, WINDOW_HEIGHT - 60.f);
+    _expBarBackground.setOutlineThickness(2.f);
+    _expBarBackground.setOutlineColor(sf::Color::Black);
 
     _expBarFill.setSize(sf::Vector2f(0.f, barHeight));
-    _expBarFill.setFillColor(sf::Color::Green);
+    _expBarFill.setFillColor(sf::Color::Yellow);
     _expBarFill.setPosition(_expBarBackground.getPosition());
 
     _levelText.setString("Nivel: 1");
@@ -100,6 +102,16 @@ Game::Game(sf::RenderWindow& window)
     _statsText.setCharacterSize(18);
     _statsText.setFillColor(sf::Color::White);
     _statsText.setPosition(20.f, 125.f);
+
+    //Bordes de textos
+    _levelText.setOutlineThickness(2.f);
+    _levelText.setOutlineColor(sf::Color::Black);
+
+    _timerTexto.setOutlineThickness(2.f);
+    _timerTexto.setOutlineColor(sf::Color::Black);
+
+    _textoPuntuacion.setOutlineThickness(2.f);
+    _textoPuntuacion.setOutlineColor(sf::Color::Black);
 
     updatePlayerStatsDisplay();
 
@@ -277,7 +289,7 @@ void Game::update(float dt)
     if (_player.getLevel() > ultimoNivel) {
         ultimoNivel = _player.getLevel();
 
-        int mejora = (rand() % 5) + 1;
+        int mejora = (rand() % 6) + 1;
 
         switch (mejora) {
         case 1:
@@ -285,20 +297,24 @@ void Game::update(float dt)
             std::cout << "+5 de danio base" << std::endl;
             break;
         case 2:
-            _player.incrementarVelocidad(50.0f);
-            std::cout << "+50 de velocidad" << std::endl;
+            _player.incrementarVelocidad(100.0f);
+            std::cout << "+100 de velocidad" << std::endl;
             break;
         case 3:
-            _player.reducirCooldownDisparo(0.05f);
-            std::cout << "-0.05s cooldown de disparo" << std::endl;
+            _player.reducirCooldownDisparo(0.2f);
+            std::cout << "-0.2s cooldown de disparo" << std::endl;
             break;
         case 4:
             _player.aumentarRangoProyectil(0.1f);
             std::cout << "+0.5s duracion del proyectil" << std::endl;
             break;
         case 5:
-            _player.aumentarVelocidadProyectil(50.f);
-            std::cout << "+50 de velocidad del proyectil" << std::endl;
+            _player.aumentarVelocidadProyectil(100.f);
+            std::cout << "+100 de velocidad del proyectil" << std::endl;
+            break;
+        case 6:  
+            _player.agregarDisparoAdicional();
+            std::cout << "+1 disparo adicional" << std::endl;
             break;
         }
     }
@@ -377,7 +393,7 @@ void Game::checkCollisions()
     // 3. Colisiones Jugador-Orbe de EXP
     for (auto it = _expOrbs.begin(); it != _expOrbs.end(); ) {
         if (_player.getGlobalBounds().intersects(it->getBounds())) {
-            _player.addExp(it->getAmount());  // Sumar EXP
+            _player.addExp(200);  // Sumar EXP
             it = _expOrbs.erase(it);          // Eliminar el orbe y actualizar el iterador
         }
         else {

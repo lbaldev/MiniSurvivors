@@ -61,7 +61,10 @@ private:
     sf::RectangleShape _gameOverBackground;
     sf::Text _gameOverPrompt;
 
-
+    //Escalado de stats
+    int _mejorasAplicadas = 0;
+    float _aumentoDanio = 0.f;
+    float _aumentoVelocidad = 0.f;
 
     void processEvents();
     void update(float deltaTime);

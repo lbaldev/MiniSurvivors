@@ -246,7 +246,8 @@ void Game::update(float dt)
 
 	_player.update(dt);
     _player.attack(getClosestEnemy());
-	_spawner.spawnEnemies(_enemies, _player.getPosition()); 
+    //Se le agrego aumentoDanio y aumentoVelocidad para que los enemigos puedan escalar por tiempo
+    _spawner.spawnEnemies(_enemies, _player.getPosition(), _aumentoDanio, _aumentoVelocidad);
 
     for (auto& enemy : _enemies) {
         enemy.chase(_player.getPosition(), dt);
@@ -318,6 +319,26 @@ void Game::update(float dt)
             break;
         }
     }
+
+    // Mejora de stats de enemigos
+    int mejorasEsperadas = static_cast<int>(_timer) / 60;
+    if (mejorasEsperadas > _mejorasAplicadas) {
+        int cantidadMejoras = mejorasEsperadas - _mejorasAplicadas;
+        _mejorasAplicadas = mejorasEsperadas;
+
+        _aumentoDanio += 10.f * cantidadMejoras;
+        _aumentoVelocidad += 2.f * cantidadMejoras;
+
+        std::cout << "Enemigos mejorados! " << _aumentoDanio
+            << " +10 daño y" << _aumentoVelocidad << " + 2 velocidad." << std::endl;
+
+        // Mejorar stats de enemigos vivos
+        for (auto& enemy : _enemies) {
+            enemy.setDamage(enemy.getDamage() + 10.f * cantidadMejoras);
+            enemy.setSpeed(enemy.getSpeed() + 2.f * cantidadMejoras);
+        }
+    }
+
 }
 
 void Game::render()

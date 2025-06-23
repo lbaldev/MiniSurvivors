@@ -5,6 +5,7 @@
 #include <vector>
 #include "Player.h"
 #include "Enemy.h"
+#include "ExpOrb.h"
 
 struct ScoreEntry {
     char nombre[30];
@@ -19,8 +20,8 @@ private:
 public:
     FileManager(const std::string& archivoPartida, const std::string& archivoPuntajes);
 
-    bool guardarPartida(const Player& jugador, const std::vector<Enemy>& enemigos);
-    bool cargarPartida(Player& jugador, std::vector<Enemy>& enemigos);
+    bool guardarPartida(const Player& jugador, const std::vector<Enemy>& enemigos, const std::vector<ExpOrb>& orbes);
+    bool cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, std::vector<ExpOrb>& orbes);
 
     bool guardarPuntaje(const ScoreEntry& entry);
     std::vector<ScoreEntry> leerPuntajes();

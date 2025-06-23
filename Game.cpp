@@ -19,7 +19,8 @@ Game::Game(sf::RenderWindow& window)
     _shouldExitToMenu(false),
 	_puntuacion(0),
 	_timer(0.f),
-    _pauseMenu(WINDOW_WIDTH, WINDOW_HEIGHT)
+    _pauseMenu(WINDOW_WIDTH, WINDOW_HEIGHT),
+	_fileManager("save.txt", "puntajes.txt")
 {
     _font.loadFromFile("assets/font.otf");
     // Música de fondo
@@ -148,9 +149,9 @@ void Game::processEvents() {
                 }
             }
             if (_state == GameState::Paused) {
-                if (event.key.code == sf::Keyboard::Up)
+                if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W)
                     _pauseMenu.moveUp();
-                if (event.key.code == sf::Keyboard::Down)
+                if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S)
                     _pauseMenu.moveDown();
                 if (event.key.code == sf::Keyboard::Enter) {
                     int selected = _pauseMenu.getSelectedIndex();
@@ -159,7 +160,9 @@ void Game::processEvents() {
                         _state = GameState::Playing; // Continuar juego
                         break;
                     case 1:
-                        //TODO: Guardar partida
+                        _fileManager.guardarPartida(_player, _enemies, _expOrbs);
+                        std::cout << "[INFO] guardando partida..." << std::endl;
+                        _shouldExitToMenu = true;
                         break;
                     case 2:
                         _shouldExitToMenu = true; // Volver al menú principal
@@ -446,4 +449,8 @@ sf::Vector2f Game::getClosestEnemy() {
 		}
 	}
     return closestEnemyPosition;
+}
+
+bool Game::loadSave() {
+    return _fileManager.cargarPartida(_player, _enemies, _expOrbs);
 }

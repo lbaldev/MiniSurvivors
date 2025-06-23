@@ -26,9 +26,13 @@ int main() {
                     else if (event.key.code == sf::Keyboard::Enter) {
                         menu.playSelectSound(); 
                         int selected = menu.getSelectedIndex();
+                        Game game(window);
                         switch (selected) {
+                        case 0: {
+							if (game.loadSave()) game.run();
+                            break;
+						}
                         case 1: {
-                            Game game(window);
                             game.run();
                             if (game.shouldExitToMenu()) {
                                 showMenu = true;

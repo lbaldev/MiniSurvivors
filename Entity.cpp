@@ -40,6 +40,7 @@ void Entity::takeDamage(float cantidad)
 }
 
 void Entity::setTexture(const std::string& texturePath) {
+    _texture = std::make_shared<sf::Texture>();
     if (_texture->loadFromFile(texturePath)) {
         _texturePath = texturePath;
         _sprite.setTexture(*_texture);

@@ -14,6 +14,8 @@ protected:
     sf::Vector2f _prevPosition;
 	std::string _texturePath;
 
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override; // M�todo protegido para dibujar la entidad, se implementa en la clase base
+
 public:
 
 	Entity(float health, float speed, const std::string& texturePath, sf::Vector2f position); // Constructor con posici�n
@@ -39,8 +41,6 @@ public:
 	void pushBack(sf::Vector2f dir, float fuerza);
 	virtual void takeDamage(float vida);
 
-protected:
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override; // M�todo protegido para dibujar la entidad, se implementa en la clase base
 };
 
 #endif

@@ -11,6 +11,7 @@
 #include "ExpOrb.h"
 #include <SFML/Audio.hpp>
 #include "PauseMenu.h"
+#include "FileManager.h"
 
 
 enum class GameState {
@@ -33,6 +34,7 @@ private:
     float dt;
     GameState _state = GameState::Playing;
     PauseMenu _pauseMenu;
+	FileManager _fileManager; 
 
     // Mariano elementos del HUD
 	sf::Font _font; // Fuente para el HUD
@@ -71,7 +73,9 @@ private:
     sf::Vector2f getClosestEnemy();
 
 public:
+
     Game(sf::RenderWindow& window);
+    bool loadSave();
     void run();
     bool shouldExitToMenu() const { return _shouldExitToMenu; }
 };

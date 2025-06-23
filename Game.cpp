@@ -159,6 +159,12 @@ void Game::update(float dt)
         enemy.chase(_player.getPosition(), dt);
     }
 
+    // Boss
+    if (_bossSpawned) {
+        _boss.chase(_player.getPosition(), dt);
+    }
+
+
     checkHitpoints();
     checkCollisions();
 
@@ -220,6 +226,23 @@ void Game::update(float dt)
             break;
         }
     }
+
+    // Boss
+    int tiempoTotal = _timer.getElapsedTime().asSeconds();
+
+    if (!_bossAparecio && !_bossSpawned && tiempoTotal >= 2) {
+        _boss = Enemy(
+            1000.f,                   // vida
+            80.f,                     // velocidad
+            50.f,                     // daño
+            "assets/boss.png",       // textura del boss
+            sf::Vector2f(600.f, 400.f) // posición inicial
+        );
+        _bossSpawned = true;
+        _bossAparecio = true;
+        std::cout << "Boss aparecio!" << std::endl;
+    }
+
 }
 
 void Game::render()
@@ -240,6 +263,12 @@ void Game::render()
 
     for (const auto& orb : _expOrbs)
         _window.draw(orb);
+
+    // Boss 
+    if (_bossSpawned) {
+        _window.draw(_boss);
+    }
+
 
     _window.setView(_window.getDefaultView()); // HUD en pantalla, no en mundo
     _window.draw(_expBarBackground);
@@ -293,7 +322,7 @@ void Game::checkCollisions()
     }
 
     // Ema
-    // 4. Colisiones Proyectil-Enemigo
+    // 4. Colisiones Proyectil-Enemigo/Boss
     const float radioProyectil = 5.f;  // El radio del proyectil
     const float radioEnemigo = 20.f;   // Aproximado para el sprite del enemigo
 
@@ -318,10 +347,44 @@ void Game::checkCollisions()
                     }
                 }
 
+                // Boss - Proyectil (estilo distancia como los enemigos)
+                if (_bossSpawned) {
+                    float dx = proyectil.getPosition().x - _boss.getPosition().x;
+                    float dy = proyectil.getPosition().y - _boss.getPosition().y;
+                    float distancia = std::sqrt(dx * dx + dy * dy);
+                    float radioBoss = 140.f; 
+
+                    if (distancia < (radioProyectil + radioBoss)) {
+                        sonidoAtaque.play();
+                        _boss.takeDamage(100);
+                        if (_boss.getHealth() <= 0) {
+                            _puntuacion += 1000;
+                            _bossSpawned = false;
+                            std::cout << "Boss derrotado!" << std::endl;
+                        }
+                        return true;
+                    }
+                }
+
+
+
                 return false; // no eliminar
             }),
         projectiles.end()
     );
+
+    //5. Colision Boss- Enemigo
+    if (_bossSpawned) {
+        for (auto& enemy : _enemies) {
+            enemy.colisionesEnemyBoss(_boss);
+        }
+    }
+
+    //6. Colision Boss- Jugador
+    if (_bossSpawned && _player.getGlobalBounds().intersects(_boss.getGlobalBounds())) {
+        _boss.colisionesPlayerEnemy(_player);
+    }
+
 
 }
 
@@ -345,15 +408,25 @@ void Game::checkHitpoints() {
 }
 
 sf::Vector2f Game::getClosestEnemy() {
-	float minDistance = std::numeric_limits<float>::max();
-	sf::Vector2f closestEnemyPosition;
-    for(Enemy& enemy : _enemies) {
-        float distance = std::hypot(enemy.getPosition().x - _player.getPosition().x, 
-                                    enemy.getPosition().y - _player.getPosition().y);
+    float minDistance = std::numeric_limits<float>::max();
+    sf::Vector2f closestEnemyPosition;
+    // Enemigos
+    for (Enemy& enemy : _enemies) {
+        float distance = std::hypot(enemy.getPosition().x - _player.getPosition().x,
+            enemy.getPosition().y - _player.getPosition().y);
         if (distance < minDistance) {
             minDistance = distance;
-			closestEnemyPosition = enemy.getPosition();
-		}
-	}
+            closestEnemyPosition = enemy.getPosition();
+        }
+    }
+    // Boss
+    if (_bossSpawned) {
+        float distanceToBoss = std::hypot(_boss.getPosition().x - _player.getPosition().x,
+            _boss.getPosition().y - _player.getPosition().y);
+        if (distanceToBoss < minDistance) {
+            closestEnemyPosition = _boss.getPosition();
+        }
+    }
+    
     return closestEnemyPosition;
 }

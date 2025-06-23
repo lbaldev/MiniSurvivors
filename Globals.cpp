@@ -6,7 +6,7 @@ const int WINDOW_HEIGHT = 720;
 float PLAYER_BASEvelocidadProyectil = 200.0f;
 float ENEMY_INTERVAL = 0.2f;
 
-int MAX_ENEMIES = 30;
+int MAX_ENEMIES = 100;
 
 
 const char* PLAYER_TEXTURE_PATH = "assets/mago.png";

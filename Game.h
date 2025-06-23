@@ -24,12 +24,17 @@ private:
     Player _player;
     std::vector<Enemy> _enemies; // Vector para almacenar enemigos
     std::vector<ExpOrb> _expOrbs;
-    Spawner _spawner;
+    Spawner _spawner; 
+    // Boss
+	Enemy _boss = Enemy(0, 0, 0, "", { 0, 0 }); // inicialización de los valores del boss por defecto
+    bool _bossSpawned = false;
+    bool _bossAparecio = false;
     sf::View _camera;
     sf::Texture _backgroundTexture;
     sf::Sprite _backgroundSprite;
     float dt;
     GameState _state = GameState::Playing;
+
 
     // Mariano elementos del HUD
 	sf::Font _font; // Fuente para el HUD

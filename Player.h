@@ -18,12 +18,9 @@ private:
     float _defense;
     float pickupRadius;
 	float _rangoAtaque;
-    
-    // Ema
     std::vector<Proyectil> Proyectiles;  // Lista de proyectiles activos
     sf::Clock _cooldownAtaque;         
-    float CDataque = 1.0;     // Tiempo mínimo entre disparos (en segundos)
-    //mariano   
+    float CDataque = 1.0;     
     float rangoProyectil = 0.5;
     float velocidadProyectil = 300.f; 
     sf::Vector2f ultima_direccion;
@@ -79,6 +76,8 @@ public:
     void setRangoProyectil(float rango) { rangoProyectil = rango; }
     void setVelocidadProyectil(float velocidad) { velocidadProyectil = velocidad; }
     void setTiempoInmune(float tiempo) { tiempoInmune = tiempo; }
+    void setAutoAim(bool autoAim) { _autoAim = autoAim; }
+
 	//*****************
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -86,7 +85,6 @@ public:
     void addExp(int amount);
 
     bool justLeveledUp();
-    void toggleAutoAim() { _autoAim = !_autoAim; }
     void incrementarDanioBase(float extra) { _baseDamage += extra; }
     void incrementarVelocidad(float extra) { _speed += extra; }
     void reducirCooldownDisparo(float cantidad) {

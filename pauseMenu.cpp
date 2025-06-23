@@ -3,7 +3,7 @@
 PauseMenu::PauseMenu(float width, float height) : _selectedIndex(0) {
     
 
-    std::vector<std::string> labels = { "Continuar", "Guardar partida", "Salir" };
+    std::vector<std::string> labels = { "Continuar", "Guardar y Salir", "Salir" };
     _font.loadFromFile("assets/font.otf");
     for (size_t i = 0; i < labels.size(); ++i) {
         sf::Text text;

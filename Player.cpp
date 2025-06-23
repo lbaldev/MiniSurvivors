@@ -22,10 +22,10 @@ Player::Player(float health, float speed, const std::string& texturePath) // El 
 void Player::handleInput(float dt) {
     sf::Vector2f direction(0.f, 0.f);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) direction.y -= 1.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) direction.y += 1.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) direction.x -= 1.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) direction.x += 1.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) direction.y -= 1.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) direction.y += 1.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) direction.x -= 1.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) direction.x += 1.f;
 
     if (direction.x != 0 || direction.y != 0) // Verifica si hay movimiento
         direction /= std::sqrt(direction.x * direction.x + direction.y * direction.y); // Normaliza la dirección para que el jugador se mueva a una velocidad constante

@@ -258,7 +258,6 @@ void Game::update(float dt)
 
 	_player.update(dt);
     _player.attack(getClosestEnemy());
-    //Se le agrego aumentoDanio y aumentoVelocidad para que los enemigos puedan escalar por tiempo
     _spawner.spawnEnemies(_enemies, _player.getPosition(), _timer);
 
     for (auto& enemy : _enemies) {

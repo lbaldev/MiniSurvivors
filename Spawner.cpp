@@ -10,6 +10,7 @@ Spawner::~Spawner()
     //dtor
 }
 //Se le agrego aumentoDanio y aumentoVelocidad para que los enemigos puedan escalar por tiempo
+
 void Spawner::spawnEnemies(std::vector<Enemy>& enemigos, sf::Vector2f playerPosition, float timer) {
     if (enemigos.size() < MAX_ENEMIES &&
         relojGeneracionEnemigos.getElapsedTime().asSeconds() >= ENEMY_INTERVAL)
@@ -21,31 +22,32 @@ void Spawner::spawnEnemies(std::vector<Enemy>& enemigos, sf::Vector2f playerPosi
 
         int tipo = std::rand() % 3;  // 0, 1 o 2
 
-        float vida, velocidad, daño;
+        float vida, velocidad, daÃ±o;
         std::string sprite;
 
         switch (tipo) {
         case 0: // Fantasma
             vida = 50.0f * (1 + timer / 60.0f);
             velocidad = 40.0f * (1 + timer / 60.0f);
-            daño = 10.0f * (1 + timer / 60.0f);
+            daÃ±o = 10.0f * (1 + timer / 60.0f);
             sprite = "assets/fantasma.png";
             break;
-        case 1: // Araña
+        case 1: // AraÃ±a
             vida = 30.0f * (1 + timer / 90.0f);
             velocidad = 30.0f;
-            daño = 15.0f * (1 + timer / 45.0f);
-            sprite = "assets/araña.png";
+            daÃ±o = 15.0f * (1 + timer / 45.0f);
+            sprite = "assets/araÃ±a.png";
             break;
         case 2: // Bruto
             vida = 100.0f * (1 + timer / 45.0f);
             velocidad = 20.0f;
-            daño = 25.0f * (1 + timer / 45.0f);
+            daÃ±o = 25.0f * (1 + timer / 45.0f);
             sprite = "assets/bruto.png";
             break;
         }
 
-        enemigos.emplace_back(vida, velocidad, daño, sprite, sf::Vector2f(x, y));
+        enemigos.emplace_back(vida, velocidad, daÃ±o, sprite, sf::Vector2f(x, y));
+
         relojGeneracionEnemigos.restart();
     }
 }

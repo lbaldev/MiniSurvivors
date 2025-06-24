@@ -9,7 +9,8 @@ class Spawner
 public:
     Spawner(); 
     virtual ~Spawner(); 
-	//Se le agregó aumentoDanio y aumentoVelocidad para que los enemigos puedan escalar por tiempo
+	//Se le agregÃ³ aumentoDanio y aumentoVelocidad para que los enemigos puedan escalar por tiempo
+
     void spawnEnemies(std::vector<Enemy>& enemigos, sf::Vector2f _position, float timer);
 
 private:

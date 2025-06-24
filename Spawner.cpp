@@ -36,7 +36,7 @@ void Spawner::spawnEnemies(std::vector<Enemy>& enemigos, sf::Vector2f playerPosi
             vida = 30.0f * (1 + timer / 90.0f);
             velocidad = 30.0f;
             damage = 15.0f * (1 + timer / 45.0f);
-            sprite = "assets/araña.png";
+            sprite = "assets/spider.png";
             break;
         case 2: // Bruto
             vida = 100.0f * (1 + timer / 45.0f);

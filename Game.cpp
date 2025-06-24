@@ -37,7 +37,7 @@ Game::Game(sf::RenderWindow& window)
     _playerIcon.setPosition(20.f, 20.f);
 
     ;
-    _backgroundTexture.loadFromFile("assets/fondo-.png");
+    _backgroundTexture.loadFromFile("assets/fondo2noche.png");
     _backgroundSprite.setTexture(_backgroundTexture);
     _backgroundSprite.setOrigin(
         _backgroundTexture.getSize().x / 2.f,
@@ -92,7 +92,7 @@ Game::Game(sf::RenderWindow& window)
 
     // Fondo semitransparente para las stats
     _statsBackground.setSize(sf::Vector2f(200.f, 180.f));
-    _statsBackground.setFillColor(sf::Color(0, 0, 0, 150)); // Negro semitransparente
+    _statsBackground.setFillColor(sf::Color(0, 0, 0, 150)); 
     _statsBackground.setPosition(10.f, 120.f); 
 
     // Texto de estadísticas
@@ -144,7 +144,7 @@ void Game::processEvents() {
             _window.close();
         }
 
-        if (_state == GameState::GameOver && event.type == sf::Event::KeyPressed) {
+        if (_state == GameState::GameOver && event.key.code == sf::Keyboard::Escape) {
             _shouldExitToMenu = true;
             return;
         }
@@ -302,7 +302,7 @@ void Game::update(float dt)
     if (_player.getLevel() > ultimoNivel) {
         ultimoNivel = _player.getLevel();
 
-        int mejora = (rand() % 6) + 1;
+        int mejora = (rand() % 5) + 1;  //sacamos el multidisparo
 
         switch (mejora) {
         case 1:
@@ -419,7 +419,7 @@ void Game::checkCollisions()
     // 3. Colisiones Jugador-Orbe de EXP
     for (auto it = _expOrbs.begin(); it != _expOrbs.end(); ) {
         if (_player.getGlobalBounds().intersects(it->getBounds())) {
-            _player.addExp(200);  // Sumar EXP
+            _player.addExp(50);  // Sumar EXP
             it = _expOrbs.erase(it);          // Eliminar el orbe y actualizar el iterador
         }
         else {

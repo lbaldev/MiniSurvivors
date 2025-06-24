@@ -329,7 +329,7 @@ void Game::update(float dt)
     }
 
     // Boss
-
+    MAX_ENEMIES = (int)_timer % 120;
     if (!_bossAparecio && !_bossSpawned &&  _timer > 1 && ((int)_timer % 120 == 0)){
         _enemies.clear();
         _enemies.emplace_back(1000.f,                   // vida

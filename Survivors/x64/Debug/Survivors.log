@@ -1,4 +1,14 @@
-﻿  Game.cpp
+﻿  Enemy.cpp
+  Entity.cpp
+  ExpOrb.cpp
+  FileManager.cpp
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(16,14): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(26,16): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(42,26): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(50,21): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(61,23): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(100,22): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+  Game.cpp
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(20,30): warning C4244: 'argumento': conversión de 'const int' a 'float'; posible pérdida de datos
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(20,16): warning C4244: 'argumento': conversión de 'const int' a 'float'; posible pérdida de datos
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(121,60): warning C4244: 'argumento': conversión de 'const int' a 'T'; posible pérdida de datos
@@ -12,4 +22,40 @@ F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(121,46): warn
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(121,46): warning C4244:             T=float
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(121,46): warning C4244:         ]
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(247,21): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+  Globals.cpp
+  Menu.cpp
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Menu.cpp(14,42): warning C4244: 'argumento': conversión de 'float' a 'unsigned int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Menu.cpp(14,35): warning C4244: 'argumento': conversión de 'float' a 'unsigned int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Menu.cpp(53,70): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Menu.cpp(53,45): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+  NameInput.cpp
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\NameInput.cpp(15,64): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\NameInput.cpp(15,41): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\NameInput.cpp(22,63): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\NameInput.cpp(22,40): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+  PauseMenu.cpp
+  Player.cpp
+  Proyectil.cpp
+  ScoreMenu.cpp
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(20,64): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(20,41): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(29,63): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(29,44): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(32,52): warning C4244: 'argumento': conversión de 'const int' a 'T'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(32,52): warning C4244:         with
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(32,52): warning C4244:         [
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(32,52): warning C4244:             T=float
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(32,52): warning C4244:         ]
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(32,38): warning C4244: 'argumento': conversión de 'const int' a 'T'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(32,38): warning C4244:         with
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(32,38): warning C4244:         [
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(32,38): warning C4244:             T=float
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(32,38): warning C4244:         ]
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(59,73): warning C4244: 'argumento': conversión de 'size_t' a 'float'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\ScoreMenu.cpp(59,44): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
+  Spawner.cpp
+  Survivors.cpp
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Survivors.cpp(13,33): warning C4244: 'argumento': conversión de 'const int' a 'float'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Survivors.cpp(13,19): warning C4244: 'argumento': conversión de 'const int' a 'float'; posible pérdida de datos
+  Generando código...
   Survivors.vcxproj -> F:\dev\Projects\programacion2\programacion2\MiniSurvivors\x64\Debug\Survivors.exe

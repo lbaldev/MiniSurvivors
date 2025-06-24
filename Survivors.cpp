@@ -4,10 +4,11 @@
 #include "Globals.h"
 #include "NameInput.h"
 #include "FileManager.h"
+#include "ScoreMenu.h"
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mini Survivors - Menú");
-
+    FileManager fileManager("save.txt", "puntajes.txt");
     while (window.isOpen()) {
         Menu menu(WINDOW_WIDTH, WINDOW_HEIGHT);
         bool showMenu = true;
@@ -43,6 +44,13 @@ int main() {
                             }
                             break;
                         }   
+                        case 3: { // Puntuaciones
+                            ScoreMenu scoreDisplay(window); // Crea una instancia de ScoreDisplay
+                            std::vector<ScoreEntry> allScores = fileManager.leerPuntajes(); // ¡Aquí usas tu FileManager para leer los puntajes!
+                            scoreDisplay.showScores(allScores); // Muestra la pantalla de puntuaciones
+                            showMenu = true; // Vuelve al menú después de ver los scores
+                            break;
+                        }
                         
                         case 4:
                             window.close();

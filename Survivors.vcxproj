@@ -142,6 +142,7 @@
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Proyectil.cpp" />
+    <ClCompile Include="ScoreMenu.cpp" />
     <ClCompile Include="Spawner.cpp" />
     <ClCompile Include="Survivors.cpp" />
   </ItemGroup>
@@ -157,6 +158,7 @@
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Proyectil.h" />
+    <ClInclude Include="ScoreMenu.h" />
     <ClInclude Include="Spawner.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,14 +1,24 @@
 #include <SFML/Graphics.hpp>
+#include <iostream>
 #include "Game.h"
 #include "Menu.h"
 #include "Globals.h"
 #include "NameInput.h"
 #include "FileManager.h"
-#include "ScoreMenu.h"
+#include "ScoreMenu.h"  
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mini Survivors - Menú");
     FileManager fileManager("save.txt", "puntajes.txt");
+
+    sf::Font mainFont;
+    if (!mainFont.loadFromFile("assets/font.otf")) {
+        std::cerr << "Error cargando fuente principal. Asegurate de que 'assets/font.otf' exista." << std::endl;
+        return -1;
+    }
+
+    ScoreMenu scoreScreen(window, mainFont);
+
     while (window.isOpen()) {
         Menu menu(WINDOW_WIDTH, WINDOW_HEIGHT);
         bool showMenu = true;
@@ -45,9 +55,7 @@ int main() {
                             break;
                         }   
                         case 3: { // Puntuaciones
-                            ScoreMenu scoreDisplay(window); // Crea una instancia de ScoreDisplay
-                            std::vector<ScoreEntry> allScores = fileManager.leerPuntajes(); // ¡Aquí usas tu FileManager para leer los puntajes!
-                            scoreDisplay.showScores(allScores); // Muestra la pantalla de puntuaciones
+                            scoreScreen.run(fileManager);
                             showMenu = true; // Vuelve al menú después de ver los scores
                             break;
                         }

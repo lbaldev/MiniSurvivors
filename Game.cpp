@@ -309,7 +309,7 @@ void Game::update(float dt)
     if (_player.getLevel() > ultimoNivel) {
         ultimoNivel = _player.getLevel();
 
-        int mejora = (rand() % 6) + 1;
+        int mejora = (rand() % 5) + 1;  //sacamos el multidisparo
 
         switch (mejora) {
         case 1:

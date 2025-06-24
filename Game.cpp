@@ -335,7 +335,9 @@ void Game::update(float dt)
             80.f,                     // velocidad
             50.f,                     // daño
             "assets/boss.png",       // textura del boss
-            sf::Vector2f(600.f, 400.f));
+			sf::Vector2f(600.f, 400.f), // posición donde aparece el boss
+            1000 // puntaje por matar al boss
+        );
         _bossSpawned = true;
         _bossAparecio = true;
         std::cout << "Boss aparecio!" << std::endl;
@@ -467,12 +469,12 @@ void Game::checkCollisions()
 
 void Game::checkHitpoints() {
     for (auto it = _enemies.begin(); it != _enemies.end(); ) { 
-        if (it->getHealth() <= 0) { 
-            _expOrbs.emplace_back(it->getPosition(), 10); 
-            it = _enemies.erase(it);
-			_puntuacion += 10; // Aumentar el puntaje por eliminar un enemigo
-
+        if (it->getHealth() <= 0) {
+			_puntuacion += it->getScoreValue(); // Se suma la puntuacion por eliminar al enemigo
+			_expOrbs.emplace_back(it->getPosition(), 10); //Tira el orbe de experiencia al morir
+            it = _enemies.erase(it); // Ripea el enemigo y desaparece
         }
+
         else {
             it->chase(_player.getPosition(), dt);
             ++it;

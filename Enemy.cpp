@@ -4,8 +4,8 @@
 #include <cmath>
 
 
-Enemy::Enemy(float health, float speed, float damage, const std::string& texturePath, sf::Vector2f startPosition)
-    : Entity(health, speed, texturePath, startPosition), _damage(damage) {
+Enemy::Enemy(float health, float speed, float damage, const std::string& texturePath, sf::Vector2f startPosition, int scoreValue)
+    : Entity(health, speed, texturePath, startPosition), _damage(damage), _scoreValue(scoreValue) {
 }
 
 void Enemy::update(float dt) {

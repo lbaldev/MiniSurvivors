@@ -14,7 +14,8 @@ private:
 
     sf::Sprite _sprite;
     static sf::Texture _texture;
-    float rangoProyectil;            // Tiempo de vida
+    float rangoProyectil;   
+    float _damage; 
 
 
 public:
@@ -23,9 +24,9 @@ public:
     // - direccionProyectil: dirección en la que se moverá 
     // - velocidadProyectil: velocidad del proyectil 
     // - lifetime: tiempo de vida en segundos 
-    Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed, float lifetime);
+    Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed, float lifetime, float damage);
 
-
+    float getDamage() const { return _damage; };
     // Actualiza la posición del proyectil y reduce su tiempo de vida
     void update(float dt);
 

@@ -4,8 +4,9 @@
 sf::Texture Proyectil::_texture;
 
 // Constructor del proyectil
-Proyectil::Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed, float lifetime)
-    : _position(position), direccionProyectil(direction), velocidadProyectil(speed), rangoProyectil(lifetime)
+Proyectil::Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed, float lifetime, float damage)
+    : _position(position), direccionProyectil(direction), velocidadProyectil(speed),
+    rangoProyectil(lifetime), _damage(damage)
 {
     // Si la dirección no es cero, la normalizamos
     if (direccionProyectil.x != 0 || direccionProyectil.y != 0) {

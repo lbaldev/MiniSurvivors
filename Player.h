@@ -31,7 +31,6 @@ private:
     sf::Clock relojIntervaloDamage;
     //Skills
     bool _autoAim = true;
-    bool _auraDamage = false;
     /**
     int _piercing;
     bool _dash;

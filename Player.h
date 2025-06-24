@@ -31,9 +31,8 @@ private:
     sf::Clock relojIntervaloDamage;
     //Skills
     bool _autoAim = true;
-    int _disparosAdicionales = 0;
+    bool _auraDamage = false;
     /**
-    bool _auraDamage;
     int _piercing;
     bool _dash;
     bool _shield;
@@ -96,8 +95,6 @@ public:
     }
     void aumentarRangoProyectil(float extra) { rangoProyectil += extra; }
     void aumentarVelocidadProyectil(float extra) { velocidadProyectil += extra; }
-    void agregarDisparoAdicional() { _disparosAdicionales++; }
-    int getDisparosAdicionales() const { return _disparosAdicionales; }
 
     void attack(sf::Vector2f position);
 

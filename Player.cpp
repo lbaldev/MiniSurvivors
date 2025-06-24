@@ -102,14 +102,6 @@ void Player::attack(sf::Vector2f EnemyPosition) {
        
             Proyectiles.emplace_back(_position, direccion, velocidadProyectil, rangoProyectil);
 
-            // Disparos adicionales 
-            const float separation = 20.0f; //distancia entre disparos adicionales
-            for (int i = 0; i < _disparosAdicionales; ++i) {
-                float offset = separation * (i + 1);
-                sf::Vector2f posAdicional = _position - (direccion * offset);
-                Proyectiles.emplace_back(posAdicional, direccion, velocidadProyectil, rangoProyectil);
-            }
-
             _cooldownAtaque.restart();
         }
     }

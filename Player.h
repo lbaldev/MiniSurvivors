@@ -53,7 +53,7 @@ public:
      // Permite acceder a los proyectiles desde fuera
     void updateProjectiles(float dt);                      // Actualiza posición y vida de proyectiles
     //***************************************
-    //Getters
+    //Getters 
 
     int getLevel() const { return _level; }
     int getExp() const { return _exp; }

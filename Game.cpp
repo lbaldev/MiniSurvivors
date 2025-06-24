@@ -26,6 +26,11 @@ Game::Game(sf::RenderWindow& window)
     musicaFondo.setLoop(true);
     musicaFondo.setVolume(10);
 
+    // Música de boss
+    musicaBoss.openFromFile("assets/boss_music.ogg");
+    musicaBoss.setLoop(true);
+    musicaBoss.setVolume(10);
+
     // Sonido de ataque
     bufferAtaque.loadFromFile("assets/Hit.ogg");
     sonidoAtaque.setBuffer(bufferAtaque);
@@ -331,6 +336,9 @@ void Game::update(float dt)
     MAX_ENEMIES = (int)_timer % 120;
     if (!_bossAparecio && !_bossSpawned &&  _timer > 1 && ((int)_timer % 120 == 0)){
         _enemies.clear();
+        musicaFondo.stop();
+		musicaBoss.play(); 
+        
         _enemies.emplace_back(1000.f,                   // vida
             80.f,                     // velocidad
             50.f,                     // daño

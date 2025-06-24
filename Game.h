@@ -59,6 +59,7 @@ private:
 
     //Ema - Musica y sonidos
     sf::Music musicaFondo;
+	sf::Music musicaBoss;
     sf::SoundBuffer bufferAtaque;
     sf::Sound sonidoAtaque;
     //pantalla game over

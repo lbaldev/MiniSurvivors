@@ -24,6 +24,8 @@ bool FileManager::guardarPartida(const Player& jugador, const std::vector<Enemy>
     bool autoAim = jugador.isAutoAimEnabled();
     std::string tex = jugador.getTexturePath();
     int lenTex = tex.size();
+	std::string nombre = jugador.getName();
+    int lenName = nombre.size();
 
     fwrite(&pos, sizeof(pos), 1, pArchivo);
     fwrite(&vida, sizeof(vida), 1, pArchivo);
@@ -37,6 +39,8 @@ bool FileManager::guardarPartida(const Player& jugador, const std::vector<Enemy>
     fwrite(&autoAim, sizeof(autoAim), 1, pArchivo);
     fwrite(&lenTex, sizeof(int), 1, pArchivo);
     fwrite(tex.c_str(), sizeof(char), lenTex, pArchivo);
+    fwrite(&lenName, sizeof(int), 1, pArchivo);
+    fwrite(nombre.c_str(), sizeof(char), lenName, pArchivo);
 
     // Guardar enemigos
     int cantidadEnemigos = enemigos.size();
@@ -81,7 +85,7 @@ bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, s
     int vida, nivel, exp;
     float damage, speed, cooldown, rango, velocidadProy;
     bool autoAim;
-    int lenTex;
+    int lenTex,lenName;
 
     fread(&pos, sizeof(pos), 1, pArchivo);
     fread(&vida, sizeof(vida), 1, pArchivo);
@@ -96,6 +100,9 @@ bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, s
     fread(&lenTex, sizeof(int), 1, pArchivo);
     std::string tex(lenTex, '\0');
     fread(&tex[0], sizeof(char), lenTex, pArchivo);
+    fread(&lenName, sizeof(int), 1, pArchivo); 
+    std::string nombre(lenName, '\0');
+    fread(&nombre[0], sizeof(char), lenName, pArchivo); 
 
     jugador = Player(vida, speed, tex);
 	jugador.setPosition(pos);
@@ -106,6 +113,7 @@ bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, s
     jugador.setRangoProyectil(rango);
     jugador.setVelocidadProyectil(velocidadProy);
     jugador.setAutoAim(autoAim);
+	jugador.setName(nombre);
 
     // Enemigos
     enemigos.clear();

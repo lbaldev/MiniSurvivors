@@ -13,6 +13,7 @@
 
 class Player : public Entity {
 private:
+    std::string _name;
     int _level;
     int _exp;
     float _baseDamage;
@@ -66,13 +67,14 @@ public:
 	float getRangoProyectil() const { return rangoProyectil; }
 	float getVelocidadProyectil() const { return velocidadProyectil; }
 	float getTiempoInmune() const { return tiempoInmune; }
+    std::string getName() const { return _name; }
     bool isAutoAimEnabled() const { return _autoAim; }
-
     //Setters
 	void setLevel(int level) { _level = level; }
 	void setExp(int exp) { _exp = exp; }
 	void setBaseDamage(float damage) { _baseDamage = damage; }
-	void setDefense(float defense) { _defense = defense; }
+	void setDefense(float defense) { _defense = defense; }  
+    void setName(const std::string& name) { _name = name; }
 	void setPickupRadius(float radius) { pickupRadius = radius; }
     void setRangoAtaque(float rango) { _rangoAtaque = rango; }
     void setCooldownAtaque(float cooldown) { CDataque = cooldown; }
@@ -80,6 +82,7 @@ public:
     void setVelocidadProyectil(float velocidad) { velocidadProyectil = velocidad; }
     void setTiempoInmune(float tiempo) { tiempoInmune = tiempo; }
     void setAutoAim(bool autoAim) { _autoAim = autoAim; }
+	void setName(std::string& name) { _name = name; }
 
 	//*****************
 

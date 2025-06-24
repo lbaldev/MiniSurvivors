@@ -340,9 +340,8 @@ void Game::update(float dt)
     }
 
     // Boss
-    int tiempoTotal = _timer.getElapsedTime().asSeconds();
 
-    if (!_bossAparecio && !_bossSpawned && tiempoTotal >= 2) {
+    if (!_bossAparecio && !_bossSpawned && _timer >= 2) {
         _boss = Enemy(
             1000.f,                   // vida
             80.f,                     // velocidad

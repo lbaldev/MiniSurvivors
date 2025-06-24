@@ -69,3 +69,17 @@ void Enemy::colisionesEnemyEnemy(Entity& otro)
     }
         
 }
+//Boss
+void Enemy::colisionesEnemyBoss(Entity& boss) {
+    const float EMPUJE_SOLO_ENEMIGO = 3.0f;
+    const float DIST_MINIMA = 140.0f; 
+
+    sf::Vector2f diff = _position - boss.getPosition();
+    float dist = std::sqrt(diff.x * diff.x + diff.y * diff.y);
+
+    if (dist < DIST_MINIMA && dist > 0.f) {
+        sf::Vector2f dir = diff / dist;
+        pushBack(dir, EMPUJE_SOLO_ENEMIGO); // solo empuja al enemigo
+    }
+}
+

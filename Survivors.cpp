@@ -24,29 +24,29 @@ int main() {
                         menu.moveDown();
                     }
                     else if (event.key.code == sf::Keyboard::Enter) {
+                        menu.playSelectSound(); 
                         int selected = menu.getSelectedIndex();
+                        Game game(window);
                         switch (selected) {
-                        case 1: {  
-                            Game game(window);
+                        case 0: {
+							if (game.loadSave()) game.run();
+                            break;
+						}
+                        case 1: {
                             game.run();
-
                             if (game.shouldExitToMenu()) {
-                                showMenu = true;  
-                            }
-                            else {
-                                window.close();  
+                                showMenu = true;
                             }
                             break;
                         }
-                        case 4:  
+                        case 4:
                             window.close();
                             break;
-                            
                         }
-
                     }
                 }
             }
+
             window.clear();
             menu.draw(window);
             window.display();

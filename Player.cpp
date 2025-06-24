@@ -13,19 +13,25 @@ Player::Player(float health, float speed, const std::string& texturePath) // El 
     //***************************************************************
     //Mariano barra de vida
     _healthBarBackground.setSize(sf::Vector2f(40.f, 6.f));
-    _healthBarBackground.setFillColor(sf::Color(50, 50, 50));
+    _healthBarBackground.setFillColor(sf::Color(70, 70, 70, 200));
+    _healthBarBackground.setOutlineThickness(2.f);
+    _healthBarBackground.setOutlineColor(sf::Color::Black);
 
-    _healthBarFill.setSize(sf::Vector2f(40.f, 6.f)); // llena al inicio
-    _healthBarFill.setFillColor(sf::Color::Red);
+    _healthBarFill.setSize(sf::Vector2f(40.f, 6.f));
+    _healthBarFill.setFillColor(sf::Color(255, 50, 50));
+
+    _levelUpBuffer.loadFromFile("assets/levelup.ogg");
+    _levelUpSound.setBuffer(_levelUpBuffer);
+    _levelUpSound.setVolume(40);
 }
 
 void Player::handleInput(float dt) {
     sf::Vector2f direction(0.f, 0.f);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) direction.y -= 1.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) direction.y += 1.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) direction.x -= 1.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) direction.x += 1.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) || sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) direction.y -= 1.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) || sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) direction.y += 1.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) direction.x -= 1.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) direction.x += 1.f;
 
     if (direction.x != 0 || direction.y != 0) // Verifica si hay movimiento
         direction /= std::sqrt(direction.x * direction.x + direction.y * direction.y); // Normaliza la dirección para que el jugador se mueva a una velocidad constante
@@ -72,6 +78,11 @@ void Player::update(float dt) {
     vidaRatio = std::max(0.f, std::min(vidaRatio, 1.f));
 
     _healthBarFill.setSize(sf::Vector2f(40.f * vidaRatio, 6.f));
+
+    
+    if (relojIntervaloDamage.getElapsedTime().asSeconds() >= tiempoInmune) {
+		_sprite.setColor(sf::Color::White);
+    }
 }
 
 void Player::attack(sf::Vector2f EnemyPosition) {
@@ -88,7 +99,17 @@ void Player::attack(sf::Vector2f EnemyPosition) {
         }
 
         if (direccion.x != 0.f || direccion.y != 0.f) {
+       
             Proyectiles.emplace_back(_position, direccion, velocidadProyectil, rangoProyectil);
+
+            // Disparos adicionales 
+            const float separation = 20.0f; //distancia entre disparos adicionales
+            for (int i = 0; i < _disparosAdicionales; ++i) {
+                float offset = separation * (i + 1);
+                sf::Vector2f posAdicional = _position - (direccion * offset);
+                Proyectiles.emplace_back(posAdicional, direccion, velocidadProyectil, rangoProyectil);
+            }
+
             _cooldownAtaque.restart();
         }
     }
@@ -126,6 +147,9 @@ void Player::takeDamage(float damage) {
         _health -= damage;
         relojIntervaloDamage.restart(); // Reinicia el reloj para el pr��ximo ataque
     }
+    else {
+		_sprite.setColor(sf::Color::Red); // Cambia el color del sprite a rojo si est�� en invulnerabilidad
+    }
     
 }
 
@@ -137,6 +161,7 @@ void Player::addExp(int cantidad) {
         _exp -= getExpToNextLevel();
         _level++;
         _leveledUp = true;
+        _levelUpSound.play(); 
     }
 }
 

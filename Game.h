@@ -10,11 +10,14 @@
 #include "Entity.h"
 #include "ExpOrb.h"
 #include <SFML/Audio.hpp>
+#include "PauseMenu.h"
+#include "FileManager.h"
 
 
 enum class GameState {
     Playing,
     GameOver,
+	Paused,
     ExitToMenu
 };
 
@@ -34,6 +37,8 @@ private:
     sf::Sprite _backgroundSprite;
     float dt;
     GameState _state = GameState::Playing;
+    PauseMenu _pauseMenu;
+	FileManager _fileManager; 
 
 
     // Mariano elementos del HUD
@@ -41,10 +46,15 @@ private:
     sf::Text _levelText;
     sf::RectangleShape _expBarBackground;
     sf::RectangleShape _expBarFill;
-    sf::Clock _timer;
+    float _timer;
     sf::Text _timerTexto;
     int _puntuacion;
     sf::Text _textoPuntuacion;
+    sf::Sprite _playerIcon;
+    sf::Texture _playerIconTexture;
+    sf::Text _statsText;
+    sf::RectangleShape _statsBackground;
+
 
     //Ema - Musica y sonidos
     sf::Music musicaFondo;
@@ -56,10 +66,14 @@ private:
     sf::RectangleShape _gameOverBackground;
     sf::Text _gameOverPrompt;
 
-
+    //Escalado de stats
+    int _mejorasAplicadas = 0;
+    float _aumentoDanio = 0.f;
+    float _aumentoVelocidad = 0.f;
 
     void processEvents();
     void update(float deltaTime);
+    void updatePlayerStatsDisplay();
     void render();
     void checkCollisions();
     void checkHitpoints();
@@ -67,7 +81,9 @@ private:
     sf::Vector2f getClosestEnemy();
 
 public:
+
     Game(sf::RenderWindow& window);
+    bool loadSave();
     void run();
     bool shouldExitToMenu() const { return _shouldExitToMenu; }
 };

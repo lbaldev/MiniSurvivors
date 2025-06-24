@@ -2,6 +2,8 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <sstream>  // Para std::stringstream
+#include <iomanip>  // Para std::fixed y std::setprecision  ambos usados para stats en pantalla
 
 
 #include "Game.h"
@@ -13,8 +15,14 @@
 Game::Game(sf::RenderWindow& window)
     : _window(window),dt(0),
     _player(100.0f, 200.0f, "assets/mago.png"),
-    _shouldExitToMenu(false) 
+
+    _shouldExitToMenu(false),
+	_puntuacion(0),
+	_timer(0.f),
+    _pauseMenu(WINDOW_WIDTH, WINDOW_HEIGHT),
+	_fileManager("save.txt", "puntajes.txt")
 {
+    _font.loadFromFile("assets/font.otf");
     // Música de fondo
     musicaFondo.openFromFile("assets/MusicaFondo.ogg");
     musicaFondo.setLoop(true);
@@ -25,16 +33,20 @@ Game::Game(sf::RenderWindow& window)
     sonidoAtaque.setBuffer(bufferAtaque);
     sonidoAtaque.setVolume(100);
 
+    //Icono de jugador
+    _playerIconTexture.loadFromFile("assets/player_icon.png");
+    _playerIcon.setTexture(_playerIconTexture); 
+    _playerIcon.setPosition(20.f, 20.f);
 
-    _font.loadFromFile("assets/font.otf");
-    _backgroundTexture.loadFromFile("assets/fondo.png");
+    ;
+    _backgroundTexture.loadFromFile("assets/fondo-.png");
     _backgroundSprite.setTexture(_backgroundTexture);
     _backgroundSprite.setOrigin(
         _backgroundTexture.getSize().x / 2.f,
         _backgroundTexture.getSize().y / 2.f
     );
     _backgroundSprite.setPosition(0.f, 0.f); // posición del centro del mapa
-
+    
 
     // Mariano - Agregando la barra de experiencia y nivel
     _levelText.setFont(_font); 
@@ -48,9 +60,11 @@ Game::Game(sf::RenderWindow& window)
     _expBarBackground.setSize(sf::Vector2f(barWidth, barHeight));
     _expBarBackground.setFillColor(sf::Color(50, 50, 50));
     _expBarBackground.setPosition(centerX - barWidth / 2.f, WINDOW_HEIGHT - 60.f);
+    _expBarBackground.setOutlineThickness(2.f);
+    _expBarBackground.setOutlineColor(sf::Color::Black);
 
     _expBarFill.setSize(sf::Vector2f(0.f, barHeight));
-    _expBarFill.setFillColor(sf::Color::Green);
+    _expBarFill.setFillColor(sf::Color::Yellow);
     _expBarFill.setPosition(_expBarBackground.getPosition());
 
     _levelText.setString("Nivel: 1");
@@ -72,11 +86,40 @@ Game::Game(sf::RenderWindow& window)
     _textoPuntuacion.setFillColor(sf::Color::Red);
     _textoPuntuacion.setPosition(900.f, 20.f);
 
+    // Icono jugador
+    _playerIcon.setTexture(_playerIconTexture);
+    _playerIcon.setPosition(20.f, 20.f); 
+    _playerIcon.setScale(90.f / _playerIcon.getLocalBounds().width,
+        90.f / _playerIcon.getLocalBounds().height); 
+
+    // Fondo semitransparente para las stats
+    _statsBackground.setSize(sf::Vector2f(200.f, 180.f));
+    _statsBackground.setFillColor(sf::Color(0, 0, 0, 150)); // Negro semitransparente
+    _statsBackground.setPosition(10.f, 120.f); 
+
+    // Texto de estadísticas
+    _statsText.setFont(_font);
+    _statsText.setCharacterSize(18);
+    _statsText.setFillColor(sf::Color::White);
+    _statsText.setPosition(20.f, 125.f);
+
+    //Bordes de textos
+    _levelText.setOutlineThickness(2.f);
+    _levelText.setOutlineColor(sf::Color::Black);
+
+    _timerTexto.setOutlineThickness(2.f);
+    _timerTexto.setOutlineColor(sf::Color::Black);
+
+    _textoPuntuacion.setOutlineThickness(2.f);
+    _textoPuntuacion.setOutlineColor(sf::Color::Black);
+
+    updatePlayerStatsDisplay();
+
     //pantalla game over
     _gameOverText.setFont(_font);
     _gameOverText.setCharacterSize(48);
     _gameOverText.setFillColor(sf::Color::Red);
-    _gameOverText.setString("            GAME OVER\n Nombre de jugador: Pepe \n Puntuacion: 1234");
+    _gameOverText.setString("            GAME OVER\n\nPuntuacion: 0");    
     _gameOverBackground.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
     _gameOverBackground.setFillColor(sf::Color::Black);
     _gameOverBackground.setPosition(0.f, 0.f);
@@ -90,15 +133,13 @@ Game::Game(sf::RenderWindow& window)
     _gameOverPrompt.setOrigin(promptBounds.width / 2.f, promptBounds.height / 2.f);
     _gameOverPrompt.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f + 100.f);
 
-
-
     sf::FloatRect bounds = _gameOverText.getLocalBounds();
     _gameOverText.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
     _gameOverText.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f);
 
 }
 
-void Game::processEvents() {
+void Game::processEvents() {  
     sf::Event event;
     while (_window.pollEvent(event)) {
         if (event.type == sf::Event::Closed) {
@@ -106,8 +147,41 @@ void Game::processEvents() {
         }
 
         if (_state == GameState::GameOver && event.type == sf::Event::KeyPressed) {
-            _shouldExitToMenu = true;  
-            return;  
+            _shouldExitToMenu = true;
+            return;
+        }
+
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape) {
+                if (_state == GameState::Paused) {
+                    _state = GameState::Playing;
+                }
+                else {
+                    _state = GameState::Paused;
+                }
+            }
+            if (_state == GameState::Paused) {
+                if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W)
+                    _pauseMenu.moveUp();
+                if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S)
+                    _pauseMenu.moveDown();
+                if (event.key.code == sf::Keyboard::Enter) {
+                    int selected = _pauseMenu.getSelectedIndex();
+                    switch (selected) {
+                    case 0:
+                        _state = GameState::Playing; // Continuar juego
+                        break;
+                    case 1:
+                        _fileManager.guardarPartida(_player, _enemies, _expOrbs);
+                        std::cout << "[INFO] guardando partida..." << std::endl;
+                        _shouldExitToMenu = true;
+                        break;
+                    case 2:
+                        _shouldExitToMenu = true; // Volver al menú principal
+                        break;
+                    }
+                }
+            }
         }
     }
 }
@@ -128,6 +202,18 @@ void Game::run() {
     }
 }
 
+void Game::updatePlayerStatsDisplay() {
+    std::stringstream stats;
+    stats << std::fixed << std::setprecision(1); // cantidad de decimales
+
+    stats << "Ataque: " << _player.getBaseDamage() << "\n"
+        << "Velocidad: " << _player.getSpeed() << "\n"
+        << "Cadencia: " << (1.0f / _player.getCooldownAtaque()) << "/s\n"
+        << "Rango: " << _player.getRangoProyectil() << "\n"
+        << "Vel. Disparo: " << _player.getVelocidadProyectil();
+
+    _statsText.setString(stats.str());
+}
 
 void Game::update(float dt)
 {
@@ -137,9 +223,16 @@ void Game::update(float dt)
 
     if (_player.getHealth() <= 0 && _state != GameState::GameOver) {
         _state = GameState::GameOver;
+        _gameOverText.setString("    GAME OVER\n\nPuntuacion: " + std::to_string(_puntuacion));
     }
-      
-      int tiempoSeg = _timer.getElapsedTime().asSeconds(); // Tiempo de juego en segundos 
+  
+    if(_state == GameState::Paused) {
+        return;
+	}
+    updatePlayerStatsDisplay();
+
+    _timer = _timer + dt;
+      int tiempoSeg = _timer; // Tiempo de juego en segundos
     _timerTexto.setString("Tiempo: " + std::to_string(tiempoSeg) + "s");
 
     int minutos = tiempoSeg / 60;
@@ -153,7 +246,8 @@ void Game::update(float dt)
 
 	_player.update(dt);
     _player.attack(getClosestEnemy());
-	_spawner.spawnEnemies(_enemies, _player.getPosition()); 
+    //Se le agrego aumentoDanio y aumentoVelocidad para que los enemigos puedan escalar por tiempo
+    _spawner.spawnEnemies(_enemies, _player.getPosition(), _aumentoDanio, _aumentoVelocidad);
 
     for (auto& enemy : _enemies) {
         enemy.chase(_player.getPosition(), dt);
@@ -168,7 +262,7 @@ void Game::update(float dt)
     checkHitpoints();
     checkCollisions();
 
-    // Deseamos que el centro de la cámara esté dentro del mapa
+	// Bloquea la camara al jugador y limita su movimiento al mapa
     sf::Vector2f center = _player.getPosition();
 
     float halfW = _camera.getSize().x / 2.f;
@@ -197,11 +291,12 @@ void Game::update(float dt)
 	_textoPuntuacion.setString("Score: " + std::to_string(_puntuacion));
 
 
+    // Pool de mejoras al azar al subir de nivel
     static int ultimoNivel = _player.getLevel();
     if (_player.getLevel() > ultimoNivel) {
         ultimoNivel = _player.getLevel();
 
-        int mejora = (rand() % 5) + 1;
+        int mejora = (rand() % 6) + 1;
 
         switch (mejora) {
         case 1:
@@ -209,20 +304,24 @@ void Game::update(float dt)
             std::cout << "+5 de danio base" << std::endl;
             break;
         case 2:
-            _player.incrementarVelocidad(50.0f);
-            std::cout << "+50 de velocidad" << std::endl;
+            _player.incrementarVelocidad(100.0f);
+            std::cout << "+100 de velocidad" << std::endl;
             break;
         case 3:
-            _player.reducirCooldownDisparo(0.05f);
-            std::cout << "-0.05s cooldown de disparo" << std::endl;
+            _player.reducirCooldownDisparo(0.2f);
+            std::cout << "-0.2s cooldown de disparo" << std::endl;
             break;
         case 4:
             _player.aumentarRangoProyectil(0.1f);
             std::cout << "+0.5s duracion del proyectil" << std::endl;
             break;
         case 5:
-            _player.aumentarVelocidadProyectil(50.f);
-            std::cout << "+50 de velocidad del proyectil" << std::endl;
+            _player.aumentarVelocidadProyectil(100.f);
+            std::cout << "+100 de velocidad del proyectil" << std::endl;
+            break;
+        case 6:  
+            _player.agregarDisparoAdicional();
+            std::cout << "+1 disparo adicional" << std::endl;
             break;
         }
     }
@@ -242,12 +341,46 @@ void Game::update(float dt)
         _bossAparecio = true;
         std::cout << "Boss aparecio!" << std::endl;
     }
+    // Mejora de stats de enemigos
+    int mejorasEsperadas = static_cast<int>(_timer) / 60;
+    if (mejorasEsperadas > _mejorasAplicadas) {
+        int cantidadMejoras = mejorasEsperadas - _mejorasAplicadas;
+        _mejorasAplicadas = mejorasEsperadas;
+
+        _aumentoDanio += 10.f * cantidadMejoras;
+        _aumentoVelocidad += 2.f * cantidadMejoras;
+
+        std::cout << "Enemigos mejorados! " << _aumentoDanio
+            << " +10 daño y" << _aumentoVelocidad << " + 2 velocidad." << std::endl;
+
+        // Mejorar stats de enemigos vivos
+        for (auto& enemy : _enemies) {
+            enemy.setDamage(enemy.getDamage() + 10.f * cantidadMejoras);
+            enemy.setSpeed(enemy.getSpeed() + 2.f * cantidadMejoras);
+        }
+    }
 
 }
 
 void Game::render()
 {
     _window.clear();
+
+    if (_state == GameState::GameOver) {
+        _window.setView(_window.getDefaultView());
+        _window.draw(_gameOverBackground);
+        _window.draw(_gameOverText);
+        _window.draw(_gameOverPrompt);
+        _window.display();
+        return;
+    }
+
+    if( _state == GameState::Paused) {
+        _pauseMenu.draw(_window);
+        _window.display();
+        return;
+	}
+
     _window.draw(_backgroundSprite);
     _window.draw(_player); // Dibujar el jugador
 
@@ -277,15 +410,10 @@ void Game::render()
     _window.draw(_timerTexto);
 	_window.draw(_textoPuntuacion);
 
-    if (_state == GameState::GameOver) {
-        _window.draw(_gameOverBackground);
-        _window.draw(_gameOverText);
-        _window.draw(_gameOverPrompt);
-        _window.display();
-        return;
-    }
-
-
+    //stats a la izq
+    _window.draw(_statsBackground);
+    _window.draw(_playerIcon);
+    _window.draw(_statsText);
 
     _window.display();
 }
@@ -313,7 +441,7 @@ void Game::checkCollisions()
     // 3. Colisiones Jugador-Orbe de EXP
     for (auto it = _expOrbs.begin(); it != _expOrbs.end(); ) {
         if (_player.getGlobalBounds().intersects(it->getBounds())) {
-            _player.addExp(it->getAmount());  // Sumar EXP
+            _player.addExp(200);  // Sumar EXP
             it = _expOrbs.erase(it);          // Eliminar el orbe y actualizar el iterador
         }
         else {
@@ -429,4 +557,9 @@ sf::Vector2f Game::getClosestEnemy() {
     }
     
     return closestEnemyPosition;
+}
+
+
+bool Game::loadSave() {
+    return _fileManager.cargarPartida(_player, _enemies, _expOrbs);
 }

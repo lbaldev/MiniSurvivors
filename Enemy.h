@@ -18,7 +18,8 @@ public:
     void colisionesEnemyBoss(Entity& boss);
 
 
-    
+	void setDamage(float damage) { _damage = damage; }
+    float getDamage() const { return _damage; }
 
 };
 

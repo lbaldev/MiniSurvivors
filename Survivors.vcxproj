@@ -138,6 +138,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="NameInput.cpp" />
     <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Proyectil.cpp" />
@@ -152,6 +153,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="NameInput.h" />
     <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Proyectil.h" />

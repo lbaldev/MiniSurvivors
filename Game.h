@@ -30,7 +30,6 @@ private:
     std::vector<ExpOrb> _expOrbs;
     Spawner _spawner; 
     // Boss
-	Enemy _boss = Enemy(0, 0, 0, "", { 0, 0 }); // inicialización de los valores del boss por defecto
     bool _bossSpawned = false;
     bool _bossAparecio = false;
     sf::View _camera;

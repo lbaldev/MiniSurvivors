@@ -4,7 +4,6 @@
 #include <SFML/Audio.hpp>
 #include <sstream>  // Para std::stringstream
 #include <iomanip>  // Para std::fixed y std::setprecision  ambos usados para stats en pantalla
-
 #include "Game.h"
 #include <random> 
 
@@ -38,7 +37,7 @@ Game::Game(sf::RenderWindow& window)
     _playerIcon.setPosition(20.f, 20.f);
 
     ;
-    _backgroundTexture.loadFromFile("assets/fondo-.png");
+    _backgroundTexture.loadFromFile("assets/fondo2noche.png");
     _backgroundSprite.setTexture(_backgroundTexture);
     _backgroundSprite.setOrigin(
         _backgroundTexture.getSize().x / 2.f,
@@ -93,7 +92,7 @@ Game::Game(sf::RenderWindow& window)
 
     // Fondo semitransparente para las stats
     _statsBackground.setSize(sf::Vector2f(200.f, 180.f));
-    _statsBackground.setFillColor(sf::Color(0, 0, 0, 150)); // Negro semitransparente
+    _statsBackground.setFillColor(sf::Color(0, 0, 0, 150)); 
     _statsBackground.setPosition(10.f, 120.f); 
 
     // Texto de estadísticas
@@ -145,7 +144,7 @@ void Game::processEvents() {
             _window.close();
         }
 
-        if (_state == GameState::GameOver && event.type == sf::Event::KeyPressed) {
+        if (_state == GameState::GameOver && event.key.code == sf::Keyboard::Escape) {
             _shouldExitToMenu = true;
             return;
         }
@@ -259,18 +258,11 @@ void Game::update(float dt)
 
 	_player.update(dt);
     _player.attack(getClosestEnemy());
-    //Se le agrego aumentoDanio, aumentoVelocidad y aumentoVida para que los enemigos puedan escalar por tiempo
-    _spawner.spawnEnemies(_enemies, _player.getPosition(), _aumentoDanio, _aumentoVelocidad, _aumentoVida);
+    _spawner.spawnEnemies(_enemies, _player.getPosition(), _timer);
 
     for (auto& enemy : _enemies) {
         enemy.chase(_player.getPosition(), dt);
     }
-
-    // Boss
-    if (_bossSpawned) {
-        _boss.chase(_player.getPosition(), dt);
-    }
-
 
     checkHitpoints();
     checkCollisions();
@@ -309,7 +301,7 @@ void Game::update(float dt)
     if (_player.getLevel() > ultimoNivel) {
         ultimoNivel = _player.getLevel();
 
-        int mejora = (rand() % 6) + 1;
+        int mejora = (rand() % 5) + 1;  //sacamos el multidisparo
 
         switch (mejora) {
         case 1:
@@ -332,49 +324,25 @@ void Game::update(float dt)
             _player.aumentarVelocidadProyectil(100.f);
             std::cout << "+100 de velocidad del proyectil" << std::endl;
             break;
-        case 6:  
-            _player.agregarDisparoAdicional();
-            std::cout << "+1 disparo adicional" << std::endl;
-            break;
         }
     }
 
     // Boss
-
-    if (!_bossAparecio && !_bossSpawned && _timer >= 2) {
-        _boss = Enemy(
-            1000.f,                   // vida
+    MAX_ENEMIES = (int)_timer % 120;
+    if (!_bossAparecio && !_bossSpawned &&  _timer > 1 && ((int)_timer % 120 == 0)){
+        _enemies.clear();
+        _enemies.emplace_back(1000.f,                   // vida
             80.f,                     // velocidad
             50.f,                     // daño
             "assets/boss.png",       // textura del boss
-            sf::Vector2f(600.f, 400.f) // posición inicial
-        );
+            sf::Vector2f(600.f, 400.f));
         _bossSpawned = true;
         _bossAparecio = true;
         std::cout << "Boss aparecio!" << std::endl;
     }
-    // Mejora de stats de enemigos
-    int mejorasEsperadas = static_cast<int>(_timer) / 60;
-    if (mejorasEsperadas > _mejorasAplicadas) {
-        int cantidadMejoras = mejorasEsperadas - _mejorasAplicadas;
-        _mejorasAplicadas = mejorasEsperadas;
 
-        _aumentoDanio += 10.f * cantidadMejoras;
-        _aumentoVelocidad += 2.f * cantidadMejoras;
-		_aumentoVida += 20.f * cantidadMejoras; 
-
-        std::cout << "Enemigos mejorados! " << _aumentoDanio
-            << " +10 daño," << _aumentoVelocidad << " +2 velocidad y" << _aumentoVida << " +20 Vida." << std::endl;
-
-        // Mejorar stats de enemigos vivos
-        for (auto& enemy : _enemies) {
-            enemy.setDamage(enemy.getDamage() + 10.f * cantidadMejoras);
-            enemy.setSpeed(enemy.getSpeed() + 2.f * cantidadMejoras);
-			enemy.setHealth(enemy.getHealth() + 20.f * cantidadMejoras); 
-        }
-    }
-
-}
+    
+ }
 
 void Game::render()
 {
@@ -411,12 +379,7 @@ void Game::render()
     for (const auto& orb : _expOrbs)
         _window.draw(orb);
 
-    // Boss 
-    if (_bossSpawned) {
-        _window.draw(_boss);
-    }
-
-
+    
     _window.setView(_window.getDefaultView()); // HUD en pantalla, no en mundo
     _window.draw(_expBarBackground);
     _window.draw(_expBarFill);
@@ -455,7 +418,7 @@ void Game::checkCollisions()
     // 3. Colisiones Jugador-Orbe de EXP
     for (auto it = _expOrbs.begin(); it != _expOrbs.end(); ) {
         if (_player.getGlobalBounds().intersects(it->getBounds())) {
-            _player.addExp(200);  // Sumar EXP
+            _player.addExp(50);  // Sumar EXP
             it = _expOrbs.erase(it);          // Eliminar el orbe y actualizar el iterador
         }
         else {
@@ -489,25 +452,6 @@ void Game::checkCollisions()
                     }
                 }
 
-                // Boss - Proyectil (estilo distancia como los enemigos)
-                if (_bossSpawned) {
-                    float dx = proyectil.getPosition().x - _boss.getPosition().x;
-                    float dy = proyectil.getPosition().y - _boss.getPosition().y;
-                    float distancia = std::sqrt(dx * dx + dy * dy);
-                    float radioBoss = 140.f; 
-
-                    if (distancia < (radioProyectil + radioBoss)) {
-                        sonidoAtaque.play();
-                        _boss.takeDamage(100);
-                        if (_boss.getHealth() <= 0) {
-                            _puntuacion += 1000;
-                            _bossSpawned = false;
-                            std::cout << "Boss derrotado!" << std::endl;
-                        }
-                        return true;
-                    }
-                }
-
 
 
                 return false; // no eliminar
@@ -515,24 +459,13 @@ void Game::checkCollisions()
         projectiles.end()
     );
 
-    //5. Colision Boss- Enemigo
-    if (_bossSpawned) {
-        for (auto& enemy : _enemies) {
-            enemy.colisionesEnemyBoss(_boss);
-        }
-    }
 
     //6. Colision Boss- Jugador
-    if (_bossSpawned && _player.getGlobalBounds().intersects(_boss.getGlobalBounds())) {
-        _boss.colisionesPlayerEnemy(_player);
-    }
 
 
 }
 
 void Game::checkHitpoints() {
-
-
     for (auto it = _enemies.begin(); it != _enemies.end(); ) { 
         if (it->getHealth() <= 0) { 
             _expOrbs.emplace_back(it->getPosition(), 10); 
@@ -559,14 +492,6 @@ sf::Vector2f Game::getClosestEnemy() {
         if (distance < minDistance) {
             minDistance = distance;
             closestEnemyPosition = enemy.getPosition();
-        }
-    }
-    // Boss
-    if (_bossSpawned) {
-        float distanceToBoss = std::hypot(_boss.getPosition().x - _player.getPosition().x,
-            _boss.getPosition().y - _player.getPosition().y);
-        if (distanceToBoss < minDistance) {
-            closestEnemyPosition = _boss.getPosition();
         }
     }
     

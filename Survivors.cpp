@@ -38,7 +38,6 @@ int main() {
                         case 1: {
                             NameInput nameScreen(window);
                             if (nameScreen.run()) {
-                                Game game(window);
                                 game.setPlayerName(nameScreen.getPlayerName());
                                 game.run(); // Ahora game puede acceder al nombre con nameScreen.getPlayerName()
                             }

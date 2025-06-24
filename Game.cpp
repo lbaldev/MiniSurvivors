@@ -305,7 +305,7 @@ void Game::update(float dt)
 
         switch (mejora) {
         case 1:
-            _player.incrementarDanioBase(5.0f);
+            _player.incrementarDanioBase(50.0f);
             std::cout << "+5 de danio base" << std::endl;
             break;
         case 2:
@@ -449,7 +449,7 @@ void Game::checkCollisions()
                     float distancia = std::sqrt(dx * dx + dy * dy);
                     if (distancia < (radioProyectil + radioEnemigo)) {
                         sonidoAtaque.play();
-                        enemy.takeDamage(100);
+                        enemy.takeDamage(proyectil.getDamage());
                         return true; // eliminar por colisión
                     }
                 }

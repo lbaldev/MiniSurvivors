@@ -71,6 +71,8 @@ private:
     int _mejorasAplicadas = 0;
     float _aumentoDanio = 0.f;
     float _aumentoVelocidad = 0.f;
+	//Escalado de stats 1.5
+    float _aumentoVida = 0.f;
 
     void processEvents();
     void update(float deltaTime);

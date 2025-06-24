@@ -2,6 +2,8 @@
 #include "Game.h"
 #include "Menu.h"
 #include "Globals.h"
+#include "NameInput.h"
+#include "FileManager.h"
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mini Survivors - Menú");
@@ -24,21 +26,25 @@ int main() {
                         menu.moveDown();
                     }
                     else if (event.key.code == sf::Keyboard::Enter) {
-                        menu.playSelectSound(); 
+                        menu.playSelectSound();
                         int selected = menu.getSelectedIndex();
                         Game game(window);
                         switch (selected) {
                         case 0: {
-							if (game.loadSave()) game.run();
-                            break;
-						}
-                        case 1: {
-                            game.run();
-                            if (game.shouldExitToMenu()) {
-                                showMenu = true;
-                            }
+                            if (game.loadSave()) game.run();
                             break;
                         }
+                        
+                        case 1: {
+                            NameInput nameScreen(window);
+                            if (nameScreen.run()) {
+                                Game game(window);
+                                game.setPlayerName(nameScreen.getPlayerName());
+                                game.run(); // Ahora game puede acceder al nombre con nameScreen.getPlayerName()
+                            }
+                            break;
+                        }   
+                        
                         case 4:
                             window.close();
                             break;

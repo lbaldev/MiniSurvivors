@@ -12,6 +12,7 @@
 #include <SFML/Audio.hpp>
 #include "PauseMenu.h"
 #include "FileManager.h"
+#include "NameInput.h"
 
 
 enum class GameState {
@@ -39,6 +40,7 @@ private:
     GameState _state = GameState::Playing;
     PauseMenu _pauseMenu;
 	FileManager _fileManager; 
+    std::string _playerName;
 
 
     // Mariano elementos del HUD
@@ -86,6 +88,7 @@ public:
     bool loadSave();
     void run();
     bool shouldExitToMenu() const { return _shouldExitToMenu; }
+    void setPlayerName(const std::string& name) { _playerName = name; }
 };
 
 #endif

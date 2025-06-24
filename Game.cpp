@@ -5,7 +5,6 @@
 #include <sstream>  // Para std::stringstream
 #include <iomanip>  // Para std::fixed y std::setprecision  ambos usados para stats en pantalla
 
-
 #include "Game.h"
 #include <random> 
 
@@ -119,7 +118,7 @@ Game::Game(sf::RenderWindow& window)
     _gameOverText.setFont(_font);
     _gameOverText.setCharacterSize(48);
     _gameOverText.setFillColor(sf::Color::Red);
-    _gameOverText.setString("            GAME OVER\n\nPuntuacion: 0");    
+    _gameOverText.setString("            GAME OVER\n\nPuntuacion: 0"); 
     _gameOverBackground.setSize(sf::Vector2f(WINDOW_WIDTH, WINDOW_HEIGHT));
     _gameOverBackground.setFillColor(sf::Color::Black);
     _gameOverBackground.setPosition(0.f, 0.f);
@@ -133,9 +132,9 @@ Game::Game(sf::RenderWindow& window)
     _gameOverPrompt.setOrigin(promptBounds.width / 2.f, promptBounds.height / 2.f);
     _gameOverPrompt.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f + 100.f);
 
-    sf::FloatRect bounds = _gameOverText.getLocalBounds();
-    _gameOverText.setOrigin(bounds.width / 2.f, bounds.height / 2.f);
-    _gameOverText.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 2.f);
+    sf::FloatRect bounds = _gameOverText.getLocalBounds(); 
+    _gameOverText.setOrigin(bounds.width / 2.f, bounds.height / 2.f); 
+    _gameOverText.setPosition(WINDOW_WIDTH / 2.f, WINDOW_HEIGHT / 3.f);
 
 }
 
@@ -223,7 +222,21 @@ void Game::update(float dt)
 
     if (_player.getHealth() <= 0 && _state != GameState::GameOver) {
         _state = GameState::GameOver;
-        _gameOverText.setString("    GAME OVER\n\nPuntuacion: " + std::to_string(_puntuacion));
+        _gameOverText.setString("    GAME OVER\n\nJugador: "+ _playerName  + "\n\nPuntuacion: " + std::to_string(_puntuacion));
+		// Guardar puntaje en el archivo
+        ScoreEntry nuevaPuntuacion;
+        strncpy_s(nuevaPuntuacion.nombre, _playerName.c_str(), sizeof(nuevaPuntuacion.nombre) - 1);
+        nuevaPuntuacion.nombre[sizeof(nuevaPuntuacion.nombre) - 1] = '\0'; // Asegurar null-termination
+
+        nuevaPuntuacion.puntuacion = _puntuacion;
+
+        if (_fileManager.guardarPuntaje(nuevaPuntuacion)) {
+            std::cout << "Puntuacion guardada al morir: " << nuevaPuntuacion.nombre << " - " << nuevaPuntuacion.puntuacion << std::endl;
+        }
+        else {
+            std::cerr << "Error al guardar la puntuacion al morir." << std::endl;
+        }
+
     }
   
     if(_state == GameState::Paused) {

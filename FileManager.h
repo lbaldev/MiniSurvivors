@@ -20,8 +20,8 @@ private:
 public:
     FileManager(const std::string& archivoPartida, const std::string& archivoPuntajes);
 
-    bool guardarPartida(const Player& jugador, const std::vector<Enemy>& enemigos, const std::vector<ExpOrb>& orbes);
-    bool cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, std::vector<ExpOrb>& orbes);
+    bool guardarPartida(const Player& jugador, const std::vector<Enemy>& enemigos, const std::vector<ExpOrb>& orbes, float& tiempo, int& puntuacion);
+    bool cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, std::vector<ExpOrb>& orbes, float& tiempo, int& puntuacion);
 
     bool guardarPuntaje(const ScoreEntry& entry);
     std::vector<ScoreEntry> leerPuntajes();

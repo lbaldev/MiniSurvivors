@@ -178,7 +178,7 @@ void Game::processEvents() {
                         _state = GameState::Playing; // Continuar juego
                         break;
                     case 1:
-                        _fileManager.guardarPartida(_player, _enemies, _expOrbs);
+                        _fileManager.guardarPartida(_player, _enemies, _expOrbs, _timer, _puntuacion);
                         std::cout << "[INFO] guardando partida..." << std::endl;
                         _shouldExitToMenu = true;
                         break;
@@ -521,5 +521,5 @@ sf::Vector2f Game::getClosestEnemy() {
 
 
 bool Game::loadSave() {
-    return _fileManager.cargarPartida(_player, _enemies, _expOrbs);
+    return _fileManager.cargarPartida(_player, _enemies, _expOrbs, _timer, _puntuacion);
 }

@@ -6,7 +6,7 @@ FileManager::FileManager(const std::string& archivoPartida, const std::string& a
     : _archivoPartida(archivoPartida), _archivoPuntajes(archivoPuntajes) {
 }
 
-bool FileManager::guardarPartida(const Player& jugador, const std::vector<Enemy>& enemigos, const std::vector<ExpOrb>& orbes) {
+bool FileManager::guardarPartida(const Player& jugador, const std::vector<Enemy>& enemigos, const std::vector<ExpOrb>& orbes, float& tiempo, int& puntuacion) {
     FILE* pArchivo = nullptr;  
     errno_t err = fopen_s(&pArchivo, _archivoPartida.c_str(), "wb");  
     if (err != 0 || pArchivo == nullptr) return false;
@@ -27,6 +27,8 @@ bool FileManager::guardarPartida(const Player& jugador, const std::vector<Enemy>
 	std::string nombre = jugador.getName();
     int lenName = nombre.size();
 
+	fwrite(&puntuacion, sizeof(int), 1, pArchivo); 
+    fwrite(&tiempo, sizeof(tiempo), 1, pArchivo);
     fwrite(&pos, sizeof(pos), 1, pArchivo);
     fwrite(&vida, sizeof(vida), 1, pArchivo);
     fwrite(&nivel, sizeof(nivel), 1, pArchivo);
@@ -76,17 +78,19 @@ bool FileManager::guardarPartida(const Player& jugador, const std::vector<Enemy>
 }
 
 
-bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, std::vector<ExpOrb>& orbes) {
+bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, std::vector<ExpOrb>& orbes, float& tiempo, int& puntuacion) {
     FILE* pArchivo = nullptr;
     errno_t err = fopen_s(&pArchivo, _archivoPartida.c_str(), "rb");
     if (err != 0 || pArchivo == nullptr) return false;
 
     sf::Vector2f pos;
-    int vida, nivel, exp;
-    float damage, speed, cooldown, rango, velocidadProy;
+    int vida, nivel, exp, puntos;
+    float damage, speed, cooldown, rango, velocidadProy, timer;
     bool autoAim;
     int lenTex,lenName;
 
+	fread(&puntos, sizeof(int), 1, pArchivo);
+	fread(&timer, sizeof(timer), 1, pArchivo);
     fread(&pos, sizeof(pos), 1, pArchivo);
     fread(&vida, sizeof(vida), 1, pArchivo);
     fread(&nivel, sizeof(nivel), 1, pArchivo);
@@ -114,7 +118,8 @@ bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, s
     jugador.setVelocidadProyectil(velocidadProy);
     jugador.setAutoAim(autoAim);
 	jugador.setName(nombre);
-
+	tiempo = timer;
+    puntuacion = puntos;
     // Enemigos
     enemigos.clear();
     int cantidadEnemigos;

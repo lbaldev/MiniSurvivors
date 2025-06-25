@@ -35,6 +35,9 @@ private:
     sf::View _camera;
     sf::Texture _backgroundTexture;
     sf::Sprite _backgroundSprite;
+    sf::Texture _bossBackgroundTexture;  
+    bool _bossBackgroundActive;
+
     float dt;
     GameState _state = GameState::Playing;
     PauseMenu _pauseMenu;

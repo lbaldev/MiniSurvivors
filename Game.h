@@ -29,9 +29,13 @@ private:
     std::vector<Enemy> _enemies; // Vector para almacenar enemigos
     std::vector<ExpOrb> _expOrbs;
     Spawner _spawner; 
+
+    int _ultimoNivel = 1;
+    
     // Boss
     bool _bossSpawned = false;
     bool _bossAparecio = false;
+    
     sf::View _camera;
     sf::Texture _backgroundTexture;
     sf::Sprite _backgroundSprite;

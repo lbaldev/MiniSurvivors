@@ -305,9 +305,8 @@ void Game::update(float dt)
 
 
     // Pool de mejoras al azar al subir de nivel
-    static int ultimoNivel = _player.getLevel();
-    if (_player.getLevel() > ultimoNivel) {
-        ultimoNivel = _player.getLevel();
+    if (_player.getLevel() > _ultimoNivel) {
+        _ultimoNivel = _player.getLevel();
 
         int mejora = (rand() % 5) + 1;  //sacamos el multidisparo
 

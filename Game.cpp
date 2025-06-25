@@ -520,5 +520,10 @@ sf::Vector2f Game::getClosestEnemy() {
 
 
 bool Game::loadSave() {
-    return _fileManager.cargarPartida(_player, _enemies, _expOrbs, _timer, _puntuacion);
+    bool cargado = _fileManager.cargarPartida(_player, _enemies, _expOrbs, _timer, _puntuacion);
+    if (cargado) {
+        _ultimoNivel = _player.getLevel(); // Fix para que no de mejoras al cargar
+    }
+    return cargado;
 }
+

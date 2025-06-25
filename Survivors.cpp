@@ -54,13 +54,13 @@ int main() {
                             }
                             break;
                         }   
-                        case 3: { // Puntuaciones
+                        case 2: { // Puntuaciones
                             scoreScreen.run(fileManager);
                             showMenu = true; // Vuelve al menú después de ver los scores
                             break;
                         }
                         
-                        case 4:
+                        case 3:
                             window.close();
                             break;
                         }

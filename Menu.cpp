@@ -2,7 +2,7 @@
 #include "Globals.h"
 
 Menu::Menu(float width, float height) : _selectedIndex(0) {
-    _options = { "Continuar", "Nueva Partida", "Opciones", "Puntuaciones", "Salir" };
+    _options = { "Continuar", "Nueva Partida", "Puntuaciones", "Salir" };
 
     if (!_font.loadFromFile("assets/font.otf")) {
         // Manejar error de carga de fuente

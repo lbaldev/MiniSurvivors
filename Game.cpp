@@ -229,10 +229,10 @@ void Game::update(float dt)
 
     if (_player.getHealth() <= 0 && _state != GameState::GameOver) {
         _state = GameState::GameOver;
-        _gameOverText.setString("    GAME OVER\n\nJugador: "+ _playerName  + "\n\nPuntuacion: " + std::to_string(_puntuacion));
+        _gameOverText.setString("    GAME OVER\n\nJugador: "+ _player.getName() + "\n\nPuntuacion: " + std::to_string(_puntuacion));
 		// Guardar puntaje en el archivo
         ScoreEntry nuevaPuntuacion;
-        strncpy_s(nuevaPuntuacion.nombre, _playerName.c_str(), sizeof(nuevaPuntuacion.nombre) - 1);
+        strncpy_s(nuevaPuntuacion.nombre, _player.getName().c_str(), sizeof(nuevaPuntuacion.nombre) - 1);
         nuevaPuntuacion.nombre[sizeof(nuevaPuntuacion.nombre) - 1] = '\0'; // Asegurar null-termination
 
         nuevaPuntuacion.puntuacion = _puntuacion;
@@ -343,10 +343,12 @@ void Game::update(float dt)
 		musicaBoss.play(); 
         
         _enemies.emplace_back(1000.f,                   // vida
-            80.f,                     // velocidad
-            50.f,                     // daño
+            120.f,                     // velocidad
+            80.f,                     // daño
             "assets/boss.png",       // textura del boss
-            sf::Vector2f(600.f, 400.f));
+			sf::Vector2f(600.f, 400.f), // posición donde aparece el boss
+            1000 // puntaje por matar al boss
+        );
         _bossSpawned = true;
         _bossAparecio = true;
         _bossBackgroundActive = true;  
@@ -473,7 +475,6 @@ void Game::checkCollisions()
     );
 
 
-    //6. Colision Boss- Jugador
 
 
 }
@@ -492,6 +493,7 @@ void Game::checkHitpoints() {
 			_puntuacion += 10; // Aumentar el puntaje por eliminar un enemigo
 
         }
+
         else {
             it->chase(_player.getPosition(), dt);
             ++it;

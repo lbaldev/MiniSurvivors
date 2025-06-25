@@ -1,6 +1,9 @@
-﻿  Spawner.cpp
-  Survivors.cpp
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Survivors.cpp(13,33): warning C4244: 'argumento': conversión de 'const int' a 'float'; posible pérdida de datos
-F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Survivors.cpp(13,19): warning C4244: 'argumento': conversión de 'const int' a 'float'; posible pérdida de datos
-  Generando código...
+﻿  FileManager.cpp
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(16,14): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(26,16): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(28,17): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(46,26): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(54,21): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(65,23): warning C4267: 'inicializando': conversión de 'size_t' a 'int'; posible pérdida de datos
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\FileManager.cpp(107,22): warning C4244: 'argumento': conversión de 'int' a 'float'; posible pérdida de datos
   Survivors.vcxproj -> F:\dev\Projects\programacion2\programacion2\MiniSurvivors\x64\Debug\Survivors.exe

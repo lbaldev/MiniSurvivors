@@ -1,4 +1,6 @@
 #include "Spawner.h"
+#include <iostream>
+
 
 Spawner::Spawner()
 {
@@ -23,6 +25,7 @@ void Spawner::spawnEnemies(std::vector<Enemy>& enemigos, sf::Vector2f playerPosi
         int tipo = std::rand() % 3;  // 0, 1 o 2
 
         float vida, velocidad, damage;
+        int score;
         std::string sprite;
 
         switch (tipo) {
@@ -31,22 +34,25 @@ void Spawner::spawnEnemies(std::vector<Enemy>& enemigos, sf::Vector2f playerPosi
             velocidad = 40.0f * (1 + timer / 60.0f);
             damage = 10.0f * (1 + timer / 60.0f);
             sprite = "assets/fantasma.png";
+            score = 10;
             break;
         case 1: // Araña
             vida = 30.0f * (1 + timer / 90.0f);
             velocidad = 30.0f;
             damage = 15.0f * (1 + timer / 45.0f);
             sprite = "assets/spider.png";
+            score = 15;
             break;
         case 2: // Bruto
             vida = 100.0f * (1 + timer / 45.0f);
             velocidad = 20.0f;
             damage = 25.0f * (1 + timer / 45.0f);
             sprite = "assets/bruto.png";
+            score = 30;
             break;
         }
 
-        enemigos.emplace_back(vida, velocidad, damage, sprite, sf::Vector2f(x, y));
+        enemigos.emplace_back(vida, velocidad, damage, sprite, sf::Vector2f(x, y), score);
 
         relojGeneracionEnemigos.restart();
     }

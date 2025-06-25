@@ -24,6 +24,8 @@ bool FileManager::guardarPartida(const Player& jugador, const std::vector<Enemy>
     bool autoAim = jugador.isAutoAimEnabled();
     std::string tex = jugador.getTexturePath();
     int lenTex = tex.size();
+	std::string nombre = jugador.getName();
+    int lenName = nombre.size();
 
     fwrite(&pos, sizeof(pos), 1, pArchivo);
     fwrite(&vida, sizeof(vida), 1, pArchivo);
@@ -37,6 +39,8 @@ bool FileManager::guardarPartida(const Player& jugador, const std::vector<Enemy>
     fwrite(&autoAim, sizeof(autoAim), 1, pArchivo);
     fwrite(&lenTex, sizeof(int), 1, pArchivo);
     fwrite(tex.c_str(), sizeof(char), lenTex, pArchivo);
+    fwrite(&lenName, sizeof(int), 1, pArchivo);
+    fwrite(nombre.c_str(), sizeof(char), lenName, pArchivo);
 
     // Guardar enemigos
     int cantidadEnemigos = enemigos.size();
@@ -81,7 +85,7 @@ bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, s
     int vida, nivel, exp;
     float damage, speed, cooldown, rango, velocidadProy;
     bool autoAim;
-    int lenTex;
+    int lenTex,lenName;
 
     fread(&pos, sizeof(pos), 1, pArchivo);
     fread(&vida, sizeof(vida), 1, pArchivo);
@@ -96,6 +100,9 @@ bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, s
     fread(&lenTex, sizeof(int), 1, pArchivo);
     std::string tex(lenTex, '\0');
     fread(&tex[0], sizeof(char), lenTex, pArchivo);
+    fread(&lenName, sizeof(int), 1, pArchivo); 
+    std::string nombre(lenName, '\0');
+    fread(&nombre[0], sizeof(char), lenName, pArchivo); 
 
     jugador = Player(vida, speed, tex);
 	jugador.setPosition(pos);
@@ -106,6 +113,7 @@ bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, s
     jugador.setRangoProyectil(rango);
     jugador.setVelocidadProyectil(velocidadProy);
     jugador.setAutoAim(autoAim);
+	jugador.setName(nombre);
 
     // Enemigos
     enemigos.clear();
@@ -145,25 +153,56 @@ bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, s
 
 bool FileManager::guardarPuntaje(const ScoreEntry& entry) {
     FILE* pArchivo;
-    errno_t err = fopen_s(&pArchivo, _archivoPuntajes.c_str(), "ab"); // append
-    if (err != 0 || pArchivo == NULL) return false;
+    errno_t err = fopen_s(&pArchivo, _archivoPuntajes.c_str(), "ab"); // append binary
+    if (err != 0 || pArchivo == NULL) {
+        std::cerr << "Error al abrir el archivo de puntajes para escritura: " << _archivoPuntajes << std::endl;
+        return false;
+    }
 
-    fwrite(&entry, sizeof(ScoreEntry), 1, pArchivo);
+    size_t written = fwrite(&entry, sizeof(ScoreEntry), 1, pArchivo);
     fclose(pArchivo);
-    return true;
+    return written == 1;
 }
 
 std::vector<ScoreEntry> FileManager::leerPuntajes() {
-    std::vector<ScoreEntry> resultados;
+    std::vector<ScoreEntry> scores;
     FILE* pArchivo;
-    errno_t err = fopen_s(&pArchivo, _archivoPuntajes.c_str(), "rb");
-    if (err != 0 || pArchivo == NULL) return resultados;
+    errno_t err = fopen_s(&pArchivo, _archivoPuntajes.c_str(), "rb"); // read binary
+    if (err != 0 || pArchivo == NULL) {
+        std::cerr << "Advertencia: El archivo de puntajes no existe o no se pudo abrir: " << _archivoPuntajes << std::endl;
+        return scores; // Retorna un vector vacío si el archivo no existe o hay error
+    }
 
-    ScoreEntry temp;
-    while (fread(&temp, sizeof(ScoreEntry), 1, pArchivo)) {
-        resultados.push_back(temp);
+    fseek(pArchivo, 0, SEEK_END);
+    long fileSize = ftell(pArchivo);
+    fseek(pArchivo, 0, SEEK_SET);
+
+    int cantidadRegistros = 0;
+    if (sizeof(ScoreEntry) > 0) {
+        cantidadRegistros = fileSize / sizeof(ScoreEntry);
+    }
+
+    scores.reserve(cantidadRegistros);
+
+    ScoreEntry entry;
+    for (int i = 0; i < cantidadRegistros; ++i) {
+        if (fread(&entry, sizeof(ScoreEntry), 1, pArchivo) == 1) {
+            scores.push_back(entry);
+        }
+        else {
+            std::cerr << "Error al leer entrada de puntaje en la posicion " << i << std::endl;
+            break;
+        }
     }
 
     fclose(pArchivo);
-    return resultados;
+
+    // *************************************************************************
+    // IMPORTANTE: QUITAR ESTAS LÍNEAS SI QUIERES ORDENAR EN SCOREMENU
+    // std::sort(scores.begin(), scores.end(), [](const ScoreEntry& a, const ScoreEntry& b) {
+    //    return a.puntuacion > b.puntuacion; // Orden descendente
+    // });
+    // *************************************************************************
+
+    return scores;
 }

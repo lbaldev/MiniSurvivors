@@ -7,9 +7,11 @@
 class Enemy : public Entity {
 private:
     float _damage;
+    // Puntuación que otorgan los enemigos al morir
+    int _scoreValue;
 
 public:
-    Enemy(float health, float speed, float damage, const std::string& texturePath, sf::Vector2f startPosition);
+    Enemy(float health, float speed, float damage, const std::string& texturePath, sf::Vector2f startPosition, int scoreValue = 10);
     void update(float dt) override;
     void chase(sf::Vector2f target, float dt);
 
@@ -17,6 +19,8 @@ public:
 	void colisionesEnemyEnemy(Entity& otro);
     void colisionesEnemyBoss(Entity& boss);
 
+    int getScoreValue() const { return _scoreValue; }
+    void setScoreValue(int value) { _scoreValue = value; }
 
 	void setDamage(float damage) { _damage = damage; }
     float getDamage() const { return _damage; }

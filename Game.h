@@ -42,7 +42,6 @@ private:
     GameState _state = GameState::Playing;
     PauseMenu _pauseMenu;
 	FileManager _fileManager; 
-    std::string _playerName;
 
 
     // Mariano elementos del HUD
@@ -93,7 +92,7 @@ public:
     bool loadSave();
     void run();
     bool shouldExitToMenu() const { return _shouldExitToMenu; }
-    void setPlayerName(const std::string& name) { _playerName = name; }
+    void setPlayerName(const std::string& name) { _player.setName(name); }
 };
 
 #endif

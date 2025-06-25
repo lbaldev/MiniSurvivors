@@ -35,6 +35,9 @@ private:
     sf::View _camera;
     sf::Texture _backgroundTexture;
     sf::Sprite _backgroundSprite;
+    sf::Texture _bossBackgroundTexture;  
+    bool _bossBackgroundActive;
+
     float dt;
     GameState _state = GameState::Playing;
     PauseMenu _pauseMenu;
@@ -58,6 +61,7 @@ private:
 
     //Ema - Musica y sonidos
     sf::Music musicaFondo;
+	sf::Music musicaBoss;
     sf::SoundBuffer bufferAtaque;
     sf::Sound sonidoAtaque;
     //pantalla game over

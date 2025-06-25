@@ -26,6 +26,11 @@ Game::Game(sf::RenderWindow& window)
     musicaFondo.setLoop(true);
     musicaFondo.setVolume(10);
 
+    // Música de boss
+    musicaBoss.openFromFile("assets/boss_music.ogg");
+    musicaBoss.setLoop(true);
+    musicaBoss.setVolume(10);
+
     // Sonido de ataque
     bufferAtaque.loadFromFile("assets/Hit.ogg");
     sonidoAtaque.setBuffer(bufferAtaque);
@@ -37,14 +42,17 @@ Game::Game(sf::RenderWindow& window)
     _playerIcon.setPosition(20.f, 20.f);
 
     ;
-    _backgroundTexture.loadFromFile("assets/fondo2noche.png");
+    _backgroundTexture.loadFromFile("assets/fondo2.png");
     _backgroundSprite.setTexture(_backgroundTexture);
     _backgroundSprite.setOrigin(
         _backgroundTexture.getSize().x / 2.f,
         _backgroundTexture.getSize().y / 2.f
     );
     _backgroundSprite.setPosition(0.f, 0.f); // posición del centro del mapa
+
+    _bossBackgroundTexture.loadFromFile("assets/fondo2noche.png");
     
+
 
     // Mariano - Agregando la barra de experiencia y nivel
     _levelText.setFont(_font); 
@@ -331,6 +339,9 @@ void Game::update(float dt)
     MAX_ENEMIES = (int)_timer % 120;
     if (!_bossAparecio && !_bossSpawned &&  _timer > 1 && ((int)_timer % 120 == 0)){
         _enemies.clear();
+        musicaFondo.stop();
+		musicaBoss.play(); 
+        
         _enemies.emplace_back(1000.f,                   // vida
             120.f,                     // velocidad
             80.f,                     // daño
@@ -340,6 +351,8 @@ void Game::update(float dt)
         );
         _bossSpawned = true;
         _bossAparecio = true;
+        _bossBackgroundActive = true;  
+        _backgroundSprite.setTexture(_bossBackgroundTexture);
         std::cout << "Boss aparecio!" << std::endl;
     }
 
@@ -468,10 +481,17 @@ void Game::checkCollisions()
 
 void Game::checkHitpoints() {
     for (auto it = _enemies.begin(); it != _enemies.end(); ) { 
-        if (it->getHealth() <= 0) {
-			_puntuacion += it->getScoreValue(); // Se suma la puntuacion por eliminar al enemigo
-			_expOrbs.emplace_back(it->getPosition(), 10); //Tira el orbe de experiencia al morir
-            it = _enemies.erase(it); // Ripea el enemigo y desaparece
+        if (it->getHealth() <= 0) { 
+            if (it->getTexturePath() == "assets/boss.png") {
+                _bossBackgroundActive = false;
+                _backgroundSprite.setTexture(_backgroundTexture);
+                musicaFondo.play();
+                musicaBoss.stop();
+            }
+            _expOrbs.emplace_back(it->getPosition(), 10); 
+            it = _enemies.erase(it);
+			_puntuacion += 10; // Aumentar el puntaje por eliminar un enemigo
+
         }
 
         else {

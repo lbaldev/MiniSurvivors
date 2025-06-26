@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <string>
-#include "FileManager.h" // Necesitamos la struct ScoreEntry
+#include "FileManager.h"
 
 class ScoreMenu {
 private:

@@ -1,6 +1,6 @@
 #include "ExpOrb.h"
 
-ExpOrb::ExpOrb(sf::Vector2f position, int amount) // Constructor con (posicion, cantidad de experiencia)
+ExpOrb::ExpOrb(sf::Vector2f position, int amount) 
     : _position(position), _amount(amount)
 {
     _shape.setRadius(5.0f);

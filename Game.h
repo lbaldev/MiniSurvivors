@@ -49,7 +49,7 @@ private:
 
 
     // Mariano elementos del HUD
-	sf::Font _font; // Fuente para el HUD
+	sf::Font _font; 
     sf::Text _levelText;
     sf::RectangleShape _expBarBackground;
     sf::RectangleShape _expBarFill;
@@ -68,6 +68,7 @@ private:
 	sf::Music musicaBoss;
     sf::SoundBuffer bufferAtaque;
     sf::Sound sonidoAtaque;
+
     //pantalla game over
     sf::Text _gameOverText;
 	sf::Clock _gameOverClock;
@@ -78,7 +79,6 @@ private:
     int _mejorasAplicadas = 0;
     float _aumentoDanio = 0.f;
     float _aumentoVelocidad = 0.f;
-	//Escalado de stats 1.5
     float _aumentoVida = 0.f;
 
     void processEvents();

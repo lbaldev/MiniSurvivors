@@ -16,7 +16,7 @@ PauseMenu::PauseMenu(float width, float height) : _selectedIndex(0) {
     }
 
     _background.setSize(sf::Vector2f(width, height));
-    _background.setFillColor(sf::Color(0, 0, 0, 150));  // semitransparente
+    _background.setFillColor(sf::Color(0, 0, 0, 150)); 
 }
 
 void PauseMenu::draw(sf::RenderWindow& window) {

@@ -16,17 +16,17 @@ void Enemy::chase(sf::Vector2f target, float dt) {
     sf::Vector2f dir = target - _position;
     float length = std::sqrt(dir.x * dir.x + dir.y * dir.y);
     if (length != 0) dir /= length;
-	move(dir.x * _speed * dt, dir.y * _speed * dt); // Mueve el enemigo hacia el objetivo
+	move(dir.x * _speed * dt, dir.y * _speed * dt); 
 
 	//_position += dir * _speed * dt; //  
-	//_sprite.setPosition(_position); // Actualiza la posici�n del sprite
+	//_sprite.setPosition(_position); // Actualiza la posicion del sprite
 }
 
 void Enemy::colisionesPlayerEnemy(Player& player)
 {
     const float EMPUJE_JUGADOR = 2.f;
 
-    // Obtener bounding boxes
+	//Hitboxes de los sprites
     sf::FloatRect enemyBounds = _sprite.getGlobalBounds();
     sf::FloatRect playerBounds = player.getSprite().getGlobalBounds();
 
@@ -89,4 +89,3 @@ void Enemy::colisionesEnemyBoss(Entity& boss) {
         pushBack(dir, EMPUJE_SOLO_ENEMIGO); // solo empuja al enemigo
     }
 }
-

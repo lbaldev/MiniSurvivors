@@ -15,16 +15,16 @@ Entity::Entity(float health, float speed, const std::string& texturePath, sf::Ve
 
 Entity::~Entity() {}
 
-void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const { // M�todo para dibujar la entidad en la ventana de renderizado
+void Entity::draw(sf::RenderTarget& target, sf::RenderStates states) const { 
     target.draw(_sprite, states);
 }
 
 void Entity::move(float desplazamientoX, float desplazamientoY)
 {
-	_prevPosition = _position; // Guarda la posici�n anterior antes de mover
+	_prevPosition = _position; 
 	_position.x += desplazamientoX;
     _position.y += desplazamientoY;
-	_sprite.setPosition(_position); // Actualiza la posici�n del sprite
+	_sprite.setPosition(_position); 
 
 }
 

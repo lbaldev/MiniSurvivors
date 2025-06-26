@@ -9,7 +9,6 @@ private:
     sf::Vector2f _position;     
     sf::Vector2f direccionProyectil;   
     float velocidadProyectil;   
-    float _lifetime;    
 
     sf::Sprite _sprite;
     static sf::Texture _texture;

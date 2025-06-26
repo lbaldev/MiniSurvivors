@@ -2,15 +2,6 @@
 #include <iostream>
 
 
-Spawner::Spawner()
-{
-
-}
-
-Spawner::~Spawner()
-{
-  
-}
 
 void Spawner::spawnEnemies(std::vector<Enemy>& enemigos, sf::Vector2f playerPosition, float timer) {
     if (enemigos.size() < MAX_ENEMIES &&

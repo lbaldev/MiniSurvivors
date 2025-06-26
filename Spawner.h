@@ -7,8 +7,7 @@
 class Spawner
 {
 public:
-    Spawner(); 
-    virtual ~Spawner(); 
+
     void spawnEnemies(std::vector<Enemy>& enemigos, sf::Vector2f _position, float timer);
 
 private:

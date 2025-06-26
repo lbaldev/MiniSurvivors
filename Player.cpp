@@ -6,7 +6,7 @@
 
 Player::Player(float health, float speed, const std::string& texturePath) // El constructor inicializa al jugador con salud, velocidad y textura
 
-	: Entity(health, speed, texturePath, sf::Vector2f(0,0)), _level(1), _exp(0), _baseDamage(50.0f), _defense(0.1f), pickupRadius(20.0f), _rangoAtaque(300.f)  // Inicializa el nivel, experiencia, daño base y defensa del jugador
+	: Entity(health, speed, texturePath, sf::Vector2f(0,0)), _level(1), _exp(0), _baseDamage(50.0f), _defense(0.1f), pickupRadius(20.0f), _rangoProyectil(0.7)  // Inicializa el nivel, experiencia, daño base y defensa del jugador
 {   
     // Ema
     ultima_direccion = sf::Vector2f(0.f, -1.f); // Dirección inicial hacia arriba
@@ -92,7 +92,7 @@ void Player::attack(sf::Vector2f EnemyPosition) {
         if (_autoAim) {
             sf::Vector2f delta = EnemyPosition - _position;
             float distance = std::sqrt(delta.x * delta.x + delta.y * delta.y);
-            if (distance < _rangoAtaque && distance > 0.01f) {
+            if (distance < _rangoProyectil*velocidadProyectil*2 && distance > 0.01f) {
                 direccion = delta / distance;
                 ultima_direccion = direccion;
             }
@@ -100,7 +100,7 @@ void Player::attack(sf::Vector2f EnemyPosition) {
 
         if (direccion.x != 0.f || direccion.y != 0.f) {
        
-            Proyectiles.emplace_back(_position, direccion, velocidadProyectil, rangoProyectil, _baseDamage);
+            Proyectiles.emplace_back(_position, direccion, velocidadProyectil, _rangoProyectil, _baseDamage);
             _cooldownAtaque.restart();
         }
     }

@@ -9,13 +9,6 @@ ExpOrb::ExpOrb(sf::Vector2f position, int amount) // Constructor con (posicion, 
     _shape.setPosition(_position);
 }
 
-void ExpOrb::update(float dt) {
-    static float time = 0.0f; // Variable estática para mantener el tiempo acumulado
-    time += dt; // Incrementar el tiempo con el delta time
-    _position.y += sin(time) * 0.1f; // Usar la función sin con un argumento válido
-    _shape.setPosition(_position);
-}
-
 sf::Vector2f ExpOrb::getPosition() const {
     return _position;
 }

@@ -13,7 +13,7 @@ private:
 
     sf::Sprite _sprite;
     static sf::Texture _texture;
-    float rangoProyectil;   
+    float _rangoProyectil;   
     float _damage; 
 
 

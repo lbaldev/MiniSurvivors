@@ -339,12 +339,12 @@ void Game::update(float dt)
         musicaFondo.stop();
 		musicaBoss.play(); 
         
-        _enemies.emplace_back(1000.f,                   // vida
-            120.f,                                      // velocidad
-            80.f,                                       // daño
-            "assets/boss.png",                          // textura 
-			sf::Vector2f(1600.f, 1600.f),               // posición 
-            1000                                        // puntaje por matar al boss
+        _enemies.emplace_back(10000.f,                   // vida
+            120.f,                     // velocidad
+            80.f,                     // daño
+            "assets/boss.png",       // textura del boss
+			sf::Vector2f(1600.f, 1600.f), // posición donde aparece el boss
+            10000 // puntaje por matar al boss
         );
         _bossSpawned = true;
         _bossAparecio = true;

@@ -6,7 +6,7 @@ sf::Texture Proyectil::_texture;
 // Constructor del proyectil
 Proyectil::Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed, float lifetime, float damage)
     : _position(position), direccionProyectil(direction), velocidadProyectil(speed),
-    rangoProyectil(lifetime), _damage(damage)
+    _rangoProyectil(lifetime), _damage(damage)
 {
     if (direccionProyectil.x != 0 || direccionProyectil.y != 0) {
         float length = std::sqrt(direccionProyectil.x * direccionProyectil.x + direccionProyectil.y * direccionProyectil.y);
@@ -19,12 +19,13 @@ Proyectil::Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed,
     _sprite.setScale(0.025f, 0.025f);
 }
 
-// Método de actualización por frame
+// MÃ©todo de actualizaciÃ³n por frame
 void Proyectil::update(float dt) {
     
     _position += direccionProyectil * velocidadProyectil * dt;
     _sprite.setPosition(_position);
     rangoProyectil -= dt;
+
 }
 
 sf::Vector2f Proyectil::getPosition() const {
@@ -32,7 +33,7 @@ sf::Vector2f Proyectil::getPosition() const {
 }
 
  float Proyectil::getLifetime() const {
-     return rangoProyectil;
+     return _rangoProyectil;
 }
 
 void Proyectil::draw(sf::RenderTarget& target, sf::RenderStates states) const {

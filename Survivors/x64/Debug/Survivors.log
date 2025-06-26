@@ -12,4 +12,7 @@ F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(129,46): warn
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(129,46): warning C4244:             T=float
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(129,46): warning C4244:         ]
 F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Game.cpp(255,21): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+  Player.cpp
+F:\dev\Projects\programacion2\programacion2\MiniSurvivors\Player.cpp(9,151): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+  Generando código...
   Survivors.vcxproj -> F:\dev\Projects\programacion2\programacion2\MiniSurvivors\x64\Debug\Survivors.exe

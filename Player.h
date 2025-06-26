@@ -19,11 +19,10 @@ private:
     float _baseDamage;
     float _defense;
     float pickupRadius;
-	float _rangoAtaque;
     std::vector<Proyectil> Proyectiles;  // Lista de proyectiles activos
     sf::Clock _cooldownAtaque;         
     float CDataque = 1.0;     
-    float rangoProyectil = 0.5;
+    float _rangoProyectil = 0.5;
     float velocidadProyectil = 300.f; 
     sf::Vector2f ultima_direccion;
     float tiempoInmune = 0.5f;
@@ -58,10 +57,9 @@ public:
 	float getBaseDamage() const { return _baseDamage; }
 	float getDefense() const { return _defense; }
 	float getPickupRadius() const { return pickupRadius; }
-	float getRangoAtaque() const { return _rangoAtaque; }
     std::vector<Proyectil>& getProjectiles();
 	float getCooldownAtaque() const { return CDataque; }
-	float getRangoProyectil() const { return rangoProyectil; }
+	float getRangoProyectil() const { return _rangoProyectil; }
 	float getVelocidadProyectil() const { return velocidadProyectil; }
 	float getTiempoInmune() const { return tiempoInmune; }
     std::string getName() const { return _name; }
@@ -74,9 +72,8 @@ public:
 	void setDefense(float defense) { _defense = defense; }  
     void setName(const std::string& name) { _name = name; }
 	void setPickupRadius(float radius) { pickupRadius = radius; }
-    void setRangoAtaque(float rango) { _rangoAtaque = rango; }
     void setCooldownAtaque(float cooldown) { CDataque = cooldown; }
-    void setRangoProyectil(float rango) { rangoProyectil = rango; }
+    void setRangoProyectil(float rango) { _rangoProyectil = rango; }
     void setVelocidadProyectil(float velocidad) { velocidadProyectil = velocidad; }
     void setTiempoInmune(float tiempo) { tiempoInmune = tiempo; }
     void setAutoAim(bool autoAim) { _autoAim = autoAim; }
@@ -94,7 +91,7 @@ public:
     void reducirCooldownDisparo(float cantidad) {
         CDataque = std::max(0.05f, CDataque - cantidad); 
     }
-    void aumentarRangoProyectil(float extra) { rangoProyectil += extra; }
+    void aumentarRangoProyectil(float extra) { _rangoProyectil += extra; }
     void aumentarVelocidadProyectil(float extra) { velocidadProyectil += extra; }
 
     void attack(sf::Vector2f position);

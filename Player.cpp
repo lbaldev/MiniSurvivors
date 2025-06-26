@@ -108,8 +108,6 @@ void Player::attack(sf::Vector2f EnemyPosition) {
 
 
 
-
-
 // Ema
 void Player::updateProjectiles(float dt) {
     // Actualizamos cada proyectil

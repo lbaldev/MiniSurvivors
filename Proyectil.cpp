@@ -24,7 +24,7 @@ void Proyectil::update(float dt) {
     
     _position += direccionProyectil * velocidadProyectil * dt;
     _sprite.setPosition(_position);
-    rangoProyectil -= dt;
+    _rangoProyectil -= dt;
 
 }
 

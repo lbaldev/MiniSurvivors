@@ -24,51 +24,58 @@ void Enemy::chase(sf::Vector2f target, float dt) {
 
 void Enemy::colisionesPlayerEnemy(Player& player)
 {
-    const float EMPUJE_JUGADOR = 2.f;  // Fuerza del empuje al jugador
+    const float EMPUJE_JUGADOR = 2.f;
 
-	sf::Vector2f direccion = _position - player.getPosition();
+    // Obtener bounding boxes
+    sf::FloatRect enemyBounds = _sprite.getGlobalBounds();
+    sf::FloatRect playerBounds = player.getSprite().getGlobalBounds();
 
-    // Normalizar el vector (convertirlo en dirección unitaria)
-    float distancia = std::sqrt(direccion.x * direccion.x + direccion.y * direccion.y);
-    if (distancia > 0) // Evitar división por cero 
+    if (enemyBounds.intersects(playerBounds))
     {
-        direccion.x /= distancia;
-        direccion.y /= distancia;
-        // Aplicar el empuje al enemigo
+        // Calcular dirección de empuje desde el jugador hacia el enemigo
+        sf::Vector2f direccion = _position - player.getPosition();
+
+        float distancia = std::sqrt(direccion.x * direccion.x + direccion.y * direccion.y);
+        if (distancia > 0.f)
+        {
+            direccion /= distancia; // Normalizar
+        }
+        else
+        {
+            direccion = sf::Vector2f(1.f, 0.f); // Arbitraria si están en el mismo punto
+        }
+
         pushBack(direccion, EMPUJE_JUGADOR);
+        player.takeDamage(_damage);
     }
-	player.takeDamage(_damage); // El jugador recibe da��o
-    
 }
+
 
 void Enemy::colisionesEnemyEnemy(Entity& otro)
 {
-    {
-        const float EMPUJE_ENEMIGO = 1.0f;
-        const float DIST_MINIMA = 40.0f;
+    const float EMPUJE_ENEMIGO = 1.0f;
 
+    sf::FloatRect bounds1 = _sprite.getGlobalBounds();
+    sf::FloatRect bounds2 = otro.getSprite().getGlobalBounds();
+
+    if (bounds1.intersects(bounds2)) // ← usamos los límites reales de los sprites
+    {
+        // Calcular dirección de separación
         sf::Vector2f diff = _position - otro.getPosition();
         float dist = std::sqrt(diff.x * diff.x + diff.y * diff.y);
 
-        if (dist < DIST_MINIMA)
-        {
-            sf::Vector2f dir;
+        sf::Vector2f dir;
+        if (dist > 0.f)
+            dir = diff / dist;
+        else
+            dir = sf::Vector2f(1.f, 0.f); // Dirección arbitraria si están en el mismo lugar
 
-            if (dist > 0.f)
-            {
-                dir = diff / dist; // Normaliza
-            }
-            else
-            {
-                dir = sf::Vector2f(1.f, 0.f); // Dirección arbitraria si están en el mismo lugar
-            }
-
-            pushBack(dir, EMPUJE_ENEMIGO);
-            otro.pushBack(-dir, EMPUJE_ENEMIGO);
-        }
+        // Aplicar empujes opuestos a ambos enemigos
+        pushBack(dir, EMPUJE_ENEMIGO);
+        otro.pushBack(-dir, EMPUJE_ENEMIGO);
     }
-        
 }
+
 //Boss
 void Enemy::colisionesEnemyBoss(Entity& boss) {
     const float EMPUJE_SOLO_ENEMIGO = 3.0f;

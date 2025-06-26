@@ -346,7 +346,7 @@ void Game::update(float dt)
             120.f,                     // velocidad
             80.f,                     // daño
             "assets/boss.png",       // textura del boss
-			sf::Vector2f(600.f, 400.f), // posición donde aparece el boss
+			sf::Vector2f(1600.f, 1600.f), // posición donde aparece el boss
             1000 // puntaje por matar al boss
         );
         _bossSpawned = true;

@@ -8,10 +8,9 @@ Proyectil::Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed,
     : _position(position), direccionProyectil(direction), velocidadProyectil(speed),
     _rangoProyectil(lifetime), _damage(damage)
 {
-    // Si la dirección no es cero, la normalizamos
     if (direccionProyectil.x != 0 || direccionProyectil.y != 0) {
         float length = std::sqrt(direccionProyectil.x * direccionProyectil.x + direccionProyectil.y * direccionProyectil.y);
-        direccionProyectil /= length; // normalización
+        direccionProyectil /= length; 
     }
     _texture.loadFromFile("assets/proyectil.png");
     _sprite.setTexture(_texture);
@@ -20,16 +19,13 @@ Proyectil::Proyectil(sf::Vector2f position, sf::Vector2f direction, float speed,
     _sprite.setScale(0.025f, 0.025f);
 }
 
-// Método de actualización por frame
+// MÃ©todo de actualizaciÃ³n por frame
 void Proyectil::update(float dt) {
-    // Movemos el proyectil en la dirección con la velocidad establecida
+    
     _position += direccionProyectil * velocidadProyectil * dt;
-
-    // Actualizamos la posición visual del sprite
     _sprite.setPosition(_position);
+    rangoProyectil -= dt;
 
-    // Reducimos el tiempo de vida restante
-    _rangoProyectil -= dt;
 }
 
 sf::Vector2f Proyectil::getPosition() const {
@@ -40,7 +36,6 @@ sf::Vector2f Proyectil::getPosition() const {
      return _rangoProyectil;
 }
 
-// Dibuja el proyectil en pantalla
 void Proyectil::draw(sf::RenderTarget& target, sf::RenderStates states) const {
     target.draw(_sprite, states);
 }

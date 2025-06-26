@@ -7,7 +7,6 @@
 class Enemy : public Entity {
 private:
     float _damage;
-    // Puntuación que otorgan los enemigos al morir
     int _scoreValue;
 
 public:

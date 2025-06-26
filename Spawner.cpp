@@ -9,9 +9,8 @@ Spawner::Spawner()
 
 Spawner::~Spawner()
 {
-    //dtor
+  
 }
-//Se le agrego aumentoDanio y aumentoVelocidad para que los enemigos puedan escalar por tiempo
 
 void Spawner::spawnEnemies(std::vector<Enemy>& enemigos, sf::Vector2f playerPosition, float timer) {
     if (enemigos.size() < MAX_ENEMIES &&

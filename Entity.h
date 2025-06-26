@@ -14,31 +14,31 @@ protected:
     sf::Vector2f _prevPosition;
 	std::string _texturePath;
 
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override; // M�todo protegido para dibujar la entidad, se implementa en la clase base
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override; 
 
 public:
 
-	Entity(float health, float speed, const std::string& texturePath, sf::Vector2f position); // Constructor con posici�n
-	virtual ~Entity(); // Destructor virtual para permitir la limpieza de recursos en clases derivadas
+	Entity(float health, float speed, const std::string& texturePath, sf::Vector2f position); 
+	virtual ~Entity(); 
 
-	virtual void update(float deltaTime) = 0; // M�todo virtual puro para actualizar la entidad, debe ser implementado por las clases derivadas
+	virtual void update(float deltaTime) = 0; 
 
 	//Getters
-	sf::Vector2f getPosition() const { return _position; } // M�todo para obtener la posici�n de la entidad
-	sf::FloatRect getGlobalBounds() const { return _sprite.getGlobalBounds(); } // M�todo para obtener los l�mites globales del sprite de la entidad
+	sf::Vector2f getPosition() const { return _position; } 
+	sf::FloatRect getGlobalBounds() const { return _sprite.getGlobalBounds(); } 
 	sf::Vector2f getPrevPosition() const { return _prevPosition; }
-	std::string getTexturePath() const { return _texturePath; } // M�todo para obtener la ruta de la textura de la entidad
-	float getHealth() const { return _health; } // M�todo para verificar si la entidad est� viva (salud > 0)
-	float getSpeed() const { return _speed; } // M�todo para obtener la velocidad de la entidad
-	sf::Sprite getSprite() const { return _sprite; } // M�todo para obtener el sprite de la entidad
+	std::string getTexturePath() const { return _texturePath; }
+	float getHealth() const { return _health; } 
+	float getSpeed() const { return _speed; } 
+	sf::Sprite getSprite() const { return _sprite; } 
 	//Setters
-	void setPosition(sf::Vector2f pos) { _position = pos; } // M�todo para establecer la posici�n de la entidad
+	void setPosition(sf::Vector2f pos) { _position = pos; } 
 	void setHealth(float health) { _health = health; }
 	void setSpeed(float speed) { _speed = speed; }
-	void setTexture(const std::string& texturePath); // M�todo para establecer la textura de la entidad, carga la textura desde el archivo
+	void setTexture(const std::string& texturePath); 
 
 	//*********************
-	void move(float desplazamientoX, float desplazamientoY); // M�todo para mover la entidad en el espacio 2D
+	void move(float desplazamientoX, float desplazamientoY); 
 	void pushBack(sf::Vector2f dir, float fuerza);
 	virtual void takeDamage(float vida);
 

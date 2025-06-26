@@ -5,17 +5,14 @@ Menu::Menu(float width, float height) : _selectedIndex(0) {
     _options = { "Continuar", "Nueva Partida", "Puntuaciones", "Salir" };
 
     if (!_font.loadFromFile("assets/font.otf")) {
-        // Manejar error de carga de fuente
+        // vamos viendo
     }
 
     // Cargar imagen de fondo
     if (!_backgroundTexture.loadFromFile("assets/menu_background.png")) {
-        // Si falla, puedes usar un color sólido como respaldo
         _backgroundTexture.create(width, height);
     }
     _backgroundSprite.setTexture(_backgroundTexture);
-
-    // Ajustar tamaño si es necesario
     _backgroundSprite.setScale(
         width / _backgroundSprite.getLocalBounds().width,
         height / _backgroundSprite.getLocalBounds().height
@@ -27,7 +24,7 @@ Menu::Menu(float width, float height) : _selectedIndex(0) {
     _moveSound.setBuffer(_moveSoundBuffer);
     _selectSound.setBuffer(_selectSoundBuffer);
 
-    // Hace el texto con todas las opciones
+    //texto opciones
     for (size_t i = 0; i < _options.size(); ++i) {
         sf::Text text;
         text.setFont(_font);
@@ -44,16 +41,12 @@ bool Menu::loadBackground(const std::string& filename) {
 }
 
 void Menu::draw(sf::RenderWindow& window) {
-    // Dibujar fondo primero
     window.draw(_backgroundSprite);
-
-    // Dibujar un rectángulo semitransparente detrás del texto
     sf::RectangleShape background(sf::Vector2f(400, 300));
-    background.setFillColor(sf::Color(0, 0, 0, 150)); // Negro semitransparente
+    background.setFillColor(sf::Color(0, 0, 0, 150)); 
     background.setPosition(WINDOW_WIDTH / 2 - 200, WINDOW_HEIGHT / 2 - 10);
     window.draw(background);
 
-    // Luego dibujar los textos del menú
     for (const auto& text : _texts) {
         window.draw(text);
     }

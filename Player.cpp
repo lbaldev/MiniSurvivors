@@ -4,14 +4,13 @@
 
 
 
-Player::Player(float health, float speed, const std::string& texturePath) // El constructor inicializa al jugador con salud, velocidad y textura
+Player::Player(float health, float speed, const std::string& texturePath) 
+
 
 	: Entity(health, speed, texturePath, sf::Vector2f(0,0)), _level(1), _exp(0), _baseDamage(50.0f), _defense(0.1f), pickupRadius(20.0f), _rangoProyectil(0.7)  // Inicializa el nivel, experiencia, daño base y defensa del jugador
 {   
-    // Ema
-    ultima_direccion = sf::Vector2f(0.f, -1.f); // Dirección inicial hacia arriba
-    //***************************************************************
-    //Mariano barra de vida
+    ultima_direccion = sf::Vector2f(0.f, -1.f); 
+    //barra de vida
     _healthBarBackground.setSize(sf::Vector2f(40.f, 6.f));
     _healthBarBackground.setFillColor(sf::Color(70, 70, 70, 200));
     _healthBarBackground.setOutlineThickness(2.f);
@@ -33,12 +32,12 @@ void Player::handleInput(float dt) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) || sf::Keyboard::isKeyPressed(sf::Keyboard::Left)) direction.x -= 1.f;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) || sf::Keyboard::isKeyPressed(sf::Keyboard::Right)) direction.x += 1.f;
 
-    if (direction.x != 0 || direction.y != 0) // Verifica si hay movimiento
-        direction /= std::sqrt(direction.x * direction.x + direction.y * direction.y); // Normaliza la dirección para que el jugador se mueva a una velocidad constante
+    if (direction.x != 0 || direction.y != 0)
+        direction /= std::sqrt(direction.x * direction.x + direction.y * direction.y); 
 
     if (direction.x != 0 || direction.y != 0) {
         ultima_direccion = direction;
-        _sprite.setScale(direction.x > 0 ? 1.f : -1.f, 1.f); // Cambia la dirección del sprite según la dirección del movimiento
+        _sprite.setScale(direction.x > 0 ? 1.f : -1.f, 1.f); 
     }
 
     //_position += direction * _speed * dt;
@@ -64,22 +63,18 @@ void Player::handleInput(float dt) {
 
 void Player::update(float dt) {
     handleInput(dt);         // Movimiento del jugador
-    // Ema
     updateProjectiles(dt);   // Actualizar proyectiles activos
 
-    // Disparo automático si pasó el cooldown
-    // Posicionarla debajo del sprite
+    //barra vida bajo el jugador
     sf::Vector2f spritePos = _sprite.getPosition();
     _healthBarBackground.setPosition(spritePos.x - 20.f, spritePos.y + _sprite.getGlobalBounds().height / 2.f + 5.f);
     _healthBarFill.setPosition(_healthBarBackground.getPosition());
 
-    // Escalar el tamaño según la salud actual
-    float vidaRatio = _health / 100.f; // suponiendo 100 es la salud máxima
+    float vidaRatio = _health / 100.f; // cambiar numero por la salud maxima del jugador
     vidaRatio = std::max(0.f, std::min(vidaRatio, 1.f));
 
     _healthBarFill.setSize(sf::Vector2f(40.f * vidaRatio, 6.f));
 
-    
     if (relojIntervaloDamage.getElapsedTime().asSeconds() >= tiempoInmune) {
 		_sprite.setColor(sf::Color::White);
     }
@@ -106,14 +101,9 @@ void Player::attack(sf::Vector2f EnemyPosition) {
     }
 }
 
-
-
-// Ema
 void Player::updateProjectiles(float dt) {
-    // Actualizamos cada proyectil
     for (auto& p : Proyectiles)
         p.update(dt);
-
 }
 
 std::vector<Proyectil>& Player::getProjectiles() {
@@ -121,10 +111,7 @@ std::vector<Proyectil>& Player::getProjectiles() {
 }
 
 void Player::draw(sf::RenderTarget& target, sf::RenderStates states) const {
-    // Dibujar sprite del jugador
     target.draw(_sprite, states);
-
-    // Dibujar la barra de salud
     target.draw(_healthBarBackground, states);
     target.draw(_healthBarFill, states);
 }
@@ -134,10 +121,10 @@ void Player::takeDamage(float damage) {
     if (relojIntervaloDamage.getElapsedTime().asSeconds() >= tiempoInmune) {
          
         _health -= damage;
-        relojIntervaloDamage.restart(); // Reinicia el reloj para el pr��ximo ataque
+        relojIntervaloDamage.restart(); 
     }
     else {
-		_sprite.setColor(sf::Color::Red); // Cambia el color del sprite a rojo si est�� en invulnerabilidad
+		_sprite.setColor(sf::Color::Red); 
     }
     
 }

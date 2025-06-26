@@ -12,8 +12,8 @@ private:
     std::vector<sf::Text> _texts;
     sf::Font _font;
     int _selectedIndex;
-    sf::Texture _backgroundTexture;  // Textura de fondo
-    sf::Sprite _backgroundSprite;    // Sprite de fondo
+    sf::Texture _backgroundTexture; 
+    sf::Sprite _backgroundSprite; 
     sf::SoundBuffer _moveSoundBuffer;
     sf::SoundBuffer _selectSoundBuffer;
     sf::Sound _moveSound;
@@ -25,7 +25,7 @@ public:
     void moveUp();
     void moveDown();
     int getSelectedIndex() const;
-    bool loadBackground(const std::string& filename); // Método para cargar el fondo
+    bool loadBackground(const std::string& filename); 
     void playSelectSound();
 };
 

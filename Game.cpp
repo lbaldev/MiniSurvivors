@@ -54,7 +54,7 @@ Game::Game(sf::RenderWindow& window)
     
 
 
-    // Mariano - Agregando la barra de experiencia y nivel
+    //Barra de experiencia y nivel
     _levelText.setFont(_font); 
     _levelText.setCharacterSize(20);
     _levelText.setFillColor(sf::Color::White);
@@ -175,7 +175,7 @@ void Game::processEvents() {
                     int selected = _pauseMenu.getSelectedIndex();
                     switch (selected) {
                     case 0:
-                        _state = GameState::Playing; // Continuar juego
+                        _state = GameState::Playing; 
                         break;
                     case 1:
                         _fileManager.guardarPartida(_player, _enemies, _expOrbs, _timer, _puntuacion);
@@ -233,7 +233,7 @@ void Game::update(float dt)
 		// Guardar puntaje en el archivo
         ScoreEntry nuevaPuntuacion;
         strncpy_s(nuevaPuntuacion.nombre, _player.getName().c_str(), sizeof(nuevaPuntuacion.nombre) - 1);
-        nuevaPuntuacion.nombre[sizeof(nuevaPuntuacion.nombre) - 1] = '\0'; // Asegurar null-termination
+        nuevaPuntuacion.nombre[sizeof(nuevaPuntuacion.nombre) - 1] = '\0';
 
         nuevaPuntuacion.puntuacion = _puntuacion;
 
@@ -252,7 +252,7 @@ void Game::update(float dt)
     updatePlayerStatsDisplay();
 
     _timer = _timer + dt;
-      int tiempoSeg = _timer; // Tiempo de juego en segundos
+      int tiempoSeg = _timer; 
     _timerTexto.setString("Tiempo: " + std::to_string(tiempoSeg) + "s");
 
     int minutos = tiempoSeg / 60;
@@ -292,14 +292,12 @@ void Game::update(float dt)
     _camera.setCenter(center);
     _window.setView(_camera);
 
-    // Mariano Actualizar HUD
+    // Actualizar HUD
     int exp = _player.getExp();
     int expToLevel = _player.getExpToNextLevel();
     float fillRatio = static_cast<float>(exp) / expToLevel;
-    fillRatio = std::min(fillRatio, 1.f); // evitar que se pase
-
+    fillRatio = std::min(fillRatio, 1.f); 
     _expBarFill.setSize(sf::Vector2f(300.f * fillRatio, 20.f));
-
     _levelText.setString("Nivel: " + std::to_string(_player.getLevel()));
 	_textoPuntuacion.setString("Score: " + std::to_string(_puntuacion));
 
@@ -313,7 +311,7 @@ void Game::update(float dt)
         switch (mejora) {
         case 1:
             _player.incrementarDanioBase(50.0f);
-            std::cout << "+5 de danio base" << std::endl;
+            std::cout << "+50 de danio base" << std::endl;
             break;
         case 2:
             _player.incrementarVelocidad(100.0f);
@@ -378,14 +376,12 @@ void Game::render()
 	}
 
     _window.draw(_backgroundSprite);
-    _window.draw(_player); // Dibujar el jugador
+    _window.draw(_player); 
 
-    // Ema
-    // Dibujar todos los proyectiles activos del jugador
+    
     for (const auto& projectile : _player.getProjectiles()) {
         _window.draw(projectile);
     }
-    //**************************************
 
     for (const auto& enemy : _enemies)
         _window.draw(enemy);
@@ -394,7 +390,7 @@ void Game::render()
         _window.draw(orb);
 
     
-    _window.setView(_window.getDefaultView()); // HUD en pantalla, no en mundo
+    _window.setView(_window.getDefaultView()); 
     _window.draw(_expBarBackground);
     _window.draw(_expBarFill);
     _window.draw(_levelText);
@@ -417,10 +413,10 @@ void Game::checkCollisions()
     {
         if (_player.getGlobalBounds().intersects(enemy.getGlobalBounds()))
         {
-            // Calcular dirección del empuje (desde jugador hacia enemigo)
             enemy.colisionesPlayerEnemy(_player);
         }
     }
+
     // 2. Colisiones Enemigo-Enemigo
     for (size_t i = 0; i < _enemies.size(); i++)
     {
@@ -429,28 +425,28 @@ void Game::checkCollisions()
             _enemies[i].colisionesEnemyEnemy(_enemies[j]);
         }
     }
+
     // 3. Colisiones Jugador-Orbe de EXP
     for (auto it = _expOrbs.begin(); it != _expOrbs.end(); ) {
         if (_player.getGlobalBounds().intersects(it->getBounds())) {
-            _player.addExp(50);  // Sumar EXP
-            it = _expOrbs.erase(it);          // Eliminar el orbe y actualizar el iterador
+            _player.addExp(50); 
+            it = _expOrbs.erase(it);  
         }
         else {
-            ++it;  // Solo avanzar si no se eliminó el orbe
+            ++it; 
         }
     }
 
-    // Ema
     // 4. Colisiones Proyectil-Enemigo/Boss
     const float radioProyectil = 5.f;  // El radio del proyectil
     const float radioEnemigo = 20.f;   // Aproximado para el sprite del enemigo
 
-    auto& projectiles = _player.getProjectiles();  // Ahora podemos modificarlos
+    auto& projectiles = _player.getProjectiles();
 
     projectiles.erase(
         std::remove_if(projectiles.begin(), projectiles.end(),
             [this, radioProyectil, radioEnemigo](Proyectil& proyectil) {
-                // Verificar si se agotó el tiempo de vida
+                
                 if (proyectil.getLifetime() <= 0) {
                     return true; // eliminar por tiempo
                 }
@@ -462,11 +458,9 @@ void Game::checkCollisions()
                     if (distancia < (radioProyectil + radioEnemigo)) {
                         sonidoAtaque.play();
                         enemy.takeDamage(proyectil.getDamage());
-                        return true; // eliminar por colisión
+                        return true; // eliminar por colision
                     }
                 }
-
-
 
                 return false; // no eliminar
             }),
@@ -488,8 +482,10 @@ void Game::checkHitpoints() {
                 musicaBoss.stop();
             }
             _expOrbs.emplace_back(it->getPosition(), 10); 
+            _puntuacion += it->getScoreValue();
             it = _enemies.erase(it);
-			_puntuacion += 10; // Aumentar el puntaje por eliminar un enemigo
+            
+			//_puntuacion += 10; // Aumentar el puntaje por eliminar un enemigo
 
         }
 

@@ -4,7 +4,7 @@
 NameInput::NameInput(sf::RenderWindow& window)
     : _window(window), _playerName(""), _nameConfirmed(false), _showCursor(true) {
 
-    // Configuración visual
+    // Configuración visuall
     _font.loadFromFile("assets/font.otf");
 
     _titleText.setFont(_font);
@@ -26,8 +26,8 @@ NameInput::NameInput(sf::RenderWindow& window)
     _inputText.setFillColor(sf::Color::White);
     _inputText.setPosition(_inputBox.getPosition().x - _inputBox.getSize().x / 2 + 10, _inputBox.getPosition().y - 15);
 
-    // Sonido (usa el mismo archivo que el menú)
-    _typingSoundBuffer.loadFromFile("assets/menu_move.ogg"); // Asegúrate de que existe
+    // Sonido
+    _typingSoundBuffer.loadFromFile("assets/menu_move.ogg"); 
     _selectSoundBuffer.loadFromFile("assets/menu_select.ogg");
     _typingSound.setBuffer(_typingSoundBuffer);
     _selectSound.setBuffer(_selectSoundBuffer);
@@ -46,22 +46,21 @@ bool NameInput::run() {
                 return false;
             }
 
-            // Tecla ESC: Volver al menú sin guardar
+            //Volver al menú sin guardar
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-                return false; // Sale sin confirmar el nombre
+                return false; 
             }
 
-            // Input de texto (solo letras, números y espacios)
+            // Input de texto
             if (event.type == sf::Event::TextEntered) {
                 char c = static_cast<char>(event.text.unicode); 
 
-                // Permitir: letras (A-Z, a-z), números (0-9), espacio y backspace
                 if (std::isalnum(c) || c == ' ' || c == '\b') {
-                    if (c == '\b' && !_playerName.empty()) { // Borrar
+                    if (c == '\b' && !_playerName.empty()) { 
                         _playerName.pop_back();
                         _typingSound.play();
                     }
-                    else if (_playerName.size() < 15 && c != '\b') { // Limitar a 15 caracteres
+                    else if (_playerName.size() < 15 && c != '\b') { 
                         _playerName += c;
                         _typingSound.play();
                     }
@@ -69,7 +68,7 @@ bool NameInput::run() {
                 }
             }
 
-            // Confirmar con Enter (si hay nombre)
+            // Confirmar con Enter
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Enter && !_playerName.empty()) {
                 _selectSound.play();
                 _nameConfirmed = true;

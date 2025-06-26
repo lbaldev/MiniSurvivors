@@ -172,7 +172,7 @@ bool FileManager::guardarPuntaje(const ScoreEntry& entry) {
 std::vector<ScoreEntry> FileManager::leerPuntajes() {
     std::vector<ScoreEntry> scores;
     FILE* pArchivo;
-    errno_t err = fopen_s(&pArchivo, _archivoPuntajes.c_str(), "rb"); // read binary
+    errno_t err = fopen_s(&pArchivo, _archivoPuntajes.c_str(), "rb"); 
     if (err != 0 || pArchivo == NULL) {
         std::cerr << "Advertencia: El archivo de puntajes no existe o no se pudo abrir: " << _archivoPuntajes << std::endl;
         return scores; // Retorna un vector vacío si el archivo no existe o hay error
@@ -201,13 +201,6 @@ std::vector<ScoreEntry> FileManager::leerPuntajes() {
     }
 
     fclose(pArchivo);
-
-    // *************************************************************************
-    // IMPORTANTE: QUITAR ESTAS LÍNEAS SI QUIERES ORDENAR EN SCOREMENU
-    // std::sort(scores.begin(), scores.end(), [](const ScoreEntry& a, const ScoreEntry& b) {
-    //    return a.puntuacion > b.puntuacion; // Orden descendente
-    // });
-    // *************************************************************************
 
     return scores;
 }

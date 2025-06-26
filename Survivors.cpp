@@ -46,17 +46,17 @@ int main() {
                             break;
                         }
                         
-                        case 1: {
+                        case 1: { //game
                             NameInput nameScreen(window);
                             if (nameScreen.run()) {
                                 game.setPlayerName(nameScreen.getPlayerName());
-                                game.run(); // Ahora game puede acceder al nombre con nameScreen.getPlayerName()
+                                game.run(); 
                             }
                             break;
                         }   
                         case 2: { // Puntuaciones
                             scoreScreen.run(fileManager);
-                            showMenu = true; // Vuelve al menú después de ver los scores
+                            showMenu = true; 
                             break;
                         }
                         

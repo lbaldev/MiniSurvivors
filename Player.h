@@ -47,15 +47,13 @@ public:
     void update(float deltaTime) override;
 
     // Ema
+    void updateProjectiles(float dt);        
     
-     // Permite acceder a los proyectiles desde fuera
-    void updateProjectiles(float dt);                      // Actualiza posición y vida de proyectiles
-    //***************************************
     //Getters
 
     int getLevel() const { return _level; }
     int getExp() const { return _exp; }
-    int getExpToNextLevel() const { return _level * 100; } // ejemplo simple
+    int getExpToNextLevel() const { return _level * 100; } 
 	float getBaseDamage() const { return _baseDamage; }
 	float getDefense() const { return _defense; }
 	float getPickupRadius() const { return pickupRadius; }
@@ -66,6 +64,7 @@ public:
 	float getTiempoInmune() const { return tiempoInmune; }
     std::string getName() const { return _name; }
     bool isAutoAimEnabled() const { return _autoAim; }
+
     //Setters
 	void setLevel(int level) { _level = level; }
 	void setExp(int exp) { _exp = exp; }

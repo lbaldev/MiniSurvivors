@@ -8,7 +8,7 @@
 #include "ScoreMenu.h"  
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mini Survivors - Menú");
+    sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Mini Survivors - Menu");
     FileManager fileManager("save.txt", "puntajes.txt");
 
     sf::Font mainFont;

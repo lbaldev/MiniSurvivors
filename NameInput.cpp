@@ -4,7 +4,7 @@
 NameInput::NameInput(sf::RenderWindow& window)
     : _window(window), _playerName(""), _nameConfirmed(false), _showCursor(true) {
 
-    // Configuración visual
+    // Configuración visuall
     _font.loadFromFile("assets/font.otf");
 
     _titleText.setFont(_font);

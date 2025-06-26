@@ -476,6 +476,8 @@ void Game::checkHitpoints() {
     for (auto it = _enemies.begin(); it != _enemies.end(); ) { 
         if (it->getHealth() <= 0) { 
             if (it->getTexturePath() == "assets/boss.png") {
+                _bossSpawned = false;
+                _bossAparecio = false;
                 _bossBackgroundActive = false;
                 _backgroundSprite.setTexture(_backgroundTexture);
                 musicaFondo.play();

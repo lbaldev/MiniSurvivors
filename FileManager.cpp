@@ -108,7 +108,9 @@ bool FileManager::cargarPartida(Player& jugador, std::vector<Enemy>& enemigos, s
     std::string nombre(lenName, '\0');
     fread(&nombre[0], sizeof(char), lenName, pArchivo); 
 
-    jugador = Player(vida, speed, tex);
+    jugador.setHealth(vida);
+	jugador.setSpeed(speed);
+	jugador.setTexture(tex);
 	jugador.setPosition(pos);
     jugador.setLevel(nivel);
     jugador.setExp(exp);
@@ -186,8 +188,6 @@ std::vector<ScoreEntry> FileManager::leerPuntajes() {
     if (sizeof(ScoreEntry) > 0) {
         cantidadRegistros = fileSize / sizeof(ScoreEntry);
     }
-
-    scores.reserve(cantidadRegistros);
 
     ScoreEntry entry;
     for (int i = 0; i < cantidadRegistros; ++i) {

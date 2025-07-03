@@ -14,7 +14,7 @@ protected:
     sf::Vector2f _prevPosition;
 	std::string _texturePath;
 
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const override; 
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override; 
 
 public:
 

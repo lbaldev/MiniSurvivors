@@ -411,10 +411,7 @@ void Game::checkCollisions()
     // 1. Colisiones Jugador-Enemigo
     for (auto& enemy : _enemies)
     {
-        if (_player.getGlobalBounds().intersects(enemy.getGlobalBounds()))
-        {
             enemy.colisionesPlayerEnemy(_player);
-        }
     }
 
     // 2. Colisiones Enemigo-Enemigo
@@ -443,32 +440,33 @@ void Game::checkCollisions()
 
     auto& projectiles = _player.getProjectiles();
 
-    projectiles.erase(
-        std::remove_if(projectiles.begin(), projectiles.end(),
-            [this, radioProyectil, radioEnemigo](Proyectil& proyectil) {
-                
-                if (proyectil.getLifetime() <= 0) {
-                    return true; // eliminar por tiempo
+    for (auto it = projectiles.begin(); it != projectiles.end(); ) {
+        bool eliminar = false;
+
+        if (it->getLifetime() <= 0) {
+            eliminar = true;
+        }
+        else {
+            for (auto& enemy : _enemies) {
+                float dx = it->getPosition().x - enemy.getPosition().x;
+                float dy = it->getPosition().y - enemy.getPosition().y;
+                float distancia = std::sqrt(dx * dx + dy * dy);
+                if (distancia < (radioProyectil + radioEnemigo)) {
+                    sonidoAtaque.play();
+                    enemy.takeDamage(it->getDamage());
+                    eliminar = true;
+                    break;
                 }
+            }
+        }
 
-                for (auto& enemy : _enemies) {
-                    float dx = proyectil.getPosition().x - enemy.getPosition().x;
-                    float dy = proyectil.getPosition().y - enemy.getPosition().y;
-                    float distancia = std::sqrt(dx * dx + dy * dy);
-                    if (distancia < (radioProyectil + radioEnemigo)) {
-                        sonidoAtaque.play();
-                        enemy.takeDamage(proyectil.getDamage());
-                        return true; // eliminar por colision
-                    }
-                }
-
-                return false; // no eliminar
-            }),
-        projectiles.end()
-    );
-
-
-
+        if (eliminar) {
+            it = projectiles.erase(it);
+        }
+        else {
+            ++it;
+        }
+    }
 
 }
 
